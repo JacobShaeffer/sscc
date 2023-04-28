@@ -1,0 +1,17 @@
+
+
+<%= render @content %>
+
+<% @content.metadata.each do |metadatum| %>
+  <p>
+    <strong>Metadata:</strong>
+    <%= metadatum.name %>
+  </p>
+<% end %>
+
+<div>
+  <%= link_to "Edit this content", edit_content_path(@content) %> |
+  <%= link_to "Back to contents", contents_path %>
+
+  <%= button_to "Destroy this content", @content, method: :delete %>
+</div>

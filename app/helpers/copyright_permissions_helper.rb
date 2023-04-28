@@ -1,0 +1,2 @@
+module CopyrightPermissionsHelper
+end

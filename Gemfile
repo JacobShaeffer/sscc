@@ -73,3 +73,13 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+# User session management
+gem 'devise', '~> 4.9'
+
+# File upload
+gem 'carrierwave', '~> 2.2', '>= 2.2.3'
+
+# rails_admin panel
+gem 'rails_admin', '~> 3.1', '>= 3.1.2'
+gem "sassc-rails"

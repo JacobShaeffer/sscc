@@ -1,6 +1,16 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  
+  devise_for :users
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  resources :metadata_types do
+    resources :metadata, except: [:index, :show], controller: 'metadata_types/metadata'
+  end
+  resources :contents
+  resources :copyright_permissions,  except: [:index]
+  resources :organizations, except: [:index, :show]
+  get 'copyright/index'
+
+  get 'home/about'
+  root 'home#index'
 end

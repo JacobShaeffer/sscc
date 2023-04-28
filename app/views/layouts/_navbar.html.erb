@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <%= link_to 'SSCC', root_path, class: 'navbar-brand' %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to 'Metadata', metadata_types_path, class: 'nav-link ' + (current_controller?('metadata_types') ? 'active' : '') %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Content', contents_path, class: 'nav-link ' + (current_controller?('contents') ? 'active' : '') %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Copyright', copyright_index_path, class: 'nav-link ' + (current_controller?('copyrights') ? 'active' : '') %>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+				<% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to 'Profile', edit_user_registration_path, class: 'nav-link ' + (current_controller?('devise') ? 'active' : '') %>
+          </li>
+					<li class="nav-item">
+						<%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: 'btn btn-secondary' %>
+					</li>
+				<% else %>
+					<li class="nav-item">
+						<%= button_to "Sign Up", new_user_registration_path, method: :get, class: 'btn btn-secondary' %>
+					</li>
+					<li class="nav-item">
+						<%= link_to "Login", new_user_session_path, class: 'nav-link' %>
+					</li>
+				<% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,46 @@
+<%= form_for [@metadata_type, @content] do |form| %>
+  <% if @content.errors.any? %>
+		<div style="color: red">
+			<h2><%= pluralize(@content.errors.count, "error") %> prohibited this content from being saved:</h2>
+
+			<ul>
+				<% @content.errors.each do |error| %>
+					<li><%= error.full_message %></li>
+				<% end %>
+			</ul>
+		</div>
+  <% end %>
+
+  <div>
+		<%= form.label :title, style: "display: block" %>
+		<%= form.text_field :title %>
+  </div>
+
+  <div>
+		<%= form.label :file, style: "display: block" %>
+		<%= form.file_field :file, onchange: "validateContentFile(this)" %>
+  </div>
+
+	<div>
+		<%= form.collection_select(:copyright_permission_id, @copyright_permissions, :id, :description, prompt: true) %>
+	</div>
+
+	<div>
+		<% @metadata_types.each do |metadata_type| %>
+			<%= metadata_type.name %>
+			<br>
+			<% metadata_type.metadata.each do |metadatum| %>
+				<input type="checkbox" name="content[metadatum_ids][]" id="content_metadatum_ids_<%= metadatum.id %>" value="<%= metadatum.id %>">
+				<%= metadatum.name %>
+				<br>
+			<% end %>
+			<br>
+		<% end %>
+	</div>
+
+
+  <div>
+		<%= form.submit %>
+  </div>
+<% end %>
+<%= javascript_include_tag "packs/content/test" %>

@@ -1,0 +1,42 @@
+<%= form_with(model: copyright_permission) do |form| %>
+  <% if copyright_permission.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(copyright_permission.errors.count, "error") %> prohibited this copyright_permission from being saved:</h2>
+
+      <ul>
+        <% copyright_permission.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div>
+    <%= form.label :organization_id, style: "display: block" %>
+    <%= form.text_field :organization_id %>
+  </div>
+
+  <div>
+    <%= form.label :granted, style: "display: block" %>
+    <%= form.check_box :granted %>
+  </div>
+
+  <div>
+    <%= form.label :date_contacted, style: "display: block" %>
+    <%= form.date_field :date_contacted %>
+  </div>
+
+  <div>
+    <%= form.label :date_of_response, style: "display: block" %>
+    <%= form.date_field :date_of_response %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

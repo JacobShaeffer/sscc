@@ -18,7 +18,7 @@
 
   <div>
     <%= form.label :organization_id, style: "display: block" %>
-    <%= form.text_field :organization_id %>
+		<%= form.collection_select(:organization_id, @organizations, :id, :name, prompt: true) %>
   </div>
 
   <div>

@@ -8,6 +8,7 @@ class CopyrightPermissionsController < ApplicationController
   # GET /copyright_permissions/new
   def new
     @copyright_permission = CopyrightPermission.new
+    @organizations = Organization.all
   end
 
   # GET /copyright_permissions/1/edit

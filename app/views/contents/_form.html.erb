@@ -16,9 +16,10 @@
 		<%= form.text_field :title %>
   </div>
 
-  <div>
+  <div data-controller='content'>
 		<%= form.label :file, style: "display: block" %>
-		<%= form.file_field :file, onchange: "validateContentFile(this)" %>
+		<%#= form.file_field :file, onchange: "validateContentFile(this)" %>
+		<%= form.file_field :file, data: {action: 'change->content#file'} %>
   </div>
 
 	<div>
@@ -43,4 +44,3 @@
 		<%= form.submit %>
   </div>
 <% end %>
-<%= javascript_include_tag "packs/content/test" %>

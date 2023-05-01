@@ -1,5 +1,6 @@
 class MetadataTypesController < ApplicationController
   before_action :set_metadata_type, only: %i[ show edit update destroy ]
+	before_action :authenticate_user!
 
   # GET /metadata_types or /metadata_types.json
   def index

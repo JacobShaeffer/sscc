@@ -4,5 +4,8 @@
 
 import { application } from "./application"
 
-import ContentController from "./content_controller"
-application.register("content", ContentController)
+import fileSelectController, {string_identifier as fileSelect_id} from "./fileSelect_controller"
+application.register(fileSelect_id, fileSelectController)
+
+import autoCompleteController, {string_identifier as autoComplete_id} from "./autoComplete_controller"
+application.register(autoComplete_id, autoCompleteController)

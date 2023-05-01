@@ -1,2 +1,15 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+
+.auto-complete {
+	border:0; outline:0;
+}
+.auto-complete:focus {
+	border:0; outline:0;
+}
+
+.auto-complete-selected {
+	display: contents;
+	font-weight: 100;
+	font-size: large;
+}

@@ -1,5 +1,6 @@
 class CopyrightPermissionsController < ApplicationController
   before_action :set_copyright_permission, only: %i[ show edit update destroy ]
+	before_action :authenticate_user!
 
   # GET /copyright_permissions/1 or /copyright_permissions/1.json
   def show

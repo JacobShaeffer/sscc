@@ -1,4 +1,4 @@
-<%= form_for [@metadata_type, @content] do |form| %>
+<%= bootstrap_form_for [@metadata_type, @content] do |form| %>
   <% if @content.errors.any? %>
 		<div style="color: red">
 			<h2><%= pluralize(@content.errors.count, "error") %> prohibited this content from being saved:</h2>
@@ -12,33 +12,42 @@
   <% end %>
 
   <div>
-		<%= form.label :title, style: "display: block" %>
 		<%= form.text_field :title %>
   </div>
 
-  <div data-controller='content'>
-		<%= form.label :file, style: "display: block" %>
+  <div data-controller='fileSelect'>
 		<%#= form.file_field :file, onchange: "validateContentFile(this)" %>
-		<%= form.file_field :file, data: {action: 'change->content#file'} %>
+		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'} %>
   </div>
 
 	<div>
 		<%= form.collection_select(:copyright_permission_id, @copyright_permissions, :id, :description, prompt: true) %>
 	</div>
 
-	<div>
+	<div class="mb-3">
+		<label class="form-label">Metadata</label>
+		<br>
 		<% @metadata_types.each do |metadata_type| %>
-			<%= metadata_type.name %>
-			<br>
-			<% metadata_type.metadata.each do |metadatum| %>
-				<input type="checkbox" name="content[metadatum_ids][]" id="content_metadatum_ids_<%= metadatum.id %>" value="<%= metadatum.id %>">
-				<%= metadatum.name %>
-				<br>
-			<% end %>
-			<br>
+
+			<div class="mb-3" data-controller='autoComplete'>
+				<label class="form-label-sm"><%= metadata_type.name %></label>
+				<div class="form-control">
+					<div class="auto-complete-selected"><span class="badge text-bg-primary">test</span></div>
+					<input class="auto-complete" id="metadataInput_<%= metadata_type.name %>" placeholder="Search">
+				</div>
+				
+				<!--<ul class="list-group" style="display: none;">-->
+				<div class="list-group">
+					<% metadata_type.metadata.each do |metadatum| %>
+						<!--<input type="checkbox" name="content[metadatum_ids][]" id="content_metadatum_ids_<%#= metadatum.id %>" value="<%= metadatum.id %>">-->
+						<a class="list-group-item list-group-action-item" data-action="click->autoComplete#onItemSelected" id="selector_for=<%= metadatum.id%>"><%= metadatum.name %></a>
+						<input style="display: none;" type="checkbox" name="content[metadatum_ids][]" id="content_metadatum_ids_<%= metadatum.id %>" value="<%= metadatum.id %>">
+					<% end %>
+				</div>
+			</div>
+
 		<% end %>
 	</div>
-
 
   <div>
 		<%= form.submit %>

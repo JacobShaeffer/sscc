@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :metadata_types do
+    collection do
+      get :search
+    end
     resources :metadata, except: [:index, :show], controller: 'metadata_types/metadata'
   end
   resources :contents

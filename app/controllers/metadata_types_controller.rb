@@ -60,6 +60,16 @@ class MetadataTypesController < ApplicationController
     end
   end
 
+  def search
+    @target = params[:target]
+    @selected = params[:selected_ids].nil? ? [] : params[:selected_ids].split(',')
+    metadata_type = MetadataType.find(params[:metadata_type_id])
+    @metadata = metadata_type.metadata.where("name LIKE ?", "%#{params[:search]}%")
+    respond_to do |format|
+      format.turbo_stream
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_metadata_type

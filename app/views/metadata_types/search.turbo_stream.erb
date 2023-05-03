@@ -1,0 +1,5 @@
+<%= turbo_stream.update @target do %>
+    <% @metadata.each do |metadatum| %>
+        <a class="list-group-item list-group-action-item <%= if @selected.include?(metadatum.id.to_s) then 'active' else '' end %>" data-action="mousedown->multiSelect#onItemSelected" id="selector_for=<%= metadatum.id%>"><%= metadatum.name %>
+    <% end %>
+<% end %>

@@ -1,6 +1,7 @@
 class MetadataTypes::MetadataController < ApplicationController
   before_action :set_metadatum, only: %i[ edit update destroy ]
   before_action :set_metadata_type, only: %i[ new edit create destory ]
+	before_action :authenticate_user!
 
   # GET /metadata/new
   def new
@@ -13,7 +14,7 @@ class MetadataTypes::MetadataController < ApplicationController
 
   # POST /metadata or /metadata.json
   def create
-    @metadatum = Metadatum.new(metadatum_params)
+    @metadatum = Metadatum.new(metadatum_params.merge(user: current_user))
     @metadatum.metadata_type = @metadata_type
 
     respond_to do |format|

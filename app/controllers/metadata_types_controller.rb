@@ -24,7 +24,7 @@ class MetadataTypesController < ApplicationController
 
   # POST /metadata_types or /metadata_types.json
   def create
-    @metadata_type = MetadataType.new(metadata_type_params)
+    @metadata_type = MetadataType.new(metadata_type_params.merge(user: current_user))
 
     respond_to do |format|
       if @metadata_type.save

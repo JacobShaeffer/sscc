@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
 		has_many :contents
+    has_many :metadata_types
+    has_many :metadata
 
     # define user roles
     enum :role, {user: 0, admin: 99}

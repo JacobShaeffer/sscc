@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_23_192403) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_04_215254) do
   create_table "content_metadata", force: :cascade do |t|
     t.integer "content_id"
     t.integer "metadatum_id"
@@ -47,13 +47,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_192403) do
     t.integer "metadata_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["metadata_type_id"], name: "index_metadata_on_metadata_type_id"
+    t.index ["user_id"], name: "index_metadata_on_user_id"
   end
 
   create_table "metadata_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_metadata_types_on_user_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -89,5 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_192403) do
   add_foreign_key "copyright_permissions", "organizations"
   add_foreign_key "copyright_permissions", "users"
   add_foreign_key "metadata", "metadata_types"
+  add_foreign_key "metadata", "users"
+  add_foreign_key "metadata_types", "users"
   add_foreign_key "organizations", "users"
 end

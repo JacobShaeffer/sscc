@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
+import Cookies from 'js-cookie';
 
 export const string_identifier = 'accordion';
 
@@ -12,7 +13,7 @@ export default class extends Controller {
     // and make the cookie name unique to the app aka sscc_collapse
 
     initialize() {
-        if ($.cookie('collapse'+this.typeValue) == 'open') {
+        if (Cookies.get('collapse'+this.typeValue) == 'open') {
             this.collapseContentTarget.classList.add("show");
             this.collapseButtonTarget.classList.remove("collapsed");
         }
@@ -23,19 +24,19 @@ export default class extends Controller {
         if (this.collapseContentTarget.classList.contains("show")) {
             this.collapseContentTarget.classList.remove("show");
             this.collapseButtonTarget.classList.add("collapsed");
-            $.removeCookie(cookieName);
+            Cookies.remove(cookieName);
 
             console.log(cookieName, " -- cookie removed");
-            console.log("all cookies: ", $.cookie());
+            console.log("all cookies: ", Cookies.get());
         } else {
             this.collapseContentTarget.classList.add("show");
             this.collapseButtonTarget.classList.remove("collapsed");
             let expDate = new Date();
             expDate.setTime(expDate.getTime() + (4 * 60 * 60 * 1000));// 4 hours
-            $.cookie(cookieName, 'open', { expires: expDate });
+            Cookies.set(cookieName, 'open', { expires: expDate });
 
             console.log('collapse'+this.typeValue, " -- cookie added");
-            console.log("all cookies: ", $.cookie());
+            console.log("all cookies: ", Cookies.get());
         }
     }
 }

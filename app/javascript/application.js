@@ -4,4 +4,4 @@ import "./controllers"
 import * as bootstrap from "bootstrap"
 
 import "./vendor/jquery"
-import "jquery.cookie"
+import "js-cookie"

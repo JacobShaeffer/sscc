@@ -1,4 +1,4 @@
-<%= form_for [@metadata_type, @metadatum] do |form| %>
+<%= bootstrap_form_for [@metadata_type, @metadatum] do |form| %>
   <% if @metadatum.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(@metadatum.errors.count, "error") %> prohibited this metadatum from being saved:</h2>

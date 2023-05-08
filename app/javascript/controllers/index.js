@@ -10,5 +10,5 @@ application.register(fileSelect_id, fileSelectController)
 import multiSelectController, {string_identifier as multiSelect_id} from "./multiSelect_controller"
 application.register(multiSelect_id, multiSelectController)
 
-// import ||Controller, {string_identifier as ||_id} from "./||_controller"
-// application.register(||_id, ||Controller)
+import accordionController, {string_identifier as accordion_id} from "./accordion_controller"
+application.register(accordion_id, accordionController)

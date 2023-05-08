@@ -14,13 +14,25 @@
             <td><%##= button_to "Destroy", metadata_type_path(metadata_type), method: :delete, data: { confirm: "Are you sure?" } %></td>-->
     <div class="accordion">
       <% @metadata_types.each do |metadata_type| %>
-        <div class="accordion-item">
+        <div class="accordion-item" data-controller="accordion" data-accordion-type-value="<%= metadata_type.id %>">
           <h2 class="accordion-header" id="heading<%= metadata_type.id %>">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= metadata_type.id %>" aria-expanded="false" aria-controls="collapse<%= metadata_type.id %>">
+            <button class="accordion-button collapsed" 
+                    type="button" 
+                    aria-expanded="false" 
+                    aria-controls="collapse<%= metadata_type.id %>"
+                    data-action="click->accordion#toggleCollapse" 
+                    data-accordion-target="collapseButton"
+                    id="accordion-button<%= metadata_type.id %>"
+            >
               <%= metadata_type.name %><span class="badge bg-secondary" style="margin-left: 15px;"><%= metadata_type.metadata.count %></span>
             </button>
           </h2>
-          <div id="collapse<%= metadata_type.id %>" class="accordion-collapse collapse" aria-labelledby="heading<%= metadata_type.id %>" data-bs-parent="#accordionExample">
+          <div id="collapse<%= metadata_type.id %>" 
+                class="accordion-collapse collapse" 
+                aria-labelledby="heading<%= metadata_type.id %>" 
+                data-bs-parent="#accordionExample"
+                data-accordion-target="collapseContent"
+          >
             <div class="accordion-body">
               <table class="table table-striped">
                 <thead>

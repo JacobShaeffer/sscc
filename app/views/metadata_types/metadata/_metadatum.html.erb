@@ -1,5 +1,9 @@
 <tr id="<%= dom_id metadatum %>">
   <td><%= metadatum.name %></td>
-  <td><%= link_to "Edit", edit_metadata_type_metadatum_path(metadatum.metadata_type, metadatum) %></td>
-  <td><%= button_to "Destroy", metadata_type_metadatum_path(metadatum.metadata_type, metadatum), method: :delete, data: { confirm: "Are you sure?" } %></td>
+  <td class="thin-column">
+    <div class="btn-tools">
+      <%= link_to "Edit", edit_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-primary me-2" %>
+      <%= button_to "Destroy", metadata_type_metadatum_path(metadatum.metadata_type, metadatum), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"%>
+    </div>
+  </td>
 </tr>

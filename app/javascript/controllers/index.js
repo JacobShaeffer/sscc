@@ -12,3 +12,5 @@ application.register(multiSelect_id, multiSelectController)
 
 import accordionController, {string_identifier as accordion_id} from "./accordion_controller"
 application.register(accordion_id, accordionController)
+import table_collapseController, {string_identifier as table_collapse_id} from "./table_collapse_controller"
+application.register(table_collapse_id, table_collapseController)

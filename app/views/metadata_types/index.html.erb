@@ -34,11 +34,18 @@
                 data-accordion-target="collapseContent"
           >
             <div class="accordion-body">
-              <table class="table table-striped">
+              <table class="table table-striped accordion" data-controller="table_collapse">
                 <thead>
-                  <tr>
+                  <tr class="test<%=metadata_type.id%>" data-action="click->table_collapse#toggle">
                     <th>Metadata Name</th>
-                    <th colspan="3">Actions</th>
+                    <th class="thin-column">Actions</th>
+                  </tr>
+                  <tr class="collapse accordion-collapse" data-table_collapse-target="collapse" id="table_collapse_<%=metadata_type.id%>">
+                    <!-- TODO: use rails form elements to make this actually create a metadata-->
+                    <th>
+                      <input type="text" class="form-control" id="metadatum_name" name="metadatum[name]" placeholder="Name">
+                    </th>
+                    <th class="thin-column"><button class="btn btn-success">+</button></th>
                   </tr>
                 </thead>
                 <tbody>

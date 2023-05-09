@@ -14,6 +14,16 @@
 	font-size: large;
 }
 
+.btn-tools {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+}
+
+.thin-column {
+	width: 161px;
+}
+
 .hidden {
 	display: none;
 }

@@ -7,7 +7,18 @@ Rails.application.routes.draw do
     collection do
       get :search
     end
-    resources :metadata, except: [:index, :show], controller: 'metadata_types/metadata'
+    # resources :metadata, except: [:index, :show], controller: 'metadata_types/metadata' do
+    #   collection do
+    #     get :search
+    #   end
+    # end
+    scope module: 'metadata_types' do
+      resources :metadata, except: [:index, :show] do
+        collection do
+          get :search
+        end
+      end
+    end
   end
   resources :contents
   resources :copyright_permissions,  except: [:index]

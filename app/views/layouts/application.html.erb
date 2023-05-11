@@ -13,8 +13,12 @@
   <body>
     <%= render "layouts/navbar" %>
     <div class="container pt-3">
-      <%= render "layouts/alert" %>
-      <%= render "layouts/notice" %>
+      <div id="alert">
+        <%= render "layouts/alert" %>
+      </div>
+      <div id="notice">
+        <%= render "layouts/notice" %>
+      </div>
       <%= yield %>
     </div>
   </body>

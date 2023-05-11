@@ -1,0 +1,52 @@
+    <div class="accordion" >
+      <% metadata_types.each do |metadata_type| %>
+        <div class="accordion-item" data-controller="accordion" data-accordion-type-value="<%= metadata_type.id %>">
+          <h2 class="accordion-header" id="heading<%= metadata_type.id %>">
+            <button class="accordion-button collapsed" 
+                    type="button" 
+                    aria-expanded="false" 
+                    aria-controls="collapse<%= metadata_type.id %>"
+                    data-action="click->accordion#toggleCollapse" 
+                    data-accordion-target="collapseButton"
+                    id="accordion-button<%= metadata_type.id %>"
+            >
+              <%= metadata_type.name %><span class="badge bg-secondary" style="margin-left: 15px;"><%= metadata_type.metadata.count %></span>
+            </button>
+          </h2>
+          <div id="collapse<%= metadata_type.id %>" 
+                class="accordion-collapse collapse" 
+                aria-labelledby="heading<%= metadata_type.id %>" 
+                data-bs-parent="#accordionExample"
+                data-accordion-target="collapseContent"
+          >
+            <div class="accordion-body">
+              <table class="table table-striped" data-controller="metadatasearch" data-metadatasearch-type-value="<%= metadata_type.id %>">
+                <thead>
+                  <tr>
+                    <th>Metadata Name</th>
+                    <th class="thin-column">Actions</th>
+                  </tr>
+                  <tr>
+                      <th>
+                        <%= render "search_input", id: metadata_type.id %>
+                      </th>
+                      <th class="thin-column btn-tools">
+                        <%= form_for [metadata_type, Metadatum.new] do |form| %>
+                            <%= form.hidden_field :name, id: metadata_type.id, data: { "metadatasearch-target": "nameinput" } %>
+                            <%= form.submit "+", class: "btn btn-success me-2" %>
+                        <% end %>
+                        <button class="btn btn-warning" data-action="click->metadatasearch#onClear">clear</button>
+                      </th>
+                  </tr>
+                </thead>
+                <tbody id="metadataTable_<%= metadata_type.id %>">
+                  <% metadata_type.metadata.each do |metadatum| %>
+                    <%= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>

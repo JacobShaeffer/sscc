@@ -9,55 +9,6 @@
 <div class="row">
   <div class="col">
   <!--TODO: need to be able to edit and destroy MetadataTypes and need to be able to add metadata to types-->
-<!--            <td><%##= link_to "Show", metadata_type %></td>
-            <td><%##= link_to "Edit", edit_metadata_type_path(metadata_type) %></td>
-            <td><%##= button_to "Destroy", metadata_type_path(metadata_type), method: :delete, data: { confirm: "Are you sure?" } %></td>-->
-    <div class="accordion">
-      <% @metadata_types.each do |metadata_type| %>
-        <div class="accordion-item" data-controller="accordion" data-accordion-type-value="<%= metadata_type.id %>">
-          <h2 class="accordion-header" id="heading<%= metadata_type.id %>">
-            <button class="accordion-button collapsed" 
-                    type="button" 
-                    aria-expanded="false" 
-                    aria-controls="collapse<%= metadata_type.id %>"
-                    data-action="click->accordion#toggleCollapse" 
-                    data-accordion-target="collapseButton"
-                    id="accordion-button<%= metadata_type.id %>"
-            >
-              <%= metadata_type.name %><span class="badge bg-secondary" style="margin-left: 15px;"><%= metadata_type.metadata.count %></span>
-            </button>
-          </h2>
-          <div id="collapse<%= metadata_type.id %>" 
-                class="accordion-collapse collapse" 
-                aria-labelledby="heading<%= metadata_type.id %>" 
-                data-bs-parent="#accordionExample"
-                data-accordion-target="collapseContent"
-          >
-            <div class="accordion-body">
-              <table class="table table-striped accordion" data-controller="table_collapse">
-                <thead>
-                  <tr class="test<%=metadata_type.id%>" data-action="click->table_collapse#toggle">
-                    <th>Metadata Name</th>
-                    <th class="thin-column">Actions</th>
-                  </tr>
-                  <tr class="collapse accordion-collapse" data-table_collapse-target="collapse" id="table_collapse_<%=metadata_type.id%>">
-                    <!-- TODO: use rails form elements to make this actually create a metadata-->
-                    <th>
-                      <input type="text" class="form-control" id="metadatum_name" name="metadatum[name]" placeholder="Name">
-                    </th>
-                    <th class="thin-column"><button class="btn btn-success">+</button></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% metadata_type.metadata.each do |metadatum| %>
-                    <%= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
-                  <% end %>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
+    <%= render "accordion", metadata_types: @metadata_types %>
   </div>
 </div>

@@ -1,6 +1,6 @@
 class MetadataTypes::MetadataController < ApplicationController
   before_action :set_metadatum, only: %i[ edit update destroy ]
-  before_action :set_metadata_type, only: %i[ new edit create destory ]
+  before_action :set_metadata_type, only: %i[ new edit create destory search ]
 	before_action :authenticate_user!
 
   # GET /metadata/new
@@ -19,11 +19,13 @@ class MetadataTypes::MetadataController < ApplicationController
 
     respond_to do |format|
       if @metadatum.save
-        format.html { redirect_to @metadata_type, notice: "Metadatum was successfully created." }
-        format.json { render :show, status: :created, location: @metadata_type }
+        flash.now[:notice] = "#{@metadatum.metadata_type.name} \"#{@metadatum.name}\" was created successfully."
+        # format.html { redirect_to @metadata_type, notice: "Metadatum was successfully created." }
+        @target = "metadataTable_#{params[:metadata_type_id]}"
+        @metadata = MetadataType.find(params[:metadata_type_id]).metadata
+        format.turbo_stream
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @metadata_type.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -47,11 +49,22 @@ class MetadataTypes::MetadataController < ApplicationController
     title = @metadatum.name
 
     if @metadatum.destroy
-      flash[:notice] = "\"#{title}\" was deleted successfully."
-      redirect_to metadata_type_path(params[:metadata_type_id])
+      flash.now[:notice] = "\"#{title}\" was deleted successfully."
+      @target = "metadatum_#{@metadatum.id}"
+      respond_to do |format|
+        format.turbo_stream
+      end
     else
       flash.now[:alert] = "There was an error deleting the metadatum."
       render :show
+    end
+  end
+
+  def search
+    @target = params[:target]
+    @metadata = @metadata_type.metadata.where("name LIKE ?", "%#{params[:search]}%")
+    respond_to do |format|
+      format.turbo_stream
     end
   end
 

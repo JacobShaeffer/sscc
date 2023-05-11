@@ -5,6 +5,11 @@ class MetadataTypesController < ApplicationController
   # GET /metadata_types or /metadata_types.json
   def index
     @metadata_types = MetadataType.all
+    # These do not prevent a malevolent actor from performing these actions
+    # but they do prevent the buttons from being displayed.
+    @show_create = true
+    @show_edit = true
+    @show_delete = true
   end
 
   # GET /metadata_types/1 or /metadata_types/1.json

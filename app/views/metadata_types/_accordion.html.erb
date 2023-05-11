@@ -27,16 +27,18 @@
                     <th class="thin-column">Actions</th>
                   </tr>
                   <tr>
-                      <th>
-                        <%= render "search_input", id: metadata_type.id %>
-                      </th>
-                      <th class="thin-column btn-tools">
-                        <%= form_for [metadata_type, Metadatum.new] do |form| %>
-                            <%= form.hidden_field :name, id: metadata_type.id, data: { "metadatasearch-target": "nameinput" } %>
-                            <%= form.submit "+", class: "btn btn-success me-2" %>
-                        <% end %>
-                        <button class="btn btn-warning" data-action="click->metadatasearch#onClear">clear</button>
-                      </th>
+                        <th>
+                            <%= render "search_input", id: metadata_type.id %>
+                        </th>
+                        <th class="thin-column btn-tools">
+                            <% if @show_create %>
+                                <%= form_for [metadata_type, Metadatum.new] do |form| %>
+                                    <%= form.hidden_field :name, id: metadata_type.id, data: { "metadatasearch-target": "nameinput" } %>
+                                    <%= form.submit "+", class: "btn btn-success me-2" %>
+                                <% end %>
+                            <% end %>
+                            <button class="btn btn-warning" data-action="click->metadatasearch#onClear">clear</button>
+                        </th>
                   </tr>
                 </thead>
                 <tbody id="metadataTable_<%= metadata_type.id %>">

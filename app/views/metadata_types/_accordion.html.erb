@@ -10,7 +10,11 @@
                     data-accordion-target="collapseButton"
                     id="accordion-button<%= metadata_type.id %>"
             >
-              <%= metadata_type.name %><span class="badge bg-secondary" style="margin-left: 15px;"><%= metadata_type.metadata.count %></span>
+              <%= metadata_type.name %>
+              <span class="badge bg-secondary" style="margin-left: 15px;"><%= metadata_type.metadata.count %></span>
+              <!--FIXME: clicking the edit button activates the accordion collapse-->
+              <!--TODO: look at using dropdown split button for this???-->
+              <span class="accordion-header-button"><%= link_to "edit", edit_metadata_type_path(metadata_type.id), class: "btn btn-primary" %></span>
             </button>
           </h2>
           <div id="collapse<%= metadata_type.id %>" 

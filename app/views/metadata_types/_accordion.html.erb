@@ -40,9 +40,10 @@
                   </tr>
                 </thead>
                 <tbody id="metadataTable_<%= metadata_type.id %>">
-                  <% metadata_type.metadata.each do |metadatum| %>
-                    <%= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
-                  <% end %>
+                    <% metadata_type.metadata.each do |metadatum| %>
+                        <%= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
+                        <%#= render "metadata_types/metadata/edit", :locals => {:metadatum => metadatum, :metadata_type => metadata_type} %>
+                    <% end %>
                 </tbody>
               </table>
             </div>

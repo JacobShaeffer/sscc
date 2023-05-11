@@ -1,12 +1,7 @@
 class MetadataTypes::MetadataController < ApplicationController
   before_action :set_metadatum, only: %i[ edit update destroy ]
-  before_action :set_metadata_type, only: %i[ new edit create destory search ]
+  before_action :set_metadata_type, only: %i[ edit create destory search ]
 	before_action :authenticate_user!
-
-  # GET /metadata/new
-  def new
-    @metadatum = Metadatum.new
-  end
 
   # GET /metadata/1/edit
   def edit

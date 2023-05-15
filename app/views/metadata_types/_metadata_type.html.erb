@@ -1,7 +1,9 @@
-<div id="<%= dom_id metadata_type %>">
-  <p>
-    <strong>Metadata Type:</strong>
-    <%= metadata_type.name %>
-  </p>
-
-</div>
+<tr id="<%= dom_id metadata_type%>">
+  <td><%= metadata_type.name %></td>
+  <td class="thin-column">
+    <div class="btn-tools">
+      <%= link_to "Edit", edit_metadata_type_path(metadata_type.id), class: "btn btn-primary me-2" %>
+      <%= button_to "Destroy", metadata_type_path(metadata_type.id), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"%>
+    </div>
+  </td>
+</tr>

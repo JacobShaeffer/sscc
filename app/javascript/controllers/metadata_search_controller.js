@@ -1,37 +1,33 @@
 import { Controller } from '@hotwired/stimulus';
-import { get, post } from "@rails/request.js"
+import { get } from "@rails/request.js"
 
 export const string_identifier = 'metadatasearch';
 
 export default class extends Controller {
     static targets = ["name", "nameinput"];
 	static values = {
-		type: String
+		type: String,
+		url: String
 	}
 
 	onSearchInput(event) {
         this.nameinputTarget.value = event.target.value;
-		this.autoComplete(this.typeValue, event.target.value);
+		this.autoComplete(event.target.value);
 	}
 
 	onClear() {
 		this.nameTarget.value = "";
 		this.nameinputTarget.value = "";
-		this.autoComplete(this.typeValue, "");
+		this.autoComplete("");
 	}
 
-	// Private
-	target_id(metadata_type){
-		return `metadataTable_${metadata_type}`;
-	}
-
-	autoComplete(metadata_type_id, search){
+	autoComplete(search){
 		let params = new URLSearchParams();
 
-		params.append("target", this.target_id(metadata_type_id));
+		params.append("target", `metadataTable_${this.typeValue}`);
 		params.append("search", search);
 
-		get(`/metadata_types/${metadata_type_id}/metadata/search?${params}`, {
+		get(`${this.urlValue}?${params}`, {
 			responseKind: "turbo-stream", 
 		})
 	}

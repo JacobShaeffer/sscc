@@ -1,7 +1,7 @@
     <div class="accordion" >
       <% metadata_types.each do |metadata_type| %>
         <div class="accordion-item" data-controller="accordion" data-accordion-type-value="<%= metadata_type.id %>">
-          <h2 class="accordion-header" id="heading<%= metadata_type.id %>">
+          <h1 class="accordion-header" id="heading<%= metadata_type.id %>">
             <button class="accordion-button collapsed" 
                     type="button" 
                     aria-expanded="false" 
@@ -12,11 +12,11 @@
             >
               <%= metadata_type.name %>
               <span class="badge bg-secondary" style="margin-left: 15px;"><%= metadata_type.metadata.count %></span>
-              <!--FIXME: clicking the edit button activates the accordion collapse-->
-              <!--TODO: look at using dropdown split button for this???-->
-              <span class="accordion-header-button"><%= link_to "edit", edit_metadata_type_path(metadata_type.id), class: "btn btn-primary" %></span>
             </button>
-          </h2>
+            <ul class="dropdown-menu">
+              <li><%= link_to "Edit", edit_metadata_type_path(metadata_type.id), class: "dropdown-item" %></li>
+            </ul>
+          </h1>
           <div id="collapse<%= metadata_type.id %>" 
                 class="accordion-collapse collapse" 
                 aria-labelledby="heading<%= metadata_type.id %>" 
@@ -24,7 +24,11 @@
                 data-accordion-target="collapseContent"
           >
             <div class="accordion-body">
-              <table class="table table-striped" data-controller="metadatasearch" data-metadatasearch-type-value="<%= metadata_type.id %>">
+              <table class="table table-striped" 
+                    data-controller="metadatasearch" 
+                    data-metadatasearch-type-value="<%= metadata_type.id %>"
+                    data-metadatasearch-url-value="/metadata_types/<%= metadata_type.id %>/metadata/search"
+              >
                 <thead>
                   <tr>
                     <th>Metadata Name</th>

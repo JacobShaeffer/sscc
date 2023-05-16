@@ -1,0 +1,28 @@
+<!--<tr id="<%#= dom_id metadata_type%>">
+		<td>
+			<%#= form_for(metadata_type) do |form| %>-->
+				<%#= form.text_field :name, class: "form-control", data: { "metadatasearch-target": "nameinput" } %>
+<!--		</td>
+		<td class="thin-column">
+			<div class="btn-tools">
+				<%#= form.submit "Update", method: :put, class: "btn btn-primary me-2" %>-->
+<!--				<button class="btn btn-warning" data-action="click->metadatasearch#onClear">Cancel</button>
+			</div>
+			<%# end %>-->
+<!--		</td>
+</tr>-->
+<div class="list-group-item" id="<%= dom_id metadata_type%>">
+	<%= form_for(metadata_type) do |form| %>
+	<div class="row">
+		<div class="col">
+				<%= form.text_field :name, class: "form-control", data: { "metadatasearch-target": "nameinput" } %>
+		</div>
+		<div class="col thin-column">
+			<div class="btn-tools">
+				<%= form.submit "Update", method: :put, class: "btn btn-primary me-2" %>
+				<button class="btn btn-warning" data-action="click->metadatasearch#onClear">Cancel</button>
+			</div>
+		</div>
+	</div>
+	<%end%>
+</div>

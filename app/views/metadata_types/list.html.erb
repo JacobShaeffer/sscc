@@ -1,4 +1,4 @@
-	<table class="table table-striped" 
+<!--	<table class="table table-striped" 
 				data-controller="metadatasearch"
 				data-metadatasearch-url-value="/metadata_types/search"
 	>
@@ -9,37 +9,48 @@
 			</tr>
 			<tr>
 				<th>
-					<%= render "search_input", id: "type" %>
-				</th>
+					<%#= render "search_input", id: "type" %>-->
+<!--				</th>
 				<th class="thin-column btn-tools">
-						<%= form_with model: MetadataType.new do |form| %>
-							<%= form.hidden_field :name, data: { "metadatasearch-target": "nameinput" } %>
-							<%= form.submit "+", class: "btn btn-success me-2" %>
-						<% end %>
-					<button class="btn btn-warning" data-action="click->metadatasearch#onClear">clear</button>
+						<%#= form_with model: MetadataType.new do |form| %>-->
+							<%#= form.hidden_field :name, data: { "metadatasearch-target": "nameinput" } %>
+							<%#= form.submit "+", class: "btn btn-success me-2" %>
+						<%# end %>
+<!--					<button class="btn btn-warning" data-action="click->metadatasearch#onClear">clear</button>
 				</th>
 			</tr>
 		</thead>
 		<tbody id="metadata_type_list">
-	<!------------------------------------------------------------------>
-			<tr id="edit_test">
-				<%= form_with model: MetadataType.find(1) do |form| %>
-					<td>
-							<!--<input type="text" class="form-control" >-->
-							<%= form.text_field :name, class: "form-control", data: { "metadatasearch-target": "nameinput" } %>
-					</td>
-					<td class="thin-column">
-						<div class="btn-tools">
-						<%= form.submit "Update", class: "btn btn-primary me-2" %>
-						<%#= link_to "Edit", edit_metadata_type_path(0), class: "btn btn-primary me-2" %>
-						<button class="btn btn-warning" data-action="click->metadatasearch#onClear">Cancel</button>
-						</div>
-					</td>
+			<%# @metadata_types.each do |metadata_type| %>-->
+				<%#= render "metadata_type", metadata_type: metadata_type %>
+			<%# end %>
+<!--		</tbody>
+	</table>-->
+	<div class="list-group list-group-striped"
+		data-controller="metadatasearch"
+		data-metadatasearch-url-value="/metadata_types/search"
+	>	
+		<div class="list-group-item">
+			<div>
+				Title
+			</div>
+			<div>
+				Actions
+			</div>
+		</div>
+		<div class="list-group-item">
+			<div>
+				<%= render "search_input", id: "type" %>
+			</div>
+			<div class="thin-column btn-tools">
+				<%= form_with model: MetadataType.new do |form| %>
+					<%= form.hidden_field :name, data: { "metadatasearch-target": "nameinput" } %>
+					<%= form.submit "+", class: "btn btn-success me-2" %>
 				<% end %>
-			</tr>
-	<!------------------------------------------------------------------>
-			<% @metadata_types.each do |metadata_type| %>
-				<%= render "metadata_type", metadata_type: metadata_type %>
-			<% end %>
-		</tbody>
-	</table>
+				<button class="btn btn-warning" data-action="click->metadatasearch#onClear">clear</button>
+			</div>
+		</div>
+		<% @metadata_types.each do |metadata_type| %>
+			<%= render "metadata_type", metadata_type: metadata_type %>
+		<% end %>
+	</div>

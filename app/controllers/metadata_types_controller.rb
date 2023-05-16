@@ -18,6 +18,9 @@ class MetadataTypesController < ApplicationController
 
   # GET /metadata_types/1/edit
   def edit
+		respond_to do |format|
+			format.turbo_stream
+		end
   end
 
   # POST /metadata_types or /metadata_types.json
@@ -37,7 +40,7 @@ class MetadataTypesController < ApplicationController
   def update
     respond_to do |format|
       if @metadata_type.update(metadata_type_params)
-        format.html { redirect_to metadata_type_url(@metadata_type), notice: "Metadata type was successfully updated." }
+        format.html { redirect_to list_metadata_types_path, notice: "Metadata type was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end

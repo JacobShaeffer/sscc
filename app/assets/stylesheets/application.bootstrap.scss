@@ -21,13 +21,21 @@
 }
 
 .thin-column {
-	width: 178px;
+	width: 183px;
 }
 
 .list-group-striped {
 	.list-group-item:nth-child(odd) {
 		background-color: #f9f9f9;
 	}
+}
+
+.list-group-header {
+	border-bottom-width: 1px !important;
+}
+
+.bold {
+	font-weight: bold;
 }
 
 .hidden {

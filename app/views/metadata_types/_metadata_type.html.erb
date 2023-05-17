@@ -1,20 +1,9 @@
-<!--<tr id="<%#= dom_id metadata_type%>">
-  <td><%#= metadata_type.name %></td>
-  <td class="thin-column">
-    <div class="btn-tools">
-      <%#= link_to "Edit", edit_metadata_type_path(metadata_type.id), class: "btn btn-primary me-2", :data => { :'turbo_stream' => '' } %>-->
-      <%#= button_to "Destroy", metadata_type_path(metadata_type.id), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"%>
-<!--    </div>
-  </td>
-</tr>-->
-
 <div class="list-group-item" id="<%= dom_id metadata_type%>">
 	<div class="row">
 		<div class="col"><%= metadata_type.name %></div>
-		<div class="col thin-column">
+		<div class="thin-column">
 			<div class="btn-tools">
 				<%= link_to "Edit", edit_metadata_type_path(metadata_type.id), class: "btn btn-primary me-2", :data => { :'turbo_stream' => '' } %>
-				<!-- Add data-turbo-stream attribute-->
 				<%= button_to "Destroy", metadata_type_path(metadata_type.id), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"%>
 			</div>
 		</div>

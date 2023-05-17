@@ -1,26 +1,15 @@
-<!--<tr id="<%#= dom_id metadata_type%>">
-		<td>
-			<%#= form_for(metadata_type) do |form| %>-->
-				<%#= form.text_field :name, class: "form-control", data: { "metadatasearch-target": "nameinput" } %>
-<!--		</td>
-		<td class="thin-column">
-			<div class="btn-tools">
-				<%#= form.submit "Update", method: :put, class: "btn btn-primary me-2" %>-->
-<!--				<button class="btn btn-warning" data-action="click->metadatasearch#onClear">Cancel</button>
-			</div>
-			<%# end %>-->
-<!--		</td>
-</tr>-->
-<div class="list-group-item" id="<%= dom_id metadata_type%>">
+<div class="list-group-item" id="<%= dom_id metadata_type %>">
 	<%= form_for(metadata_type) do |form| %>
 	<div class="row">
 		<div class="col">
 				<%= form.text_field :name, class: "form-control", data: { "metadatasearch-target": "nameinput" } %>
+				<%= inline_error_for(:name, metadata_type) %>
 		</div>
-		<div class="col thin-column">
+		<div class="thin-column">
 			<div class="btn-tools">
 				<%= form.submit "Update", method: :put, class: "btn btn-primary me-2" %>
-				<button class="btn btn-warning" data-action="click->metadatasearch#onClear">Cancel</button>
+				<!--<button class="btn btn-warning" data-action="click->metadatasearch#onClear">Cancel</button>-->
+				<%= link_to "Cancel", list_metadata_types_path, class: "btn btn-warning" %>
 			</div>
 		</div>
 	</div>

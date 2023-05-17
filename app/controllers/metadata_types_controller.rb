@@ -40,9 +40,9 @@ class MetadataTypesController < ApplicationController
   def update
     respond_to do |format|
       if @metadata_type.update(metadata_type_params)
-        format.html { redirect_to list_metadata_types_path, notice: "Metadata type was successfully updated." }
+				format.turbo_stream
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.turbo_stream { render :edit, status: :unprocessable_entity }
       end
     end
   end
@@ -60,6 +60,9 @@ class MetadataTypesController < ApplicationController
   def search
     @target = params[:target]
     @metadata_types = MetadataType.where("name LIKE ?", "%#{params[:search]}%")
+		print "----------------------------------------------------\n"
+		print @metadata_types.inspect
+		print "\n----------------------------------------------------\n"
     respond_to do |format|
       format.turbo_stream
     end

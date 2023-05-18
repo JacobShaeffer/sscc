@@ -18,9 +18,10 @@ class MetadataTypesController < ApplicationController
 
   # GET /metadata_types/1/edit
   def edit
-		respond_to do |format|
-			format.turbo_stream
-		end
+		# respond_to do |format|
+		# 	format.turbo_stream
+		# end
+    @metadata_types = MetadataType.all
   end
 
   # POST /metadata_types or /metadata_types.json

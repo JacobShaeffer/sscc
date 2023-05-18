@@ -1,6 +1,6 @@
 class MetadataTypes::MetadataController < ApplicationController
   before_action :set_metadatum, only: %i[ edit update destroy ]
-  before_action :set_metadata_type, only: %i[ edit create destory search ]
+  before_action :set_metadata_type
 	before_action :authenticate_user!
 
   # GET /metadata/1/edit
@@ -27,13 +27,15 @@ class MetadataTypes::MetadataController < ApplicationController
 
   # PATCH/PUT /metadata/1 or /metadata/1.json
   def update
+    #TODO: turn these into a helper and embed them in the erb
+    @show_create = true
+    @show_edit = true
+    @show_delete = true
     respond_to do |format|
       if @metadatum.update(metadatum_params)
-        format.html { redirect_to metadata_type_path(@metadatum.metadata_type_id), notice: "Metadatum was successfully updated." }
-        format.json { render :show, status: :ok, location: @metadatum }
+        format.turbo_stream
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @metadatum.errors, status: :unprocessable_entity }
       end
     end
   end

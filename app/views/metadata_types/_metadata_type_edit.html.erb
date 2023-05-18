@@ -1,10 +1,10 @@
 <div class="list-group-item" id="<%= dom_id metadata_type %>">
-	<%= turbo_frame_tag dom_id(metadata_type, "turbo_frame_") do %>
+	<%= turbo_frame_tag dom_id(metadata_type, "turbo_frame") do %>
 		<%= form_for(metadata_type) do |form| %>
 		<div class="row">
 			<div class="col">
-					<%= form.text_field :name, class: "form-control", data: { "metadatasearch-target": "nameinput" } %>
-					<%= inline_error_for(:name, metadata_type) %>
+				<%= form.text_field :name, class: "form-control", data: { "metadatasearch-target": "nameinput" } %>
+				<%= inline_error_for(:name, metadata_type) %>
 			</div>
 			<div class="thin-column">
 				<div class="btn-tools">

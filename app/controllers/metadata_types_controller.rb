@@ -18,10 +18,6 @@ class MetadataTypesController < ApplicationController
 
   # GET /metadata_types/1/edit
   def edit
-		# respond_to do |format|
-		# 	format.turbo_stream
-		# end
-    @metadata_types = MetadataType.all
   end
 
   # POST /metadata_types or /metadata_types.json
@@ -43,7 +39,7 @@ class MetadataTypesController < ApplicationController
       if @metadata_type.update(metadata_type_params)
 				format.turbo_stream
       else
-        format.turbo_stream { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_entity }
       end
     end
   end

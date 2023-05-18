@@ -7,7 +7,8 @@ export default class extends Controller {
     static targets = ["name", "nameinput"];
 	static values = {
 		type: String,
-		url: String
+		url: String,
+		target: String
 	}
 
 	onSearchInput(event) {
@@ -24,7 +25,7 @@ export default class extends Controller {
 	autoComplete(search){
 		let params = new URLSearchParams();
 
-		params.append("target", `metadataTable_${this.typeValue}`);
+		params.append("target", this.targetValue + this.typeValue);
 		params.append("search", search);
 
 		get(`${this.urlValue}?${params}`, {

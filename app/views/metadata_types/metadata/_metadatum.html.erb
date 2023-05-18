@@ -1,17 +1,37 @@
-<tr id="<%= dom_id metadatum %>">
-  <% if @show_edit || @show_delete %>
-    <td><%= metadatum.name %></td>
+<!--<tr id="<%#= dom_id metadatum %>">-->
+  <%# if @show_edit || @show_delete %>
+<!--    <td><%#= metadatum.name %></td>
     <td class="thin-column">
       <div class="btn-tools">
-        <% if @show_edit %>
-          <%= link_to "Edit", edit_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-primary me-2" %>
-        <% end %>
-        <% if @show_delete %>
-          <%= button_to "Destroy", metadata_type_metadatum_path(metadatum.metadata_type, metadatum), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"%>
-        <% end %>
-      </div>
+        <%# if @show_edit %>-->
+          <%#= link_to "Edit", edit_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-primary me-2" %>
+        <%# end %>
+        <%# if @show_delete %>
+          <%#= button_to "Destroy", metadata_type_metadatum_path(metadatum.metadata_type, metadatum), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"%>
+        <%# end %>
+<!--      </div>
     </td>
-  <% else %>
-    <td colspan="2"><%= metadatum.name %></td>
-  <% end %>
-</tr>
+  <%# else %>-->
+<!--    <td colspan="2"><%#= metadatum.name %></td>-->
+  <%# end %>
+<!--</tr>-->
+
+<div class="list-group-item" id="<%= dom_id metadatum%>">
+	<%= turbo_frame_tag dom_id(metadatum, "turbo_frame") do %>
+		<div class="row">
+			<div class="col"><%= metadatum.name %></div>
+      <% if @show_edit || @show_delete %>
+        <div class="thin-column">
+          <div class="btn-tools">
+            <% if @show_edit %>
+              <%= link_to "Edit", edit_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-primary me-2", :data => { :'turbo_stream' => '' } %>
+            <% end %>
+            <% if @show_delete %>
+              <%= button_to "Destroy", metadata_type_metadatum_path(metadatum.metadata_type, metadatum), method: :delete, class: "btn btn-danger"%>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+		</div>
+	<% end %>
+</div>

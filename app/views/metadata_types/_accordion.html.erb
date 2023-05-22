@@ -78,7 +78,7 @@
                       <%= render "search_input", id: metadata_type.id %>
                     </div>
                     <div class="thin-column btn-tools">
-                      <% if @show_create %>
+                      <% if policy(Metadatum).create? %>
                           <%= form_for [metadata_type, Metadatum.new] do |form| %>
                               <%= form.hidden_field :name, id: metadata_type.id, data: { "metadatasearch-target": "nameinput" } %>
                               <%= form.submit "+", class: "btn btn-success me-2" %>

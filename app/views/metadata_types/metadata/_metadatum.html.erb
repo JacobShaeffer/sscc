@@ -20,14 +20,12 @@
 	<%= turbo_frame_tag dom_id(metadatum, "turbo_frame") do %>
 		<div class="row">
 			<div class="col"><%= metadatum.name %></div>
-      <% if @show_edit || @show_delete %>
+      <% if policy(Metadatum).edit?  %>
         <div class="thin-column">
           <div class="btn-tools">
-            <% if @show_edit %>
-              <%= link_to "Edit", edit_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-primary me-2", :data => { :'turbo_stream' => '' } %>
-            <% end %>
-            <% if @show_delete %>
-              <%= button_to "Destroy", metadata_type_metadatum_path(metadatum.metadata_type, metadatum), method: :delete, class: "btn btn-danger"%>
+            <%= link_to "Edit", edit_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-primary me-2", :data => { :'turbo_stream' => '' } %>
+            <% if policy(Metadatum).destroy? %>
+              <%= button_to "Destroy", metadata_type_metadatum_path(metadatum.metadata_type, metadatum), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"%>
             <% end %>
           </div>
         </div>

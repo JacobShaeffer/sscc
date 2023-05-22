@@ -82,5 +82,7 @@ gem 'carrierwave', '~> 2.2', '>= 2.2.3'
 
 # rails_admin panel
 gem 'rails_admin', '~> 3.1', '>= 3.1.2'
+
 gem "sassc-rails"
 gem 'bootstrap_form', '~> 5.1'
+gem "pundit", "~> 2.3"

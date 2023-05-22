@@ -5,10 +5,12 @@ class MetadataTypes::MetadataController < ApplicationController
 
   # GET /metadata/1/edit
   def edit
+    authorize Metadatum
   end
 
   # POST /metadata or /metadata.json
   def create
+    authorize Metadatum
     @metadatum = Metadatum.new(metadatum_params.merge(user: current_user))
     @metadatum.metadata_type = @metadata_type
 
@@ -27,10 +29,7 @@ class MetadataTypes::MetadataController < ApplicationController
 
   # PATCH/PUT /metadata/1 or /metadata/1.json
   def update
-    #TODO: turn these into a helper and embed them in the erb
-    @show_create = true
-    @show_edit = true
-    @show_delete = true
+    authorize Metadatum
     respond_to do |format|
       if @metadatum.update(metadatum_params)
         format.turbo_stream
@@ -42,7 +41,7 @@ class MetadataTypes::MetadataController < ApplicationController
 
   # DELETE /metadata/1 or /metadata/1.json
   def destroy
-    print("destroying metadatum")
+    authorize Metadatum
     title = @metadatum.name
 
     if @metadatum.destroy
@@ -58,6 +57,7 @@ class MetadataTypes::MetadataController < ApplicationController
   end
 
   def search
+    authorize Metadatum
     @target = params[:target]
     @metadata = @metadata_type.metadata.where("name LIKE ?", "%#{params[:search]}%")
     respond_to do |format|

@@ -4,24 +4,23 @@ class MetadataTypesController < ApplicationController
 
   # GET /metadata_types or /metadata_types.json
   def index
+    authorize MetadataType
     @metadata_types = MetadataType.all
-    # These do not prevent a malevolent actor from performing these actions
-    # but they do prevent the buttons from being displayed.
-    @show_create = true
-    @show_edit = true
-    @show_delete = true
   end
 
   def list
+    authorize MetadataType
     @metadata_types = MetadataType.all
   end
 
   # GET /metadata_types/1/edit
   def edit
+    authorize MetadataType
   end
 
   # POST /metadata_types or /metadata_types.json
   def create
+    authorize MetadataType
     @metadata_type = MetadataType.new(metadata_type_params.merge(user: current_user))
 
     respond_to do |format|
@@ -35,6 +34,7 @@ class MetadataTypesController < ApplicationController
 
   # PATCH/PUT /metadata_types/1 or /metadata_types/1.json
   def update
+    authorize MetadataType
     respond_to do |format|
       if @metadata_type.update(metadata_type_params)
 				format.turbo_stream
@@ -46,6 +46,7 @@ class MetadataTypesController < ApplicationController
 
   # DELETE /metadata_types/1 or /metadata_types/1.json
   def destroy
+    authorize MetadataType
     @metadata_type.destroy
 
     respond_to do |format|
@@ -55,6 +56,7 @@ class MetadataTypesController < ApplicationController
   end
 
   def search
+    authorize MetadataType
     @target = params[:target]
     @metadata_types = MetadataType.where("name LIKE ?", "%#{params[:search]}%")
 		print "----------------------------------------------------\n"

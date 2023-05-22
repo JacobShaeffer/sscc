@@ -2,9 +2,11 @@
   <div class="col">
     <h1>Metadata Type</h1>
   </div>
-  <div class="col">
-    <%= link_to "List Metadata Types", list_metadata_types_path, class: "btn btn-primary" %>
-  </div>
+  <% if policy(MetadataType).list? %>
+    <div class="col">
+      <%= link_to "List Metadata Types", list_metadata_types_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
 </div>
 <div class="row">
   <div class="col">

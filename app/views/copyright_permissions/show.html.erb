@@ -2,13 +2,13 @@
 
 <div id="<%= dom_id @copyright_permission %>">
   <p>
-    <strong>Description:</strong>
-    <%= @copyright_permission.description %>
+    <strong>Notes:</strong>
+    <%= @copyright_permission.notes %>
   </p>
 
   <p>
     <strong>Organization:</strong>
-    <%= @copyright_permission.organization_id %>
+    <%= @copyright_permission.organization.name %>
   </p>
 
   <p>
@@ -25,10 +25,15 @@
     <strong>Date of response:</strong>
     <%= @copyright_permission.date_of_response %>
   </p>
+  
+  <p>
+    <strong>Communications:</strong>
+    <%= @copyright_permission.communication %>
+  </p>
 
   <p>
     <strong>User:</strong>
-    <%= @copyright_permission.user_id %>
+    <%= @copyright_permission.user.name %>
   </p>
 
 </div>

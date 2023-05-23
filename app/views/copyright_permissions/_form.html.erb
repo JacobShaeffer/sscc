@@ -12,8 +12,8 @@
   <% end %>
 
   <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description %>
+    <%= form.label :notes, style: "display: block" %>
+    <%= form.text_area :notes %>
   </div>
 
   <div>
@@ -34,6 +34,11 @@
   <div>
     <%= form.label :date_of_response, style: "display: block" %>
     <%= form.date_field :date_of_response %>
+  </div>
+
+  <div>
+    <%= form.label :communication, style: "display: block" %>
+    <%= form.text_field :communication %>
   </div>
 
   <div>

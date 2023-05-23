@@ -15,13 +15,29 @@
 		<%= form.text_field :title %>
 	</div>
 
+	<div>
+		<%= form.text_field :display_title %>
+	</div>
+
 	<div data-controller='fileSelect'>
 		<%#= form.file_field :file, onchange: "validateContentFile(this)" %>
 		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'} %>
 	</div>
 
 	<div>
+		<%= form.text_area :description %>
+	</div>
+
+	<div>
+		<%= form.number_field :year_of_publication %>
+	</div>
+
+	<div>
 		<%= form.collection_select(:copyright_permission_id, @copyright_permissions, :id, :description, prompt: true) %>
+	</div>
+	
+	<div>
+		<%= form.text_area :copyright_notes %>
 	</div>
 
 	<div class="mb-3">

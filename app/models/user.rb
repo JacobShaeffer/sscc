@@ -14,6 +14,8 @@ class User < ApplicationRecord
     # set default user role
     after_initialize :set_default_role
 
+    validates :name, presence: true
+
     private
 
     def set_default_role

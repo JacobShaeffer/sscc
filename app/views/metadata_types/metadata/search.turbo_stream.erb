@@ -2,5 +2,6 @@
     <% @metadata.each do |metadatum| %>
         <%#= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
         <%= render "metadatum", metadatum: metadatum %>
+		<%= inline_error_for(:name, metadatum) %>
     <% end %>
 <% end %>

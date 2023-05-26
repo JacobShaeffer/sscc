@@ -11,6 +11,7 @@
     <%= @copyright_permission.organization.name %>
   </p>
 
+
   <p>
     <strong>Granted:</strong>
     <%= @copyright_permission.granted %>
@@ -28,8 +29,8 @@
   
   <p>
     <strong>Communications:</strong>
-    <%= @copyright_permission.communication %>
   </p>
+  <iframe src='<%= @copyright_permission.communication_url if @copyright_permission.communication? %>' width="600" height="780"></iframe>
 
   <p>
     <strong>User:</strong>

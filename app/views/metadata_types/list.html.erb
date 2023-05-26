@@ -46,9 +46,10 @@
 			<div class="row">
 				<div class="col">
 					<%= render "search_input", id: "type" %>
+					<%= inline_error_for(:name, @metadata_type) %>
 				</div>
 				<div class="thin-column btn-tools">
-					<%= form_with model: MetadataType.new do |form| %>
+					<%= form_with model: @metadata_type do |form| %>
 						<%= form.hidden_field :name, data: { "metadatasearch-target": "nameinput" } %>
 						<%= form.submit "+", class: "btn btn-success me-2" %>
 					<% end %>
@@ -58,7 +59,7 @@
 		</div>
 	</div>
 	<div class="list-group list-group-striped list-group-flush" id="metadata_types_list">	
-			<% @metadata_types.each do |metadata_type| %>
+			<% MetadataType.all.each do |metadata_type| %>
 				<%= render "metadata_type", metadata_type: metadata_type %>
 			<% end %>
 	</div>

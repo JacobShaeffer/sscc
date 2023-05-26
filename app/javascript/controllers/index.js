@@ -16,3 +16,5 @@ import table_collapseController, {string_identifier as table_collapse_id} from "
 application.register(table_collapse_id, table_collapseController)
 import metadata_searchController, {string_identifier as metadata_search_id} from "./metadata_search_controller"
 application.register(metadata_search_id, metadata_searchController)
+import formController, {string_identifier as form_id} from "./form_controller"
+application.register(form_id, formController)

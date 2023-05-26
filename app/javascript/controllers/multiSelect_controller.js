@@ -10,7 +10,7 @@ export default class extends Controller {
 	}
 
 	onItemSelected(event) {
-		// console.log("onItemSelected", event.target.id);
+		console.log("onItemSelected", event.target.id);
 		var target_id = event.target.id.substr(13);
 		var badge_id = "metadatum_badge_" + target_id;
 		this.toggleCheckBox(target_id);
@@ -42,7 +42,6 @@ export default class extends Controller {
 	}
 
 	onSearchInput(event) {
-		let target = `metadataInput_${this.typeValue}_list`;
 		this.autoComplete(this.typeValue, event.target.value);
 	}
 

@@ -10,7 +10,7 @@ class MetadataTypesController < ApplicationController
 
   def list
     authorize MetadataType
-    @metadata_types = MetadataType.all
+    @metadata_type = MetadataType.new
   end
 
   # GET /metadata_types/1/edit
@@ -27,7 +27,7 @@ class MetadataTypesController < ApplicationController
       if @metadata_type.save
         format.html { redirect_to list_metadata_types_path, notice: "Metadata type was successfully created." }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :list, status: :unprocessable_entity }
       end
     end
   end

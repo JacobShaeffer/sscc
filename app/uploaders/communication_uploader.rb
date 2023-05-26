@@ -1,4 +1,4 @@
-class FileUploader < CarrierWave::Uploader::Base
+class CommunicationUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
@@ -35,11 +35,14 @@ class FileUploader < CarrierWave::Uploader::Base
 
   # Add an allowlist of extensions which are allowed to be uploaded.
   # For images you might use something like this:
+  # def extension_allowlist
+  #   %w(jpg jpeg gif png)
+  # end
   def extension_allowlist
-    %w(pdf mp3 mp4)
+    %w(pdf)
   end
   def content_type_allowlist
-    %w(application/pdf audio/mpeg video/mp4)
+    %w(application/pdf)
   end
 
   # Override the filename of the uploaded files:

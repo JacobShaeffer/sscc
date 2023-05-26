@@ -2,6 +2,8 @@
 
 <%= render @content %>
 
+<iframe src='<%= @content.file_url if @content.file? %>' width="600" height="780"></iframe>
+
 <% @content.metadata.each do |metadatum| %>
   <p>
     <strong>Metadata:</strong>

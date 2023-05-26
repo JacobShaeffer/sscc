@@ -14,17 +14,17 @@ class ContentsController < ApplicationController
   # GET /contents/new
   def new
     @content = Content.new
-    @metadata_types = MetadataType.all
-    @copyright_permissions = CopyrightPermission.all
   end
 
   # GET /contents/1/edit
   def edit
     @metadata_types = MetadataType.all
+    @content.file.cache! unless @content.file.file.nil?
   end
 
   # POST /contents or /contents.json
   def create
+    # content_params[:metadatum_ids].reject!(&:blank?) if content_params[:metadatum_ids]
     @content = Content.new(content_params.merge(user: current_user))
 
     respond_to do |format|
@@ -81,6 +81,6 @@ class ContentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def content_params
-      params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication, :copyright_notes, :copyright_permission_id, metadatum_ids: [])
+      params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication, :copyright_notes, :copyright_permission_id, :copyright_permission, metadatum_ids: [])
     end
 end

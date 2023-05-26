@@ -17,12 +17,12 @@ class MetadataTypes::MetadataController < ApplicationController
     respond_to do |format|
       if @metadatum.save
         flash.now[:notice] = "#{@metadatum.metadata_type.name} \"#{@metadatum.name}\" was created successfully."
-        # format.html { redirect_to @metadata_type, notice: "Metadatum was successfully created." }
         @target = "metadataTable_#{params[:metadata_type_id]}"
         @metadata = MetadataType.find(params[:metadata_type_id]).metadata
         format.turbo_stream
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream
+        # format.html { render :new, status: :unprocessable_entity }
       end
     end
   end

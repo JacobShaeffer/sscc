@@ -4,21 +4,25 @@ class CopyrightPermissionsController < ApplicationController
 
   # GET /copyright_permissions/1 or /copyright_permissions/1.json
   def show
+    authorize @copyright_permission
   end
 
   # GET /copyright_permissions/new
   def new
     @copyright_permission = CopyrightPermission.new
+    authorize @copyright_permission
     @organizations = Organization.all
   end
 
   # GET /copyright_permissions/1/edit
   def edit
+    authorize @copyright_permission
   end
 
   # POST /copyright_permissions or /copyright_permissions.json
   def create
     @copyright_permission = CopyrightPermission.new(copyright_permission_params.merge(user: current_user))
+    authorize @copyright_permission
 
     respond_to do |format|
       if @copyright_permission.save
@@ -33,6 +37,7 @@ class CopyrightPermissionsController < ApplicationController
 
   # PATCH/PUT /copyright_permissions/1 or /copyright_permissions/1.json
   def update
+    authorize @copyright_permission
     respond_to do |format|
       if @copyright_permission.update(copyright_permission_params)
         format.html { redirect_to copyright_permission_url(@copyright_permission), notice: "Copyright permission was successfully updated." }
@@ -46,6 +51,7 @@ class CopyrightPermissionsController < ApplicationController
 
   # DELETE /copyright_permissions/1 or /copyright_permissions/1.json
   def destroy
+    authorize @copyright_permission
     @copyright_permission.destroy
 
     respond_to do |format|
@@ -62,6 +68,6 @@ class CopyrightPermissionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def copyright_permission_params
-      params.require(:copyright_permission).permit(:description, :organization_id, :granted, :date_contacted, :date_of_response)
+      params.require(:copyright_permission).permit(:notes, :organization_id, :granted, :date_contacted, :date_of_response, :communication, :communication_cache)
     end
 end

@@ -9,10 +9,6 @@ export default class extends Controller {
 		type: String
 	}
 
-	connect() {
-		console.log("Hello, Stimulus!", string_identifier);
-	}
-
 	onItemSelected(event) {
 		console.log("onItemSelected", event.target.id);
 		var target_id = event.target.id.substr(13);
@@ -26,9 +22,9 @@ export default class extends Controller {
 	}
 
 	onBadgeClicked(event) {
-		console.log("onBadgeClicked", event.target.id);
+		// console.log("onBadgeClicked", event.target.id);
 		var target_id = event.target.id.substr(21);
-		console.log("target_id", target_id);
+		// console.log("target_id", target_id);
 		var listItem_id = "selector_for=" + target_id;
 		this.toggleCheckBox(target_id);
 		document.getElementById(listItem_id).classList.toggle("active");
@@ -36,17 +32,16 @@ export default class extends Controller {
 	}
 
 	onSearchFocusIn(event) {
-		console.log("onSearchFocusIn", event.target.id);
+		// console.log("onSearchFocusIn", event.target.id);
 		document.getElementById(event.target.id + "_list").classList.toggle("hidden");
 	}
 
 	onSearchFocusOut(event) {
-		console.log("onSearchFocusOut", event.target.id);
+		// console.log("onSearchFocusOut", event.target.id);
 		document.getElementById(event.target.id + "_list").classList.toggle("hidden");
 	}
 
 	onSearchInput(event) {
-		let target = `metadataInput_${this.typeValue}_list`;
 		this.autoComplete(this.typeValue, event.target.value);
 	}
 
@@ -63,20 +58,20 @@ export default class extends Controller {
 	autoComplete(metadata_type_id, search){
 		let params = new URLSearchParams();
 
-		console.log("checkboxes", this.checkboxTargets);
-		this.checkboxTargets.forEach((checkbox) => {
-			console.log("checkbox", checkbox.value, checkbox.checked);
-		})
+		// console.log("checkboxes", this.checkboxTargets);
+		// this.checkboxTargets.forEach((checkbox) => {
+		// 	console.log("checkbox", checkbox.value, checkbox.checked);
+		// })
 		let selected_ids = this.checkboxTargets.filter((checkbox) => 
 			checkbox.checked).map((checkbox) => checkbox.value).join(",")
-		console.log("selected_ids", selected_ids);
+		// console.log("selected_ids", selected_ids);
 
 		params.append("target", this.target_id(metadata_type_id));
 		params.append("metadata_type_id", metadata_type_id);
 		params.append("search", search);
 		params.append("selected_ids", selected_ids);
 
-		get(`/metadata_types/search?${params}`, {
+		get(`/contents/search?${params}`, {
 			responseKind: "turbo-stream", 
 		})
 	}

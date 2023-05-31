@@ -5,16 +5,20 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
 		has_many :contents
+    has_many :metadata_types
+    has_many :metadata
 
     # define user roles
-    enum :role, {user: 0, admin: 99}
+    enum :role, {guest: 0, organization: 1, volunteer: 2, intern: 3, admin: 99}
 
     # set default user role
     after_initialize :set_default_role
 
+    validates :name, presence: true
+
     private
 
     def set_default_role
-      self.role ||= :user
+      self.role ||= :guest
     end
 end

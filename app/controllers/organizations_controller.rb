@@ -5,15 +5,18 @@ class OrganizationsController < ApplicationController
   # GET /organizations/new
   def new
     @organization = Organization.new
+    authorize @organization
   end
 
   # GET /organizations/1/edit
   def edit
+    authorize @organization
   end
 
   # POST /organizations or /organizations.json
   def create
     @organization = Organization.new(organization_params.merge(user: current_user))
+    authorize @organization
 
     respond_to do |format|
       if @organization.save
@@ -28,6 +31,7 @@ class OrganizationsController < ApplicationController
 
   # PATCH/PUT /organizations/1 or /organizations/1.json
   def update
+    authorize @organization
     respond_to do |format|
       if @organization.update(organization_params)
         format.html { redirect_to copyright_index_path, notice: "Organization was successfully updated." }
@@ -41,6 +45,7 @@ class OrganizationsController < ApplicationController
 
   # DELETE /organizations/1 or /organizations/1.json
   def destroy
+    authorize @organization
     # TODO: test deleting an organization with associated copyright permissions
     # With and without the following
     @organization.copyright_permissions.clear
@@ -60,6 +65,6 @@ class OrganizationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def organization_params
-      params.require(:organization).permit(:name, :website, :email)
+      params.require(:organization).permit(:name, :website, :contact_information)
     end
 end

@@ -4,67 +4,64 @@ class MetadataTypesController < ApplicationController
 
   # GET /metadata_types or /metadata_types.json
   def index
+    authorize MetadataType
     @metadata_types = MetadataType.all
   end
 
-  # GET /metadata_types/1 or /metadata_types/1.json
-  def show
-    @metadata_type = MetadataType.find(params[:id])
-    @metadata = @metadata_type.metadata
-  end
-
-  # GET /metadata_types/new
-  def new
+  def list
+    authorize MetadataType
     @metadata_type = MetadataType.new
   end
 
   # GET /metadata_types/1/edit
   def edit
+    authorize @metadata_type
   end
 
   # POST /metadata_types or /metadata_types.json
   def create
-    @metadata_type = MetadataType.new(metadata_type_params)
+    @metadata_type = MetadataType.new(metadata_type_params.merge(user: current_user))
+    authorize @metadata_type
 
     respond_to do |format|
       if @metadata_type.save
-        format.html { redirect_to metadata_types_path, notice: "Metadata type was successfully created." }
-        format.json { render :show, status: :created, location: @metadata_type }
+        format.html { redirect_to list_metadata_types_path, notice: "Metadata type was successfully created." }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @metadata_type.errors, status: :unprocessable_entity }
+        format.html { render :list, status: :unprocessable_entity }
       end
     end
   end
 
   # PATCH/PUT /metadata_types/1 or /metadata_types/1.json
   def update
+    authorize @metadata_type
     respond_to do |format|
       if @metadata_type.update(metadata_type_params)
-        format.html { redirect_to metadata_type_url(@metadata_type), notice: "Metadata type was successfully updated." }
-        format.json { render :show, status: :ok, location: @metadata_type }
+				format.turbo_stream
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @metadata_type.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # DELETE /metadata_types/1 or /metadata_types/1.json
   def destroy
+    authorize @metadata_type
     @metadata_type.destroy
 
     respond_to do |format|
-      format.html { redirect_to metadata_types_url, notice: "Metadata type was successfully destroyed." }
+      format.html { redirect_to list_metadata_types_url, notice: "Metadata type was successfully destroyed." }
       format.json { head :no_content }
     end
   end
 
   def search
+    authorize MetadataType
     @target = params[:target]
-    @selected = params[:selected_ids].nil? ? [] : params[:selected_ids].split(',')
-    metadata_type = MetadataType.find(params[:metadata_type_id])
-    @metadata = metadata_type.metadata.where("name LIKE ?", "%#{params[:search]}%")
+    @metadata_types = MetadataType.where("name LIKE ?", "%#{params[:search]}%")
+		print "----------------------------------------------------\n"
+		print @metadata_types.inspect
+		print "\n----------------------------------------------------\n"
     respond_to do |format|
       format.turbo_stream
     end

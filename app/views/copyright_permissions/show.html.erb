@@ -1,41 +1,57 @@
 
 
 <div id="<%= dom_id @copyright_permission %>">
-  <p>
-    <strong>Description:</strong>
-    <%= @copyright_permission.description %>
-  </p>
+  <div class="row">
+    <div class="col-md-4">
+      <p>
+        <strong>Notes:</strong>
+        <%= @copyright_permission.notes %>
+      </p>
 
-  <p>
-    <strong>Organization:</strong>
-    <%= @copyright_permission.organization_id %>
-  </p>
+      <p>
+        <strong>Organization:</strong>
+        <%= @copyright_permission.organization.name %>
+      </p>
 
-  <p>
-    <strong>Granted:</strong>
-    <%= @copyright_permission.granted %>
-  </p>
 
-  <p>
-    <strong>Date contacted:</strong>
-    <%= @copyright_permission.date_contacted %>
-  </p>
+      <p>
+        <strong>Granted:</strong>
+        <%= @copyright_permission.granted %>
+      </p>
 
-  <p>
-    <strong>Date of response:</strong>
-    <%= @copyright_permission.date_of_response %>
-  </p>
+      <p>
+        <strong>Date contacted:</strong>
+        <%= @copyright_permission.date_contacted %>
+      </p>
 
-  <p>
-    <strong>User:</strong>
-    <%= @copyright_permission.user_id %>
-  </p>
+      <p>
+        <strong>Date of response:</strong>
+        <%= @copyright_permission.date_of_response %>
+      </p>
+      
 
+      <p>
+        <strong>User:</strong>
+        <%= @copyright_permission.user.name %>
+      </p>
+    </div>
+
+    <div class="col-md-8">
+      <p>
+        <strong>Communications:</strong>
+      </p>
+      <iframe src='<%= @copyright_permission.communication_url unless @copyright_permission.communication.file.nil? %>' allowfullscreen="true" class="content-iframe"></iframe>
+    </div>
 </div>
 
 <div>
-  <%= link_to "Edit this copyright permission", edit_copyright_permission_path(@copyright_permission) %> |
+  <% if policy(@copyright_permission).edit? %>
+    <%= link_to "Edit this copyright permission", edit_copyright_permission_path(@copyright_permission) %> |
+  <% end %>
   <%= link_to "Back", copyright_index_path %>
 
-  <%= button_to "Destroy this copyright permission", @copyright_permission, method: :delete %>
+  <% if policy(@copyright_permission).destroy? %>
+    <%= button_to "Destroy this copyright permission", @copyright_permission, method: :delete %>
+  <% end %>
+
 </div>

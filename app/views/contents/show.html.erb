@@ -1,17 +1,27 @@
 
+<div class="row">
+  <div class="col-md-4">
+    <%= render @content %>
+    <% @content.metadata.each do |metadatum| %>
+      <p>
+        <strong>Metadata:</strong>
+        <%= metadatum.name %>
+      </p>
+    <% end %>
+  </div>
+  <div class="col-md-8">
+    <iframe src='<%= @content.file_url unless @content.file.file.nil? %>' width="600" height="780"></iframe>
+  </div>
+</div>
 
-<%= render @content %>
-
-<% @content.metadata.each do |metadatum| %>
-  <p>
-    <strong>Metadata:</strong>
-    <%= metadatum.name %>
-  </p>
-<% end %>
 
 <div>
-  <%= link_to "Edit this content", edit_content_path(@content) %> |
+  <% if policy(@content).edit? %>
+    <%= link_to "Edit this content", edit_content_path(@content) %> |
+  <% end %>
   <%= link_to "Back to contents", contents_path %>
 
-  <%= button_to "Destroy this content", @content, method: :delete %>
+  <% if policy(@content).destroy? %>
+    <%= button_to "Destroy this content", @content, method: :delete %>
+  <% end %>
 </div>

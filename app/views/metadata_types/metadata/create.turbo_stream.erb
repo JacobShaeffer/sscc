@@ -1,0 +1,10 @@
+<%= turbo_stream.update @target do %>
+    <% @metadata.each do |metadatum| %>
+        <%#= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
+        <%= render "metadatum", metadatum: metadatum %>
+    <% end %>
+<% end %>
+<%= turbo_stream.replace "metadataSearchInput_#{@metadata_type.id}" do %>
+    <%= render "metadata_types/search_input", id: @metadata_type.id %>
+<% end %>
+<%= render_turbo_stream_notice_messages %>

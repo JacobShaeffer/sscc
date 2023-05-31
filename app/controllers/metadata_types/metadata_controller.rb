@@ -1,56 +1,67 @@
 class MetadataTypes::MetadataController < ApplicationController
   before_action :set_metadatum, only: %i[ edit update destroy ]
-  before_action :set_metadata_type, only: %i[ new edit create destory ]
-
-  # GET /metadata/new
-  def new
-    @metadatum = Metadatum.new
-  end
+  before_action :set_metadata_type
+	before_action :authenticate_user!
 
   # GET /metadata/1/edit
   def edit
+    authorize @metadatum
   end
 
   # POST /metadata or /metadata.json
   def create
-    @metadatum = Metadatum.new(metadatum_params)
+    @metadatum = Metadatum.new(metadatum_params.merge(user: current_user))
+    authorize @metadatum
     @metadatum.metadata_type = @metadata_type
 
     respond_to do |format|
       if @metadatum.save
-        format.html { redirect_to @metadata_type, notice: "Metadatum was successfully created." }
-        format.json { render :show, status: :created, location: @metadata_type }
+        flash.now[:notice] = "#{@metadatum.metadata_type.name} \"#{@metadatum.name}\" was created successfully."
+        @target = "metadataTable_#{params[:metadata_type_id]}"
+        @metadata = MetadataType.find(params[:metadata_type_id]).metadata
+        format.turbo_stream
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @metadata_type.errors, status: :unprocessable_entity }
+        format.turbo_stream
+        # format.html { render :new, status: :unprocessable_entity }
       end
     end
   end
 
   # PATCH/PUT /metadata/1 or /metadata/1.json
   def update
+    authorize @metadatum
     respond_to do |format|
       if @metadatum.update(metadatum_params)
-        format.html { redirect_to metadata_type_path(@metadatum.metadata_type_id), notice: "Metadatum was successfully updated." }
-        format.json { render :show, status: :ok, location: @metadatum }
+        format.turbo_stream
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @metadatum.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # DELETE /metadata/1 or /metadata/1.json
   def destroy
-    print("destroying metadatum")
+    authorize @metadatum
     title = @metadatum.name
 
     if @metadatum.destroy
-      flash[:notice] = "\"#{title}\" was deleted successfully."
-      redirect_to metadata_type_path(params[:metadata_type_id])
+      flash.now[:notice] = "\"#{title}\" was deleted successfully."
+      @target = "metadatum_#{@metadatum.id}"
+      respond_to do |format|
+        format.turbo_stream
+      end
     else
       flash.now[:alert] = "There was an error deleting the metadatum."
       render :show
+    end
+  end
+
+  def search
+    authorize Metadatum
+    @target = params[:target]
+    @metadata = @metadata_type.metadata.where("name LIKE ?", "%#{params[:search]}%")
+    respond_to do |format|
+      format.turbo_stream
     end
   end
 

@@ -1,51 +1,87 @@
-<%= bootstrap_form_for [@metadata_type, @content] do |form| %>
+<%= bootstrap_form_for [@metadata_type, @content], data: {controller: 'form'} do |form| %>
 	<% if @content.errors.any? %>
 		<div style="color: red">
-			<h2><%= pluralize(@content.errors.count, "error") %> prohibited this content from being saved:</h2>
-
+			<h2><%= pluralize(@content.errors.count, "error") %> prohibited this content from being saved</h2>
 			<ul>
 				<% @content.errors.each do |error| %>
+					<%puts(error)%>
 					<li><%= error.full_message %></li>
 				<% end %>
 			</ul>
 		</div>
 	<% end %>
 
-	<div>
-		<%= form.text_field :title %>
+	<div class="field">
+		<%= form.text_field :title, required: true %>
 	</div>
 
-	<div data-controller='fileSelect'>
-		<%#= form.file_field :file, onchange: "validateContentFile(this)" %>
-		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'} %>
+	<div class="field">
+		<%= form.text_field :display_title, required: true %>
 	</div>
 
-	<div>
-		<%= form.collection_select(:copyright_permission_id, @copyright_permissions, :id, :description, prompt: true) %>
+	<div data-controller='fileSelect' class="field">
+		<%= form.label :file, "File" %>
+		<% if !@content.file.file.nil? %>
+			<div style="background-color: red;">
+				<h5>Existing file</h5>	
+				<%= @content.file_identifier %>
+			</div>
+		<% end %>
+		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, skip_label: true %>
+		<%= form.hidden_field :file_cache, required: true%>
+	</div>
+
+	<div class="field">
+		<%= form.text_area :description, required: true %>
+	</div>
+
+	<div class="field">
+		<%= form.number_field :year_of_publication %>
+	</div>
+
+	<div class="field">
+		<%= form.collection_select(:copyright_permission_id, CopyrightPermission.all, :id, :organization_name, {:prompt => "Select"}, required: true ) %>
+	</div>
+	
+	<div class="field">
+		<%= form.text_area :copyright_notes %>
 	</div>
 
 	<div class="mb-3">
 		<label class="form-label">Metadata</label>
 		<div class="form-control">
-			<% @metadata_types.each do |metadata_type| %>
+			<% MetadataType.all.each do |metadata_type| %>
 
 				<div class="mb-3" 
 						data-controller='multiSelect' 
 						id="metadataInput_<%= metadata_type.id %>" 
 						data-action="focusin->multiSelect#onSearchFocusIn focusout->multiSelect#onSearchFocusOut" 
 						data-multiSelect-type-value="<%= metadata_type.id%>"
+						class="field"
 				>
 					<label class="form-label-sm"><%= metadata_type.name %></label>
 					<div class="form-control" data-action="click->multiSelect#onSearchInputClick">
 						<% metadata_type.metadata.each do |metadatum| %>
-							<div class="auto-complete-selected hidden" id="metadatum_badge_<%= metadatum.id%>" data-action="mousedown->multiSelect#onBadgeClicked"><span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>" ><%= metadatum.name %></span></div>
-							<input class="hidden" 
-										type="checkbox" 
-										name="content[metadatum_ids][]" 
-										id="content_metadatum_ids_<%= metadatum.id %>" 
-										value="<%= metadatum.id %>"
-										data-multiSelect-target="checkbox"
-							>
+							<% is_checked = @content.metadata.include?(metadatum) %>
+							<div class="auto-complete-selected <%= is_checked ? "" : "hidden" %>" id="metadatum_badge_<%= metadatum.id%>" data-action="mousedown->multiSelect#onBadgeClicked"><span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>" ><%= metadatum.name %></span></div>
+							<% if is_checked%>
+								<input class="hidden" 
+											type="checkbox" 
+											name="content[metadatum_ids][]" 
+											id="content_metadatum_ids_<%= metadatum.id %>" 
+											value="<%= metadatum.id %>"
+											data-multiSelect-target="checkbox"
+											checked	
+								>
+							<% else %>
+								<input class="hidden" 
+											type="checkbox" 
+											name="content[metadatum_ids][]" 
+											id="content_metadatum_ids_<%= metadatum.id %>" 
+											value="<%= metadatum.id %>"
+											data-multiSelect-target="checkbox"
+								>
+							<% end %>
 						<% end %>
 						<input class="auto-complete" 
 									placeholder="Search" 
@@ -56,12 +92,12 @@
 									size="35"
 						>
 					</div>
+					<!--<p class="error">Please select metadata values</p>-->
 					
-					<!--<ul class="list-group" style="display: none;">-->
 					<div class="list-group hidden" id="metadataInput_<%= metadata_type.id %>_list">
 						<% metadata_type.metadata.each do |metadatum| %>
-							<!--<input type="checkbox" name="content[metadatum_ids][]" id="content_metadatum_ids_<%#= metadatum.id %>" value="<%= metadatum.id %>">-->
-							<a class="list-group-item list-group-action-item" data-action="mousedown->multiSelect#onItemSelected" id="selector_for=<%= metadatum.id%>"><%= metadatum.name %>
+							<% is_checked = @content.metadata.include?(metadatum) %>
+							<a class="list-group-item list-group-action-item <%= is_checked ? "active" : "" %>" data-action="mousedown->multiSelect#onItemSelected" id="selector_for=<%= metadatum.id%>"><%= metadatum.name %></a>
 						<% end %>
 					</div>
 				</div>
@@ -69,7 +105,7 @@
 		</div>
 	</div>
 
-  <div>
+  <div class="actions">
 		<%= form.submit %>
   </div>
 <% end %>

@@ -1,7 +1,13 @@
-<div id="<%= dom_id metadata_type %>">
-  <p>
-    <strong>Metadata Type:</strong>
-    <%= metadata_type.name %>
-  </p>
-
+<div class="list-group-item" id="<%= dom_id metadata_type%>">
+	<%= turbo_frame_tag dom_id(metadata_type, "turbo_frame") do %>
+		<div class="row">
+			<div class="col"><%= metadata_type.name %></div>
+			<div class="thin-column">
+				<div class="btn-tools">
+					<%= link_to "Edit", edit_metadata_type_path(metadata_type.id), class: "btn btn-primary me-2", :data => { :'turbo_stream' => '' } %>
+					<%= button_to "Destroy", metadata_type_path(metadata_type.id), method: :delete, data: { turbo: false }, class: "btn btn-danger"%>
+				</div>
+			</div>
+		</div>
+	<% end %>
 </div>

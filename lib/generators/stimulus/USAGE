@@ -1,0 +1,12 @@
+Description:
+    Creates a stimulus controller and imports it into the stimulus index file
+
+Example:
+    bin/rails generate stimulus ControllerTitle
+
+    This will create:
+        app/javascript/controllers/ControllerTitle_controller.js
+
+        and 
+
+        append an import statement to app/javascript/controllers/index.js for the generated controller

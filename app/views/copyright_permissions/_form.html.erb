@@ -1,4 +1,4 @@
-<%= form_with(model: copyright_permission) do |form| %>
+<%= bootstrap_form_with(model: copyright_permission, data: {controller: 'form'}) do |form| %>
   <% if copyright_permission.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(copyright_permission.errors.count, "error") %> prohibited this copyright_permission from being saved:</h2>
@@ -12,29 +12,42 @@
   <% end %>
 
   <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description %>
+    <%= form.text_area :notes %>
+  </div>
+
+  <div class="field">
+		<%= form.collection_select(:organization_id, Organization.all, :id, :name, {:prompt => "Select"}, required: true) %>
+  </div>
+
+  <div class="field">
+    <%= form.select :granted, CopyrightPermission.granteds.keys.map {|u| [u.titleize, u]}, {:prompt => 'Select One'}, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.date_field :date_contacted, required: true %>
   </div>
 
   <div>
-    <%= form.label :organization_id, style: "display: block" %>
-		<%= form.collection_select(:organization_id, @organizations, :id, :name, prompt: true) %>
-  </div>
-
-  <div>
-    <%= form.label :granted, style: "display: block" %>
-    <%= form.check_box :granted %>
-  </div>
-
-  <div>
-    <%= form.label :date_contacted, style: "display: block" %>
-    <%= form.date_field :date_contacted %>
-  </div>
-
-  <div>
-    <%= form.label :date_of_response, style: "display: block" %>
     <%= form.date_field :date_of_response %>
   </div>
+
+<!--  <div>-->
+    <%#= form.text_field :communication %>
+    <%#= form.file_field :communication %>
+    <%#= form.hidden_field :communication_cache, :value => @copyright_permission.communication_cache %>
+<!--  </div>-->
+
+	<div data-controller='fileSelect' class="field">
+		<%= form.label :communication, "Communication" %>
+		<% if !@copyright_permission.communication.file.nil? %>
+			<div style="background-color: red;">
+				<h5>Existing file</h5>	
+				<%= @copyright_permission.communication_identifier %>
+			</div>
+		<% end %>
+		<%= form.file_field :communication, data: {action: 'change->fileSelect#onFileSelected'}, skip_label: true %>
+		<%= form.hidden_field :communication_cache, required: true%>
+	</div>
 
   <div>
     <%= form.submit %>

@@ -4,9 +4,11 @@
 			<div class="col">
 				<h1>Copyright</h1>
 			</div>
-			<div class="col">
-				<%= link_to "ADD COPYRIGHT", new_copyright_permission_path, class: "btn btn-primary" %>
-			</div>
+			<% if policy(CopyrightPermission).create? %>
+				<div class="col">
+					<%= link_to "ADD COPYRIGHT", new_copyright_permission_path, class: "btn btn-primary" %>
+				</div>
+			<% end %>
 		</div>
 		<div class="row">
 			<div class="col">
@@ -18,7 +20,7 @@
 							<th>Date Contacted</th>
 							<th>Date of Response</th>
 							<th>User</th>
-							<th colspan="3">Actions</th>
+							<th colspan="<%= [policy(CopyrightPermission).edit?, policy(CopyrightPermission).destroy?].count(true) + 1 %>">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -30,8 +32,12 @@
 								<td><%= crp.date_of_response %></td>
 								<td><%= crp.user.name %></td>
 								<td><%= link_to "Show", copyright_permission_path(crp) %></td>
-								<td><%= link_to "Edit", edit_copyright_permission_path(crp) %></td>
-								<td><%= button_to "Destroy", copyright_permission_path(crp), method: :delete, data: { confirm: "Are you sure?" } %></td>
+								<% if policy(CopyrightPermission).edit? %>
+									<td><%= link_to "Edit", edit_copyright_permission_path(crp) %></td>
+								<% end %>
+								<% if policy(CopyrightPermission).destroy? %>
+									<td><%= button_to "Destroy", copyright_permission_path(crp), method: :delete, data: { confirm: "Are you sure?" } %></td>
+								<% end %>
 							</tr>
 						<% end %>
 					</tbody>
@@ -46,9 +52,11 @@
 			<div class="col">
 				<h1>Organization</h1>
 			</div>
-			<div class="col">
-				<%= link_to "ADD ORGANIZATION", new_organization_path, class: "btn btn-primary" %>
-			</div>
+			<% if policy(Organization).create? %>
+				<div class="col">
+					<%= link_to "ADD ORGANIZATION", new_organization_path, class: "btn btn-primary" %>
+				</div>
+			<% end %>
 		</div>
 		<div class="row">
 			<div class="col">
@@ -58,7 +66,9 @@
 							<th>Name</th>
 							<th>Website</th>
 							<th>Contact</th>
-							<th colspan="2">Actions</th>
+							<% if policy(Organization).edit? || policy(Organization).destroy? %>
+								<th colspan="<%= [policy(CopyrightPermission).edit?, policy(CopyrightPermission).destroy?].count(true) %>">Actions</th>
+							<% end %>
 						</tr>
 					</thead>
 					<tbody>
@@ -67,8 +77,12 @@
 								<td><%= org.name %></td>
 								<td><%= org.website %></td>
 								<td><%= org.contact_information %></td>
-								<td><%= link_to "Edit", edit_organization_path(org) %></td>
-								<td><%= button_to "Destroy", organization_path(org), method: :delete, data: { confirm: "Are you sure?" } %></td>
+								<% if policy(Organization).edit? %>
+									<td><%= link_to "Edit", edit_organization_path(org) %></td>
+								<% end %>
+								<% if policy(Organization).destroy? %>
+									<td><%= button_to "Destroy", organization_path(org), method: :delete, data: { confirm: "Are you sure?" } %></td>
+								<% end %>
 							</tr>
 						<% end %>
 					</tbody>

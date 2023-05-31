@@ -2,13 +2,12 @@
 	<% if @content.errors.any? %>
 		<div style="color: red">
 			<h2><%= pluralize(@content.errors.count, "error") %> prohibited this content from being saved</h2>
-
-<!--			<ul>-->
-				<%# @content.errors.each do |error| %>
-					<%#puts(error)%>
-<!--					<li><%#= error.full_message %></li>-->
-				<%# end %>
-<!--			</ul>-->
+			<ul>
+				<% @content.errors.each do |error| %>
+					<%puts(error)%>
+					<li><%= error.full_message %></li>
+				<% end %>
+			</ul>
 		</div>
 	<% end %>
 
@@ -20,17 +19,17 @@
 		<%= form.text_field :display_title, required: true %>
 	</div>
 
-		<div data-controller='fileSelect' class="field">
-			<%= form.label :file, "File" %>
-			<% if !@content.file.file.nil? %>
-				<div style="background-color: red;">
-					<h5>Existing file</h5>	
-					<%= @content.file_identifier %>
-				</div>
-			<% end %>
-			<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, skip_label: true %>
-			<%= form.hidden_field :file_cache, required: true%>
-		</div>
+	<div data-controller='fileSelect' class="field">
+		<%= form.label :file, "File" %>
+		<% if !@content.file.file.nil? %>
+			<div style="background-color: red;">
+				<h5>Existing file</h5>	
+				<%= @content.file_identifier %>
+			</div>
+		<% end %>
+		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, skip_label: true %>
+		<%= form.hidden_field :file_cache, required: true%>
+	</div>
 
 	<div class="field">
 		<%= form.text_area :description, required: true %>

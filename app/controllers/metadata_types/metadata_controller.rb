@@ -5,13 +5,13 @@ class MetadataTypes::MetadataController < ApplicationController
 
   # GET /metadata/1/edit
   def edit
-    authorize Metadatum
+    authorize @metadatum
   end
 
   # POST /metadata or /metadata.json
   def create
-    authorize Metadatum
     @metadatum = Metadatum.new(metadatum_params.merge(user: current_user))
+    authorize @metadatum
     @metadatum.metadata_type = @metadata_type
 
     respond_to do |format|
@@ -29,7 +29,7 @@ class MetadataTypes::MetadataController < ApplicationController
 
   # PATCH/PUT /metadata/1 or /metadata/1.json
   def update
-    authorize Metadatum
+    authorize @metadatum
     respond_to do |format|
       if @metadatum.update(metadatum_params)
         format.turbo_stream
@@ -41,7 +41,7 @@ class MetadataTypes::MetadataController < ApplicationController
 
   # DELETE /metadata/1 or /metadata/1.json
   def destroy
-    authorize Metadatum
+    authorize @metadatum
     title = @metadatum.name
 
     if @metadatum.destroy

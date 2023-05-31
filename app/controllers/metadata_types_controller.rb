@@ -15,13 +15,13 @@ class MetadataTypesController < ApplicationController
 
   # GET /metadata_types/1/edit
   def edit
-    authorize MetadataType
+    authorize @metadata_type
   end
 
   # POST /metadata_types or /metadata_types.json
   def create
-    authorize MetadataType
     @metadata_type = MetadataType.new(metadata_type_params.merge(user: current_user))
+    authorize @metadata_type
 
     respond_to do |format|
       if @metadata_type.save
@@ -34,7 +34,7 @@ class MetadataTypesController < ApplicationController
 
   # PATCH/PUT /metadata_types/1 or /metadata_types/1.json
   def update
-    authorize MetadataType
+    authorize @metadata_type
     respond_to do |format|
       if @metadata_type.update(metadata_type_params)
 				format.turbo_stream
@@ -46,7 +46,7 @@ class MetadataTypesController < ApplicationController
 
   # DELETE /metadata_types/1 or /metadata_types/1.json
   def destroy
-    authorize MetadataType
+    authorize @metadata_type
     @metadata_type.destroy
 
     respond_to do |format|

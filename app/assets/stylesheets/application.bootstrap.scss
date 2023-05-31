@@ -52,8 +52,9 @@
     color: #dc3545;
 }
 
-#notice {
-	position: absolute;
-	bottom: 5px;
-	width: 50%;
+.content-iframe {
+	width: 600px;
+	height: 600px;
+	resize: both;
+	overflow: auto;
 }

@@ -12,7 +12,11 @@
 	<% end %>
 
 	<div class="field">
-		<%= form.text_field :title, required: true %>
+		<%= form.label :title %>
+		<div class='tooltip-field'>
+			<%= form.text_field :title, required: true, skip_label: true %>
+			<div class="tooltip-holder ms-1" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="What happends when we have a really long tooltip? But what if it's really long? Like really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long">?</div>
+		</div>
 	</div>
 
 	<div class="field">

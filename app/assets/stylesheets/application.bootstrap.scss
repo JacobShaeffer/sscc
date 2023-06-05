@@ -58,3 +58,21 @@
 	resize: both;
 	overflow: auto;
 }
+
+.custom-tooltip {
+	--bs-tooltip-max-width: 400px;
+}
+
+.tooltip-holder {
+	width: fit-content;
+	border: 1px solid black;
+    border-radius: 100%;
+    padding: 0px 5px;
+    line-height: initial;
+	cursor: pointer;
+}
+
+.tooltip-field {
+	display: flex;
+	align-items: baseline;
+}

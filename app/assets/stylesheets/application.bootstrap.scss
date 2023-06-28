@@ -1,8 +1,17 @@
+
+$primary: #0676d8;
+$secondary: #ffc627;
+// $success: ;
+// $info: ; 
+// $warning: ;
+// $danger: ;
+// $light: ;
+// $dark: ;
+// $ASU-gold : #ffc627;
+// $ASU-maroon : #8c1d40;
+
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
-
-$ASU-gold : #ffc627;
-$ASU-maroon : #8c1d40;
 
 .auto-complete {
 	border:0; outline:0;
@@ -83,6 +92,10 @@ $ASU-maroon : #8c1d40;
 .home-button {
 	min-height: 186px;
 	min-width: 261px;
+}
+
+.highlight-text {
+	color: $secondary;
 }
 
 .corner-ribbon {

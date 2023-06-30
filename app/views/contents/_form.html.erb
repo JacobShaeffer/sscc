@@ -25,13 +25,17 @@
 
 	<div data-controller='fileSelect' class="field">
 		<%= form.label :file, "File" %>
-		<% if !@content.file.file.nil? %>
-			<div style="background-color: red;">
-				<h5>Existing file</h5>	
-				<%= @content.file_identifier %>
-			</div>
-		<% end %>
-		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, skip_label: true %>
+		<div class="input-group">
+			<span class="input-group-text" id="file-name">Choose File</span>
+			<!--this one-->
+			<% if @content.file.file.nil? %>
+				<input type="text" class="form-control" id="Selected-File-Display" value="No File Selected"/>
+			<% else %>
+				<input type="text" class="form-control" id="Selected-File-Display" value="<%=@content.file_identifier%>"/>
+			<% end %>
+		</div>
+		<!--Add a jacascript function when this form field changes to update the text input above to mactch since the content.file_identifier won't update if the user selects a new file-->
+		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: "height: 0px;"}, skip_label: true %>
 		<%= form.hidden_field :file_cache, required: true%>
 	</div>
 

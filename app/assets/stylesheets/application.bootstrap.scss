@@ -136,3 +136,15 @@ $secondary: #ffc627;
     /* Centerize the text content */
     text-align: center;
 }
+
+.file-input-button {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.file-input-hidden {
+	z-index: 4;
+	position: relative;
+	opacity: 0;
+	top: -38px;
+}

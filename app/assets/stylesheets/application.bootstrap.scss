@@ -1,3 +1,15 @@
+
+$primary: #0676d8;
+$secondary: #ffc627;
+// $success: ;
+// $info: ; 
+// $warning: ;
+// $danger: ;
+// $light: ;
+// $dark: ;
+// $ASU-gold : #ffc627;
+// $ASU-maroon : #8c1d40;
+
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
 
@@ -57,4 +69,82 @@
 	height: 600px;
 	resize: both;
 	overflow: auto;
+}
+
+.custom-tooltip {
+	--bs-tooltip-max-width: 400px;
+}
+
+.tooltip-holder {
+	width: fit-content;
+	border: 1px solid black;
+    border-radius: 100%;
+    padding: 0px 5px;
+    line-height: initial;
+	cursor: pointer;
+}
+
+.tooltip-field {
+	display: flex;
+	align-items: baseline;
+}
+
+.home-button {
+	min-height: 186px;
+	min-width: 261px;
+}
+
+.highlight-text {
+	color: $secondary;
+}
+
+.corner-ribbon {
+    position: relative;
+}
+
+.corner-ribbon__inner {
+    /* Displayed at the top left corner */
+    left: 0px;
+    position: absolute;
+    top: 0px;
+
+    /* Size */
+    height: 7rem;
+    width: 7rem;
+
+    /* Hide the part of its children which is displayed outside */
+    overflow: hidden;
+}
+
+.corner-ribbon__ribbon {
+	color: red;
+    /* Position */
+    left: 0rem;
+    position: absolute;
+    top: 2rem;
+
+    /* Size */
+    // height: 1.5rem;
+    width: 10rem;
+
+    /* Displayed diagonally */
+    transform: translate(-38px, -8px) rotate(-45deg);
+
+    /* Background color */
+    background-color: #d1d5db;
+
+    /* Centerize the text content */
+    text-align: center;
+}
+
+.file-input-button {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.file-input-hidden {
+	z-index: 4;
+	position: relative;
+	opacity: 0;
+	top: -38px;
 }

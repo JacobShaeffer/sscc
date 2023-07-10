@@ -23,7 +23,8 @@ Rails.application.routes.draw do
   end
   resources :copyright_permissions,  except: [:index]
   resources :organizations, except: [:index, :show]
-  get 'copyright/index'
+  # get 'copyright/index'
+  match "/copyright", to: "copyright#index", :via => [:get]
 
   get 'home/about'
   root 'home#index'

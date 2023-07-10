@@ -34,7 +34,6 @@
 				<input type="text" class="form-control" id="Selected-File-Display" value="<%=@content.file_identifier%>"/>
 			<% end %>
 		</div>
-		<!--Add a jacascript function when this form field changes to update the text input above to mactch since the content.file_identifier won't update if the user selects a new file-->
 		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: "height: 0px;"}, skip_label: true %>
 		<%= form.hidden_field :file_cache, required: true%>
 	</div>

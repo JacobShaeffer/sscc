@@ -26,7 +26,6 @@ default: &default
 
 production:
   <<: *default
-  host: localhost
   adapter: postgresql
   encoding: utf8
   database: sscc_production

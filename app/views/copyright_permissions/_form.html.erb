@@ -39,13 +39,15 @@
 
 	<div data-controller='fileSelect' class="field">
 		<%= form.label :communication, "Communication" %>
-		<% if !@copyright_permission.communication.file.nil? %>
-			<div style="background-color: red;">
-				<h5>Existing file</h5>	
-				<%= @copyright_permission.communication_identifier %>
-			</div>
-		<% end %>
-		<%= form.file_field :communication, data: {action: 'change->fileSelect#onFileSelected'}, skip_label: true %>
+    <div class="input-group">
+			<span class="input-group-text" id="file-name">Choose File</span>
+			<% if @copyright_permission.communication.file.nil? %>
+				<input type="text" class="form-control" id="Selected-File-Display" value="No File Selected"/>
+			<% else %>
+				<input type="text" class="form-control" id="Selected-File-Display" value="<%=@copyright_permission.communication_identifier%>"/>
+			<% end %>
+    </div>
+		<%= form.file_field :communication, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: 'height: 0px;'}, skip_label: true %>
 		<%= form.hidden_field :communication_cache, required: true%>
 	</div>
 

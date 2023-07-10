@@ -20,7 +20,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to copyright_index_path, notice: "Organization was successfully created." }
+        format.html { redirect_to copyright_path, notice: "Organization was successfully created." }
         # format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -34,7 +34,7 @@ class OrganizationsController < ApplicationController
     authorize @organization
     respond_to do |format|
       if @organization.update(organization_params)
-        format.html { redirect_to copyright_index_path, notice: "Organization was successfully updated." }
+        format.html { redirect_to copyright_path, notice: "Organization was successfully updated." }
         # format.json { render :show, status: :ok, location: @organization }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,7 +52,7 @@ class OrganizationsController < ApplicationController
     @organization.destroy
 
     respond_to do |format|
-      format.html { redirect_to copyright_index_url, notice: "Organization was successfully destroyed." }
+      format.html { redirect_to copyright_url, notice: "Organization was successfully destroyed." }
       format.json { head :no_content }
     end
   end

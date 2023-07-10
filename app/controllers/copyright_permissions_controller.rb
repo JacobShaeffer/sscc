@@ -55,7 +55,7 @@ class CopyrightPermissionsController < ApplicationController
     @copyright_permission.destroy
 
     respond_to do |format|
-      format.html { redirect_to copyright_index_url, notice: "Copyright permission was successfully destroyed." }
+      format.html { redirect_to copyright_url, notice: "Copyright permission was successfully destroyed." }
       format.json { head :no_content }
     end
   end

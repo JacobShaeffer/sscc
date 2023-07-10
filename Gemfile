@@ -14,7 +14,8 @@ gem "sprockets-rails"
 gem 'pg'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 5.0"
+# gem "puma", "~> 5.0"
+gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
 
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"

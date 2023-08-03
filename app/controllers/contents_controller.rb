@@ -75,7 +75,7 @@ class ContentsController < ApplicationController
     @target = params[:target]
     @selected = params[:selected_ids].nil? ? [] : params[:selected_ids].split(',')
     metadata_type = MetadataType.find(params[:metadata_type_id])
-    @metadata = metadata_type.metadata.where("name LIKE ?", "%#{params[:search]}%")
+    @metadata = metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%")
     respond_to do |format|
       format.turbo_stream
     end

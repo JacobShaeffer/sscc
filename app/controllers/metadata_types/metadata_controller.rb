@@ -59,7 +59,7 @@ class MetadataTypes::MetadataController < ApplicationController
   def search
     authorize Metadatum
     @target = params[:target]
-    @metadata = @metadata_type.metadata.where("name LIKE ?", "%#{params[:search]}%")
+    @metadata = @metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%")
     respond_to do |format|
       format.turbo_stream
     end

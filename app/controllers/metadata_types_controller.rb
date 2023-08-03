@@ -58,10 +58,7 @@ class MetadataTypesController < ApplicationController
   def search
     authorize MetadataType
     @target = params[:target]
-    @metadata_types = MetadataType.where("name LIKE ?", "%#{params[:search]}%")
-		print "----------------------------------------------------\n"
-		print @metadata_types.inspect
-		print "\n----------------------------------------------------\n"
+    @metadata_types = MetadataType.where("lower(name) LIKE lower(?)", "%#{params[:search]}%")
     respond_to do |format|
       format.turbo_stream
     end

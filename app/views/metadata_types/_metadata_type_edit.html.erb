@@ -6,6 +6,10 @@
 				<%= form.text_field :name, class: "form-control", data: { "metadatasearch-target": "nameinput" } %>
 				<%= inline_error_for(:name, metadata_type) %>
 			</div>
+			<div class="col">
+				<%= form.number_field :order, class: "form-control", data: { "metadatasearch-target": "orderinput" } %>
+				<%= inline_error_for(:order, metadata_type) %>
+			</div>
 			<div class="thin-column">
 				<div class="btn-tools">
 					<%= form.submit "Update", method: :put, class: "btn btn-primary me-2" %>

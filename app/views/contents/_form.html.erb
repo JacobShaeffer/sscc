@@ -13,28 +13,24 @@
 
 	<div class="field">
 		<%= form.label :title %>
-		<div class='tooltip-field'>
-			<%= form.text_field :title, required: true, skip_label: true %>
-			<div class="tooltip-holder ms-1" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="What happends when we have a really long tooltip? But what if it's really long? Like really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long">?</div>
-		</div>
+		<div class="tooltip-holder ms-1" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="What happends when we have a really long tooltip? But what if it's really long? Like really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long">?</div>
+		<%= form.text_field :title, required: true, skip_label: true %>
 	</div>
 
 	<div class="field">
 		<%= form.text_field :display_title, required: true %>
 	</div>
 
-	<div data-controller='fileSelect' class="field">
+	<div data-controller='fileSelect' data-fileSelect-extensions-value='["pdf","mp3","mp4"]' class="field">
 		<%= form.label :file, "File" %>
 		<div class="input-group">
 			<span class="input-group-text" id="file-name">Choose File</span>
-			<!--this one-->
 			<% if @content.file.file.nil? %>
 				<input type="text" class="form-control" id="Selected-File-Display" value="No File Selected"/>
 			<% else %>
 				<input type="text" class="form-control" id="Selected-File-Display" value="<%=@content.file_identifier%>"/>
 			<% end %>
 		</div>
-		<!--Add a jacascript function when this form field changes to update the text input above to mactch since the content.file_identifier won't update if the user selects a new file-->
 		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: "height: 0px;"}, skip_label: true %>
 		<%= form.hidden_field :file_cache, required: true%>
 	</div>
@@ -58,7 +54,7 @@
 	<div class="mb-3">
 		<label class="form-label">Metadata</label>
 		<div class="form-control">
-			<% MetadataType.all.each do |metadata_type| %>
+			<% MetadataType.all.order(:order).each do |metadata_type| %>
 
 				<div class="mb-3" 
 						data-controller='multiSelect' 
@@ -71,7 +67,7 @@
 					<div class="form-control" data-action="click->multiSelect#onSearchInputClick">
 						<% metadata_type.metadata.each do |metadatum| %>
 							<% is_checked = @content.metadata.include?(metadatum) %>
-							<div class="auto-complete-selected <%= is_checked ? "" : "hidden" %>" id="metadatum_badge_<%= metadatum.id%>" data-action="mousedown->multiSelect#onBadgeClicked"><span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>" ><%= metadatum.name %></span></div>
+							<div style="background-color: 'green';" class="auto-complete-selected <%= is_checked ? "" : "hidden" %>" id="metadatum_badge_<%= metadatum.id%>" data-action="mousedown->multiSelect#onBadgeClicked"><span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>" ><%= metadatum.name %></span></div>
 							<% if is_checked%>
 								<input class="hidden" 
 											type="checkbox" 
@@ -104,8 +100,7 @@
 					
 					<div class="list-group hidden" id="metadataInput_<%= metadata_type.id %>_list">
 						<% metadata_type.metadata.each do |metadatum| %>
-							<% is_checked = @content.metadata.include?(metadatum) %>
-							<a class="list-group-item list-group-action-item <%= is_checked ? "active" : "" %>" data-action="mousedown->multiSelect#onItemSelected" id="selector_for=<%= metadatum.id%>"><%= metadatum.name %></a>
+							<%= render 'list-group-item', is_active: @content.metadata.include?(metadatum), metadatum: metadatum %>
 						<% end %>
 					</div>
 				</div>
@@ -114,6 +109,6 @@
 	</div>
 
   <div class="actions">
-		<%= form.submit %>
+		<%= form.submit "Save" %>
   </div>
 <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_23_212146) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_04_190850) do
   create_table "content_metadata", force: :cascade do |t|
     t.integer "content_id"
     t.integer "metadatum_id"
@@ -35,7 +35,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_212146) do
 
   create_table "copyright_permissions", force: :cascade do |t|
     t.text "notes"
-    t.integer "organization_id", null: false
     t.date "date_contacted"
     t.date "date_of_response"
     t.integer "user_id", null: false
@@ -43,7 +42,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_212146) do
     t.datetime "updated_at", null: false
     t.integer "granted"
     t.string "communication"
-    t.index ["organization_id"], name: "index_copyright_permissions_on_organization_id"
+    t.string "organization_name"
+    t.string "organization_website"
+    t.string "organization_contact_information"
     t.index ["user_id"], name: "index_copyright_permissions_on_user_id"
   end
 
@@ -62,17 +63,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_212146) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.integer "order"
     t.index ["user_id"], name: "index_metadata_types_on_user_id"
-  end
-
-  create_table "organizations", force: :cascade do |t|
-    t.string "name"
-    t.string "website"
-    t.string "contact_information"
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_organizations_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -96,10 +88,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_23_212146) do
 
   add_foreign_key "contents", "copyright_permissions"
   add_foreign_key "contents", "users"
-  add_foreign_key "copyright_permissions", "organizations"
   add_foreign_key "copyright_permissions", "users"
   add_foreign_key "metadata", "metadata_types"
   add_foreign_key "metadata", "users"
   add_foreign_key "metadata_types", "users"
-  add_foreign_key "organizations", "users"
 end

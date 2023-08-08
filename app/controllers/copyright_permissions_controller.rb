@@ -2,6 +2,10 @@ class CopyrightPermissionsController < ApplicationController
   before_action :set_copyright_permission, only: %i[ show edit update destroy ]
 	before_action :authenticate_user!
 
+  def index
+    @copyright_permissions = CopyrightPermission.all
+  end
+
   # GET /copyright_permissions/1 or /copyright_permissions/1.json
   def show
     authorize @copyright_permission
@@ -55,7 +59,7 @@ class CopyrightPermissionsController < ApplicationController
     @copyright_permission.destroy
 
     respond_to do |format|
-      format.html { redirect_to copyright_index_url, notice: "Copyright permission was successfully destroyed." }
+      format.html { redirect_to copyright_permissions_url, notice: "Copyright permission was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -68,6 +72,6 @@ class CopyrightPermissionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def copyright_permission_params
-      params.require(:copyright_permission).permit(:notes, :organization_id, :granted, :date_contacted, :date_of_response, :communication, :communication_cache)
+      params.require(:copyright_permission).permit(:notes, :organization_name, :organization_website, :organization_contact_information, :granted, :date_contacted, :date_of_response, :communication, :communication_cache)
     end
 end

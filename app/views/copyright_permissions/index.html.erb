@@ -15,7 +15,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>Organization</th>
+							<th>Organization <i class="bi bi-chevron-up"></i></th>
 							<th>Granted</th>
 							<th>Date Contacted</th>
 							<th>Date of Response</th>
@@ -26,7 +26,7 @@
 					<tbody>
 						<% @copyright_permissions.each do |crp| %>
 							<tr>
-								<td><%= crp.organization.name %></td>
+								<td><%= crp.organization_name %></td>
 								<td><%= crp.granted %></td>
 								<td><%= crp.date_contacted %></td>
 								<td><%= crp.date_of_response %></td>
@@ -37,51 +37,6 @@
 								<% end %>
 								<% if policy(CopyrightPermission).destroy? %>
 									<td><%= button_to "Destroy", copyright_permission_path(crp), method: :delete, data: { confirm: "Are you sure?" } %></td>
-								<% end %>
-							</tr>
-						<% end %>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col">
-		<div class="row">
-			<div class="col">
-				<h1>Organization</h1>
-			</div>
-			<% if policy(Organization).create? %>
-				<div class="col">
-					<%= link_to "ADD ORGANIZATION", new_organization_path, class: "btn btn-primary" %>
-				</div>
-			<% end %>
-		</div>
-		<div class="row">
-			<div class="col">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Website</th>
-							<th>Contact</th>
-							<% if policy(Organization).edit? || policy(Organization).destroy? %>
-								<th colspan="<%= [policy(CopyrightPermission).edit?, policy(CopyrightPermission).destroy?].count(true) %>">Actions</th>
-							<% end %>
-						</tr>
-					</thead>
-					<tbody>
-						<% @organizations.each do |org| %>
-							<tr>
-								<td><%= org.name %></td>
-								<td><%= org.website %></td>
-								<td><%= org.contact_information %></td>
-								<% if policy(Organization).edit? %>
-									<td><%= link_to "Edit", edit_organization_path(org) %></td>
-								<% end %>
-								<% if policy(Organization).destroy? %>
-									<td><%= button_to "Destroy", organization_path(org), method: :delete, data: { confirm: "Are you sure?" } %></td>
 								<% end %>
 							</tr>
 						<% end %>

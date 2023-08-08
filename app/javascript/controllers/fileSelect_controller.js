@@ -3,19 +3,35 @@ import { Controller } from "@hotwired/stimulus"
 export const string_identifier = "fileSelect";
 
 export default class extends Controller {
+	static values = {
+		extensions: Array,
+		ae: String,
+	}
 	onFileSelected(event) {
-		console.log('event', event);
-		console.log('target', event.target);
-		console.log('target value', event.target.value);
 		// Check the file type here and respond to the form with a stream to do real-time validation????
+		var allowedExtensions = this.extensionsValue;
+		var errorMessageExt = ""
+		var allowedExtensionsExt = "("
+		for (var i = 0; i < allowedExtensions.length; i++) {
+			errorMessageExt += allowedExtensions[i];
+			allowedExtensionsExt += "\." + allowedExtensions[i];
+			if (i < allowedExtensions.length - 1) {
+				if (i == allowedExtensions.length - 2) {
+					errorMessageExt += " or ";
+				} else {
+					errorMessageExt += ", ";
+				}
+				allowedExtensionsExt += "|";
+			}
+		}
+		allowedExtensionsExt += ")";
 
-		var errorMessage = "File type not supported. Please upload a pdf, mp3, or mp4 file.";
-		var allowedExtensions = /(\.pdf|\.mp3|\.mp4)$/i;
-
-		console.log('test: ', allowedExtensions.test(event.target.value));
+		var errorMessage = `File type not supported. Please upload a ${errorMessageExt} file.`;
+		// var allowedExtensionsRegex = /(\.pdf|\.mp3|\.mp4)$/i;
+		var allowedExtensionsRegex = new RegExp(allowedExtensionsExt + "$", "i");
 
 		// test if the file is an allowed extension
-		if (!allowedExtensions.test(event.target.value)) {
+		if (!allowedExtensionsRegex.test(event.target.value)) {
 			alert(errorMessage);
 			event.target.value = '';
 			return false;

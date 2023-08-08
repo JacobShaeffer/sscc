@@ -59,7 +59,7 @@
 		</div>
 	</div>
 	<div class="list-group list-group-striped list-group-flush" id="metadata_types_list">	
-			<% MetadataType.all.each do |metadata_type| %>
+			<% MetadataType.all.order(:order).each do |metadata_type| %>
 				<%= render "metadata_type", metadata_type: metadata_type %>
 			<% end %>
 	</div>

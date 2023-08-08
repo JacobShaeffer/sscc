@@ -21,11 +21,11 @@ class CommunicationUploader < CarrierWave::Uploader::Base
   end
 
   def extension_allowlist
-    %w(pdf)
+    %w(pdf png jpg jpeg)
   end
 
   def content_type_allowlist
-    %w(application/pdf)
+    %w(application/pdf image/png image/jpg image/jpeg)
   end
 
 end

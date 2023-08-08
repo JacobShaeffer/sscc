@@ -9,10 +9,19 @@
       </p>
 
       <p>
-        <strong>Organization:</strong>
-        <%= @copyright_permission.organization.name %>
+        <strong>Organization name:</strong>
+        <%= @copyright_permission.organization_name %>
       </p>
 
+      <p>
+        <strong>Organization website:</strong>
+        <%= @copyright_permission.organization_website %>
+      </p>
+
+      <p>
+        <strong>Organization contact information:</strong>
+        <%= @copyright_permission.organization_contact_information %>
+      </p>
 
       <p>
         <strong>Granted:</strong>
@@ -48,7 +57,7 @@
   <% if policy(@copyright_permission).edit? %>
     <%= link_to "Edit this copyright permission", edit_copyright_permission_path(@copyright_permission) %> |
   <% end %>
-  <%= link_to "Back", copyright_index_path %>
+  <%= link_to "Back", copyright_permissions_path %>
 
   <% if policy(@copyright_permission).destroy? %>
     <%= button_to "Destroy this copyright permission", @copyright_permission, method: :delete %>

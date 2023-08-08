@@ -11,45 +11,53 @@
     </div>
   <% end %>
 
+  <div class="row">
+    <div class="field col-lg-4 col-md-6">
+      <%= form.text_field :organization_name, required: true %>
+    </div>
+
+    <div class="field col-lg-4 col-md-6">
+      <%= form.text_field :organization_website %>
+    </div>
+
+    <div class="field col-lg-4 col-md-6">
+      <%= form.text_field :organization_contact_information, required: true %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field col-lg-6 col-md-12">
+      <%= form.select :granted, CopyrightPermission.granteds.keys.map {|u| [u.titleize, u]}, {:prompt => 'Select One'}, required: true %>
+    </div>
+
+    <div class="field col-lg-3 col-md-6">
+      <%= form.date_field :date_contacted, required: true %>
+    </div>
+
+    <div class="field col-lg-3 col-md-6">
+      <%= form.date_field :date_of_response %>
+    </div>
+  </div>
+
   <div>
     <%= form.text_area :notes %>
   </div>
 
-  <div class="field">
-		<%= form.collection_select(:organization_id, Organization.all, :id, :name, {:prompt => "Select"}, required: true) %>
-  </div>
-
-  <div class="field">
-    <%= form.select :granted, CopyrightPermission.granteds.keys.map {|u| [u.titleize, u]}, {:prompt => 'Select One'}, required: true %>
-  </div>
-
-  <div class="field">
-    <%= form.date_field :date_contacted, required: true %>
-  </div>
-
-  <div>
-    <%= form.date_field :date_of_response %>
-  </div>
-
-<!--  <div>-->
-    <%#= form.text_field :communication %>
-    <%#= form.file_field :communication %>
-    <%#= form.hidden_field :communication_cache, :value => @copyright_permission.communication_cache %>
-<!--  </div>-->
-
-	<div data-controller='fileSelect' class="field">
+	<div data-controller='fileSelect' data-fileSelect-extensions-value='["pdf","mp3","mp4"]' class="field">
 		<%= form.label :communication, "Communication" %>
-		<% if !@copyright_permission.communication.file.nil? %>
-			<div style="background-color: red;">
-				<h5>Existing file</h5>	
-				<%= @copyright_permission.communication_identifier %>
-			</div>
-		<% end %>
-		<%= form.file_field :communication, data: {action: 'change->fileSelect#onFileSelected'}, skip_label: true %>
+		<div class="input-group">
+			<span class="input-group-text" id="file-name">Choose File</span>
+			<% if @copyright_permission.communication.file.nil? %>
+				<input type="text" class="form-control" id="Selected-File-Display" value="No File Selected"/>
+			<% else %>
+				<input type="text" class="form-control" id="Selected-File-Display" value="<%=@copyright_permission.communication_identifier%>"/>
+			<% end %>
+		</div>
+		<%= form.file_field :communication, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: "height: 0px;"}, skip_label: true %>
 		<%= form.hidden_field :communication_cache, required: true%>
 	</div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit "Save" %>
   </div>
 <% end %>

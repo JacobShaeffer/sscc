@@ -21,9 +21,7 @@ Rails.application.routes.draw do
       get :search
     end
   end
-  resources :copyright_permissions,  except: [:index]
-  resources :organizations, except: [:index, :show]
-  get 'copyright/index'
+  resources :copyright_permissions
 
   get 'home/about'
   root 'home#index'

@@ -148,3 +148,8 @@ $secondary: #ffc627;
 	opacity: 0;
 	top: -38px;
 }
+
+.list-group-item {
+	--bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity));
+}

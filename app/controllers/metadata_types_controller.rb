@@ -5,7 +5,7 @@ class MetadataTypesController < ApplicationController
   # GET /metadata_types or /metadata_types.json
   def index
     authorize MetadataType
-    @metadata_types = MetadataType.all
+    @metadata_types = MetadataType.all.order(:order)
   end
 
   def list
@@ -72,6 +72,6 @@ class MetadataTypesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def metadata_type_params
-      params.require(:metadata_type).permit(:name)
+      params.require(:metadata_type).permit(:name, :order)
     end
 end

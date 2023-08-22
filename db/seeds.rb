@@ -29,6 +29,7 @@ metadata_types = MetadataType.create([
     {name: "Education Type", order: 1, user_id: 1},
     {name: "Primary User", order: 1, user_id: 1},
     {name: "Resource Type", order: 1, user_id: 1},
+    {name: "Rights Statement", order: 1, user_id: 1},
     # {name: "", order: 1, user_id: 1},
 ])
 
@@ -54,4 +55,9 @@ end
 resource_types = ["Activity","Video","Lesson Plan","Book","Fiction","Curriculum","Article","Fact Sheet","Textbook","Manual","Map","Report","Course","Syllabus","Lecture","Lecture Notes","Audiobook","Article","Student Guide","Case Study","Teaching Guide","كتاب مدرسي","Affiche","Fiche Descriptive","Livre","Activité","Histoire","Manuel","Prèsentation","Contrôle","Vidéo","Plan de Leçon","Manuel Scolaire","المنهج.الدراسي","قصة","كتيب/دليل","فعالية/نشاط","كتاب","الكتاب.المدرسي","فعالية/نشاط","منهج.دراسي","قصة","Infographic","منهج.دراسي","Podcast","Reference Guide","Hoja de Cálculo","Plan de Lección","Artículo","Libro","Reporto","Libro de Audio","Actividad","Mapa","فيديو","Articulo","Activdad","قصص القصيرة","ورقة عمل","Song","Infográfico","Poem","Guión","Igitabo","Amashusho","Inyangiko","Gahunda y’isomo","Urupapuro rw’amakurushingiro","Ishusho","Short Story","Storybook","Dataset"]
 resource_types.each do |resource_type|
     create_metadata(resource_type, metadata_types.find {|metadata| metadata.name == "Resource Type"}, 1)
+end
+
+rights_statements = ["All rights reserved - permission granted to share on SolarSPELL library for educational purposes only.","Can be shared for educational purposes only.","Public domain.","CC BY - This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use.","CC BY SA - This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use. If you remix, adapt, or build upon the material, you must license the modified material under identical terms.","CC BY NC SA - This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial purposes only, and only so long as attribution is given to the creator. If you remix, adapt, or build upon the material, you must license the modified material under identical terms. ","CC BY NC - This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial purposes only, and only so long as attribution is given to the creator. ","CC BY ND - This license allows reusers to copy and distribute the material in any medium or format in unadapted form only, and only so long as attribution is given to the creator. The license allows for commercial use. ","CC BY NC ND - This license allows reusers to copy and distribute the material in any medium or format in unadapted form only, for noncommercial purposes only, and only so long as attribution is given to the creator."]
+rights_statements.each do |rights_statement|
+    create_metadata(rights_statement, metadata_types.find {|metadata| metadata.name == "Rights Statement"}, 1)
 end

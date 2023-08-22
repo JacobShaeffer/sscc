@@ -24,38 +24,6 @@
                 data-accordion-target="collapseContent"
           >
             <div class="accordion-body">
-<!--              <table class="table table-striped" 
-                    data-controller="metadatasearch" 
-                    data-metadatasearch-type-value="<%#= metadata_type.id %>"
-                    data-metadatasearch-url-value="/metadata_types/<%#= metadata_type.id %>/metadata/search"
-              >
-                <thead>
-                  <tr>
-                    <th>Metadata Name</th>
-                    <th class="thin-column">Actions</th>
-                  </tr>
-                  <tr>
-                        <th>
-                            <%#= render "search_input", id: metadata_type.id %>-->
-<!--                        </th>
-                        <th class="thin-column btn-tools">
-                            <%# if @show_create %>-->
-                                <%#= form_for [metadata_type, Metadatum.new] do |form| %>
-                                    <%#= form.hidden_field :name, id: metadata_type.id, data: { "metadatasearch-target": "nameinput" } %>
-                                    <%#= form.submit "+", class: "btn btn-success me-2" %>
-                                <%# end %>
-                            <%# end %>
-<!--                            <button class="btn btn-warning" data-action="click->metadatasearch#onClear">clear</button>
-                        </th>
-                  </tr>
-                </thead>
-                <tbody id="metadataTable_<%#= metadata_type.id %>">
-                    <%# metadata_type.metadata.each do |metadatum| %>-->
-                        <%#= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
-                    <%# end %>
-<!--                </tbody>
-              </table>-->
-
               <div class="list-group list-group-flush"
                 data-controller="metadatasearch"
                 data-metadatasearch-type-value="<%= metadata_type.id %>"

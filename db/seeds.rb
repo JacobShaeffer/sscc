@@ -38,6 +38,7 @@ metadata_types = MetadataType.create([
 def create_metadata(name, metadata_type, user_id)
     if Metadatum.find_by(name: name, metadata_type: metadata_type, user_id: user_id) == nil
         Metadatum.create(name: name, metadata_type: metadata_type, user_id: user_id)
+    end
 end
 
 education_types = ["Lower Primary School Student","Upper Primary School Student","Middle School Student","Secondary School Student","College/Upper Division","Adult Education","Career/Technical","Graduate/Professional","Preschool","Kindergarten","Grade 01","Grade 02","Grade 03","Grade 04","Grade 05","Grade 06","Grade 07","Grade 08","Grade 09","Grade 10","Grade 11","Grade 12"]

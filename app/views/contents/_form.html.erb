@@ -11,40 +11,50 @@
 		</div>
 	<% end %>
 
-	<div class="field">
-		<%= form.label :title %>
-		<div class="tooltip-holder ms-1" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="What happends when we have a really long tooltip? But what if it's really long? Like really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long">?</div>
-		<%= form.text_field :title, required: true, skip_label: true %>
-	</div>
-
-	<div class="field">
-		<%= form.text_field :display_title, required: true %>
-	</div>
-
-	<div data-controller='fileSelect' data-fileSelect-extensions-value='["pdf","mp3","mp4"]' class="field">
-		<%= form.label :file, "File" %>
-		<div class="input-group">
-			<span class="input-group-text" id="file-name">Choose File</span>
-			<% if @content.file.file.nil? %>
-				<input type="text" class="form-control" id="Selected-File-Display" value="No File Selected"/>
-			<% else %>
-				<input type="text" class="form-control" id="Selected-File-Display" value="<%=@content.file_identifier%>"/>
-			<% end %>
+	<div class="row">
+		<div class="field col-lg-6 col-md-12">
+			<%#= form.label :title %>
+			<!--<div class="tooltip-holder ms-1" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-title="What happends when we have a really long tooltip? But what if it's really long? Like really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long">?</div>-->
+			<%#= form.text_field :title, required: true, skip_label: true %>
+			<%= form.text_field :title, required: true %>
 		</div>
-		<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: "height: 0px;"}, skip_label: true %>
-		<%= form.hidden_field :file_cache, required: true%>
+
+		<div class="field col-lg-6 col-md-12">
+			<%= form.text_field :display_title, required: true %>
+		</div>
 	</div>
 
-	<div class="field">
-		<%= form.text_area :description, required: true %>
+	<div class="row">
+		<div class="field">
+			<%= form.text_area :description, required: true %>
+		</div>
 	</div>
 
-	<div class="field">
-		<%= form.number_field :year_of_publication %>
-	</div>
+	<div class="row">
+		<div data-controller='fileSelect' 
+			data-fileSelect-extensions-value='["pdf","mp3","mp4"]' 
+			class="field col-lg-4 col-md-6 col-sm-12"
+		>
+			<%= form.label :file, "File", class: "form-label" %>
+			<div class="input-group">
+				<span class="input-group-text" id="file-name">Choose File</span>
+				<% if @content.file.file.nil? %>
+					<input type="text" class="form-control" id="Selected-File-Display" value="No File Selected"/>
+				<% else %>
+					<input type="text" class="form-control" id="Selected-File-Display" value="<%=@content.file_identifier%>"/>
+				<% end %>
+			</div>
+			<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: "height: 0px;"}, skip_label: true %>
+			<%= form.hidden_field :file_cache, required: true%>
+		</div>
 
-	<div class="field">
-		<%= form.collection_select(:copyright_permission_id, CopyrightPermission.all, :id, :organization_name, {:prompt => "Select"}, required: true ) %>
+		<div class="field col-lg-4 col-md-6 col-sm-12">
+			<%= form.number_field :year_of_publication %>
+		</div>
+
+		<div class="field col-lg-4 col-md-6 col-sm-12">
+			<%= form.collection_select(:copyright_permission_id, CopyrightPermission.all, :id, :organization_name, {:prompt => "Select"}, required: true ) %>
+		</div>
 	</div>
 	
 	<div class="field">
@@ -57,11 +67,11 @@
 			<% MetadataType.all.order(:order).each do |metadata_type| %>
 
 				<div class="mb-3" 
-						data-controller='multiSelect' 
-						id="metadataInput_<%= metadata_type.id %>" 
-						data-action="focusin->multiSelect#onSearchFocusIn focusout->multiSelect#onSearchFocusOut" 
-						data-multiSelect-type-value="<%= metadata_type.id%>"
-						class="field"
+					data-controller='multiSelect' 
+					id="metadataInput_<%= metadata_type.id %>" 
+					data-action="focusin->multiSelect#onSearchFocusIn focusout->multiSelect#onSearchFocusOut" 
+					data-multiSelect-type-value="<%= metadata_type.id%>"
+					class="field"
 				>
 					<label class="form-label-sm"><%= metadata_type.name %></label>
 					<div class="form-control" data-action="click->multiSelect#onSearchInputClick">
@@ -70,36 +80,36 @@
 							<div style="background-color: 'green';" class="auto-complete-selected <%= is_checked ? "" : "hidden" %>" id="metadatum_badge_<%= metadatum.id%>" data-action="mousedown->multiSelect#onBadgeClicked"><span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>" ><%= metadatum.name %></span></div>
 							<% if is_checked%>
 								<input class="hidden" 
-											type="checkbox" 
-											name="content[metadatum_ids][]" 
-											id="content_metadatum_ids_<%= metadatum.id %>" 
-											value="<%= metadatum.id %>"
-											data-multiSelect-target="checkbox"
-											checked	
+										type="checkbox" 
+										name="content[metadatum_ids][]" 
+										id="content_metadatum_ids_<%= metadatum.id %>" 
+										value="<%= metadatum.id %>"
+										data-multiSelect-target="checkbox"
+										checked	
 								>
 							<% else %>
 								<input class="hidden" 
-											type="checkbox" 
-											name="content[metadatum_ids][]" 
-											id="content_metadatum_ids_<%= metadatum.id %>" 
-											value="<%= metadatum.id %>"
-											data-multiSelect-target="checkbox"
+										type="checkbox" 
+										name="content[metadatum_ids][]" 
+										id="content_metadatum_ids_<%= metadatum.id %>" 
+										value="<%= metadatum.id %>"
+										data-multiSelect-target="checkbox"
 								>
 							<% end %>
 						<% end %>
 						<input class="auto-complete" 
-									placeholder="Search" 
-									id="metadataInput_<%= metadata_type.id %>" 
-									data-multiSelect-target="searchInput"
-									data-action="input->multiSelect#onSearchInput" 
-									autoComplete="off"
-									size="35"
+								placeholder="Search" 
+								id="metadataInput_<%= metadata_type.id %>" 
+								data-multiSelect-target="searchInput"
+								data-action="input->multiSelect#onSearchInput" 
+								autoComplete="off"
+								size="35"
 						>
 					</div>
 					<!--<p class="error">Please select metadata values</p>-->
 					
 					<div class="list-group hidden" id="metadataInput_<%= metadata_type.id %>_list">
-						<% metadata_type.metadata.each do |metadatum| %>
+						<% metadata_type.metadata.first(10).each do |metadatum| %>
 							<%= render 'list-group-item', is_active: @content.metadata.include?(metadatum), metadatum: metadatum %>
 						<% end %>
 					</div>
@@ -108,7 +118,9 @@
 		</div>
 	</div>
 
-  <div class="actions">
+	<div class="actions mb-3">
 		<%= form.submit "Save" %>
-  </div>
+
+		<%= link_to "Cancel", contents_path, :class => "btn btn-danger"%>
+	</div>
 <% end %>

@@ -57,7 +57,9 @@
 		<%= form.hidden_field :communication_cache, required: true%>
 	</div>
 
-  <div>
+  <div class="actions mb-3">
     <%= form.submit "Save" %>
+
+		<%= link_to "Cancel", copyright_permissions_path, :class => "btn btn-danger"%>
   </div>
 <% end %>

@@ -1,5 +1,5 @@
 <%= turbo_stream.update @target do %>
-    <% @metadata.each do |metadatum| %>
+    <% @metadata.first(10).each do |metadatum| %>
         <%= render 'list-group-item', is_active: @selected.include?(metadatum.id.to_s), metadatum: metadatum %>
     <% end %>
     <!--TODO:-->

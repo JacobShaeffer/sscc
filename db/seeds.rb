@@ -10,17 +10,17 @@ case Rails.env
 when "development"
     # development seeds
     users = User.create([
-        {email: "admin@admin.com", name: "ad min", password: "adminpassword", password_confirmation: "adminpassword", role: 99}, 
-        {email: "intern@intern.com", name: "in tern", password: "intern", password_confirmation: "intern", role: 3},
-        {email: "volunteer@volunteer.com", name: "volu nteer", password: "volunteer", password_confirmation: "volunteer", role: 2},
-        {email: "organization@organization.com", name: "organi zation", password: "organization", password_confirmation: "organization", role: 1},
-        {email: "guest@guest.com", name: "gu est", password: "guestpassword", password_confirmation: "guestpassword", role: 0},
+        {email: "admin@admin.com", name: "ad min", password: "adminpassword", password_confirmation: "adminpassword", role: 'admin'}, 
+        {email: "intern@intern.com", name: "in tern", password: "intern", password_confirmation: "intern", role: 'intern'},
+        {email: "volunteer@volunteer.com", name: "volu nteer", password: "volunteer", password_confirmation: "volunteer", role: 'volunteer'},
+        {email: "organization@organization.com", name: "organi zation", password: "organization", password_confirmation: "organization", role: 'organization'},
+        {email: "guest@guest.com", name: "gu est", password: "guestpassword", password_confirmation: "guestpassword", role: 'guest'},
     ])
 when "production"
     # production seeds 
     # RAILS_ENV=production bin/rails db:seed
     users = User.create([
-        {email: "admin@admin.com", name: "ad min", password: "changeme", password_confirmation: "changeme", role: 99}, 
+        {email: "admin@admin.com", name: "ad min", password: "changeme", password_confirmation: "changeme", role: 'admin'}, 
     ])
 end
 

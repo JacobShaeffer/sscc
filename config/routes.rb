@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :contents do
     collection do
       get :search
+      get :add_new_metadatum
     end
   end
   resources :copyright_permissions

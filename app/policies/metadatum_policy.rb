@@ -11,7 +11,7 @@ class MetadatumPolicy < ApplicationPolicy
   end
 
   def create?
-    @user.admin? || @user.intern? || @user.organization?
+    @user.admin? || @user.intern?
   end
 
   def update?

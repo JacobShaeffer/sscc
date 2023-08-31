@@ -9,11 +9,30 @@ export default class extends Controller {
 		type: String
 	}
 
+	onAddSelected(event) {
+		let name = this.searchInputTarget.value;
+		this.searchInputTarget.value = "";
+		this.autoComplete(this.typeValue, "");
+
+		let params = new URLSearchParams();
+
+		let target = `metadataInput_${this.typeValue}`;
+
+		params.append("target", target);
+		params.append("metadata_type_id", this.typeValue);
+		params.append("name", name);
+
+		get(`/contents/add_new_metadatum?${params}`, {
+			responseKind: "turbo-stream", 
+		})
+	}
+
 	onItemSelected(event) {
 		console.log("onItemSelected", event.target.id);
 		var target_id = event.target.id.substr(13);
 		var badge_id = "metadatum_badge_" + target_id;
 		this.toggleCheckBox(target_id);
+		// console.log("badge_id", badge_id)
 		document.getElementById(badge_id).classList.toggle("hidden");
 		event.target.classList.toggle("active");
 
@@ -22,12 +41,15 @@ export default class extends Controller {
 	}
 
 	onBadgeClicked(event) {
-		// console.log("onBadgeClicked", event.target.id);
+		console.log("onBadgeClicked", event.target.id);
 		var target_id = event.target.id.substr(21);
-		// console.log("target_id", target_id);
+		console.log("target_id", target_id);
 		var listItem_id = "selector_for=" + target_id;
 		this.toggleCheckBox(target_id);
-		document.getElementById(listItem_id).classList.toggle("active");
+		let selector_for = document.getElementById(listItem_id);
+		if (selector_for) {
+			selector_for.classList.toggle("active");
+		}
 		event.target.parentElement.classList.toggle("hidden");
 	}
 
@@ -50,23 +72,16 @@ export default class extends Controller {
 	}
 
 	// Private
-	target_id(metadata_type){
-		let target = `metadataInput_${metadata_type}_list`;
-		return target
-	}
 
 	autoComplete(metadata_type_id, search){
 		let params = new URLSearchParams();
 
-		// console.log("checkboxes", this.checkboxTargets);
-		// this.checkboxTargets.forEach((checkbox) => {
-		// 	console.log("checkbox", checkbox.value, checkbox.checked);
-		// })
 		let selected_ids = this.checkboxTargets.filter((checkbox) => 
-			checkbox.checked).map((checkbox) => checkbox.value).join(",")
-		// console.log("selected_ids", selected_ids);
+			checkbox.checked).map((checkbox) => checkbox.value).join(",");
 
-		params.append("target", this.target_id(metadata_type_id));
+		let target = `metadataInput_${metadata_type_id}_list`;
+
+		params.append("target", target);
 		params.append("metadata_type_id", metadata_type_id);
 		params.append("search", search);
 		params.append("selected_ids", selected_ids);

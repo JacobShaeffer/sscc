@@ -68,16 +68,26 @@
 
 				<div class="mb-3" 
 					data-controller='multiSelect' 
-					id="metadataInput_<%= metadata_type.id %>" 
+					id="multiSelectFor=<%= metadata_type.id %>" 
 					data-action="focusin->multiSelect#onSearchFocusIn focusout->multiSelect#onSearchFocusOut" 
 					data-multiSelect-type-value="<%= metadata_type.id%>"
 					class="field"
 				>
 					<label class="form-label-sm"><%= metadata_type.name %></label>
-					<div class="form-control" data-action="click->multiSelect#onSearchInputClick">
+					<div class="form-control" 
+						data-action="click->multiSelect#onSearchInputClick"
+						id="metadataInput_<%= metadata_type.id %>_container"
+					>
 						<% metadata_type.metadata.each do |metadatum| %>
 							<% is_checked = @content.metadata.include?(metadatum) %>
-							<div style="background-color: 'green';" class="auto-complete-selected <%= is_checked ? "" : "hidden" %>" id="metadatum_badge_<%= metadatum.id%>" data-action="mousedown->multiSelect#onBadgeClicked"><span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>" ><%= metadatum.name %></span></div>
+							<div class="auto-complete-selected <%= is_checked ? "" : "hidden" %>" 
+								id="metadatum_badge_<%= metadatum.id%>" 
+								data-action="mousedown->multiSelect#onBadgeClicked"
+							>
+								<span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>">
+									<%= metadatum.name %>
+								</span>
+							</div>
 							<% if is_checked%>
 								<input class="hidden" 
 										type="checkbox" 

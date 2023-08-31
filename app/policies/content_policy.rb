@@ -38,6 +38,10 @@ class ContentPolicy < ApplicationPolicy
     true
   end
 
+  def add_new_metadatum?
+    @user.admin? || @user.intern?
+  end
+
   class Scope < Scope
     # NOTE: Be explicit about which records you allow access to!
     # def resolve

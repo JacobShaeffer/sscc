@@ -13,15 +13,15 @@ class MetadataTypes::MetadataController < ApplicationController
     @metadatum = Metadatum.new(metadatum_params.merge(user: current_user))
     authorize @metadatum
     @metadatum.metadata_type = @metadata_type
+    @target = "metadataTable_#{params[:metadata_type_id]}"
 
     respond_to do |format|
       if @metadatum.save
         flash.now[:notice] = "#{@metadatum.metadata_type.name} \"#{@metadatum.name}\" was created successfully."
-        @target = "metadataTable_#{params[:metadata_type_id]}"
         @metadata = MetadataType.find(params[:metadata_type_id]).metadata
         format.turbo_stream
       else
-        format.turbo_stream
+        format.turbo_stream { render "create_error" }
         # format.html { render :new, status: :unprocessable_entity }
       end
     end

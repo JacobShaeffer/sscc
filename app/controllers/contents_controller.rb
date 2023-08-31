@@ -74,10 +74,26 @@ class ContentsController < ApplicationController
     #Used in multi_select turbo controller for Content#new
     @target = params[:target]
     @selected = params[:selected_ids].nil? ? [] : params[:selected_ids].split(',')
-    metadata_type = MetadataType.find(params[:metadata_type_id])
-    @metadata = metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%")
+    @metadata_type = MetadataType.find(params[:metadata_type_id])
+    @metadata = @metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%")
     respond_to do |format|
       format.turbo_stream
+    end
+  end
+
+  def add_new_metadatum
+    authorize Content
+    #Add a new metadatum to the database while createing a content record
+    @metadata_type = MetadataType.find(params[:metadata_type_id])
+    @target = params[:target]
+    @metadatum = @metadata_type.metadata.create(name: params[:name], user: current_user)
+    respond_to do |format|
+      if @metadatum.save
+        format.turbo_stream
+      else
+        @target = @target + "_container"
+        format.turbo_stream { render "add_new_metadatum_error"}
+      end
     end
   end
 

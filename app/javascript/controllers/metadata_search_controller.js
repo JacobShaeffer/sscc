@@ -20,6 +20,10 @@ export default class extends Controller {
 		this.nameTarget.value = "";
 		this.nameinputTarget.value = "";
 		this.autoComplete("");
+		let errorMsg = document.getElementById(this.typeValue + "_error");
+		if (errorMsg) {
+			errorMsg.remove();
+		}
 	}
 
 	autoComplete(search){

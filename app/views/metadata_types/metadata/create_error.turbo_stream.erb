@@ -1,0 +1,3 @@
+<%= turbo_stream.after "metadataSearchInput_#{@metadata_type.id}" do %>
+    <p class="error" id="<%= @metadata_type.id %>_error"> <%= @metadatum.errors.full_messages.join(", ") %> </p>
+<% end %>

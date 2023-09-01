@@ -4,8 +4,7 @@ class Content < ApplicationRecord
   has_many :content_metadata, dependent: :destroy
   has_many :metadata, through: :content_metadata
 
-  mount_uploader :file, FileUploader
-  serialize :file, JSON # If useing SQLite, add this line.
+  has_one_attached :file
 
   validates :title, presence: true, allow_blank: false
   validates :display_title, presence: true, allow_blank: false

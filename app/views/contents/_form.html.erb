@@ -45,7 +45,7 @@
 				<% end %>
 			</div>
 			<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: "height: 0px;"}, skip_label: true %>
-			<%= form.hidden_field :file_cache, required: true%>
+			<%#= form.hidden_field :file_cache, required: true%>
 		</div>
 
 		<div class="field col-lg-4 col-md-6 col-sm-12">

@@ -23,7 +23,7 @@
           <tr>
             <td><%= content.title %></td>
             <td><%= content.display_title %></td>
-            <td><%= content.file_identifier %></td>
+            <td><%= content.file.filename %></td>
             <td><%= content.user.name %></td>
             <td><%= link_to "Show", content %></td>
             <% if policy(content).edit? %>

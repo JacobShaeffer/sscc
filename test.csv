@@ -1,0 +1,6 @@
+email,name,password,password_confirmation,role
+thisisatest@test.com,test,testpassword,testpassword,guest
+thisisatest2@test.com,test2,testpassword,testpassword,guest
+thisisatest3@test.com,test3,testpassword,testpassword,guest
+thisisatest4@test.com,test4,testpassword,testpassword,guest
+thisisatest5@test.com,test5,testpassword,testpassword,guest

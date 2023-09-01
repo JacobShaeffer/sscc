@@ -10,7 +10,9 @@
     <% end %>
   </div>
   <div class="col-md-8">
-    <iframe src='<%= @content.file_url unless @content.file.file.nil? %>' width="600" height="780"></iframe>
+    <iframe src='<%= url_for(@content.file) %>' width="600" height="780"></iframe>
+    <%#= link_to @content.file %>
+    <%#= image_tag @content.file.preview(resize_limit_to: [100, 100]) %>
   </div>
 </div>
 

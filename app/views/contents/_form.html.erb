@@ -44,7 +44,12 @@
 					<input type="text" class="form-control" id="Selected-File-Display" value="<%=@content.file_identifier%>"/>
 				<% end %>
 			</div>
-			<%= form.file_field :file, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: "height: 0px;"}, skip_label: true %>
+			<%= form.file_field :file, 
+				data: {action: 'change->fileSelect#onFileSelected'}, 
+				class: "file-input-hidden", 
+				wrapper: { class: 'mb-3', style: "height: 0px;"}, 
+				skip_label: true 
+			%>
 			<%#= form.hidden_field :file_cache, required: true%>
 		</div>
 

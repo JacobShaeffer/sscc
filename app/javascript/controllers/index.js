@@ -18,3 +18,5 @@ import metadata_searchController, {string_identifier as metadata_search_id} from
 application.register(metadata_search_id, metadata_searchController)
 import formController, {string_identifier as form_id} from "./form_controller"
 application.register(form_id, formController)
+import filepondController, {string_identifier as filepond_id} from "./filepond_controller"
+application.register(filepond_id, filepondController)

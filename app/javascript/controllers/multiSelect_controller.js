@@ -28,7 +28,7 @@ export default class extends Controller {
 	}
 
 	onItemSelected(event) {
-		console.log("onItemSelected", event.target.id);
+		// console.log("onItemSelected", event.target.id);
 		var target_id = event.target.id.substr(13);
 		var badge_id = "metadatum_badge_" + target_id;
 		this.toggleCheckBox(target_id);
@@ -41,9 +41,9 @@ export default class extends Controller {
 	}
 
 	onBadgeClicked(event) {
-		console.log("onBadgeClicked", event.target.id);
+		// console.log("onBadgeClicked", event.target.id);
 		var target_id = event.target.id.substr(21);
-		console.log("target_id", target_id);
+		// console.log("target_id", target_id);
 		var listItem_id = "selector_for=" + target_id;
 		this.toggleCheckBox(target_id);
 		let selector_for = document.getElementById(listItem_id);

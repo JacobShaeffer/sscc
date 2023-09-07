@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   end
   resources :copyright_permissions
 
+  # Filepond endpoints
+  delete 'filepond/remove', to: 'filepond#remove'
+
   get 'home/about'
   root 'home#index'
 end

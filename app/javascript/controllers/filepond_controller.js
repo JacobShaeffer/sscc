@@ -1,33 +1,40 @@
 import { Controller } from '@hotwired/stimulus';
 import * as FilePond from "filepond";
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import {DirectUpload} from "activestorage"
 
 export const string_identifier = 'filepond';
 
 export default class extends Controller {
-    static targets = [];
+	static values = {
+		extensions: Array,
+	}
 
     initialize() {
       // Called once, when the controller is first instantiated
-			console.log("filepond controller initialized")
-    }
+		console.log("filepond controller initialized")
+		FilePond.registerPlugin(FilePondPluginFileValidateType);
+		FilePond.registerPlugin(FilePondPluginFileValidateSize);
 
-    connect() {
-      // Called every time the controller is connected to the DOM
-			console.log("filepond controller connected")
-
-			const input = document.querySelector('input[type="file"]');
-			console.log("this is a test", input);
-			if(input){
-				console.log("there is an input")
-				FilePond.create( input );
+		const input = document.querySelector('input[type="file"]');
+		if(input){
+			FilePond.create( input );
+			
+			const credit = document.querySelector('.filepond--credits');
+			if (credit) {
+				credit.remove();
 			}
+		}
 
-			const directUploadUrl = input.dataset.directUploadUrl
+		const directUploadUrl = input.dataset.directUploadUrl
 
-			FilePond.setOptions({
-				server: {
-					process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+		// acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+		FilePond.setOptions({
+			acceptedFileTypes: this.extensionsValue,
+			maxFileSize: '265MB',
+			server: {
+				process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
 					const uploader = new DirectUpload(file, directUploadUrl, {
 						directUploadWillStoreFileWithXHR: (request) => {
 						request.upload.addEventListener(
@@ -52,12 +59,20 @@ export default class extends Controller {
 					return {
 						abort: () => abort()
 					}
-					},
-						headers: {
+				},
+				revert: {
+					url: '/filepond/remove'
+				},
+				headers: {
 					'X-CSRF-Token': document.head.querySelector("[name='csrf-token']").content
-					}
 				}
-			})
+			}
+		})
+	}
+
+    connect() {
+      // Called every time the controller is connected to the DOM
+			console.log("filepond controller connected")
     }
 
     disconnect() {

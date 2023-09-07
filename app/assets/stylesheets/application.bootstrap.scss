@@ -154,4 +154,21 @@ $secondary: #ffc627;
 .list-group-item {
 	--bs-bg-opacity: 1;
     background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity));
+	cursor: pointer;
+	// max-width: 500px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.badge {
+	max-width: 300px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.error-special {
+	position: absolute;
+	z-index: 10;
 }

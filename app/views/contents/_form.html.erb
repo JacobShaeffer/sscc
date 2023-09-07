@@ -1,15 +1,15 @@
 <%= bootstrap_form_for [@metadata_type, @content], data: {controller: 'form'} do |form| %>
-	<% if @content.errors.any? %>
-		<div style="color: red">
-			<h2><%= pluralize(@content.errors.count, "error") %> prohibited this content from being saved</h2>
+	<%# if @content.errors.any? %>
+<!--		<div style="color: red">
+			<h2><%#= pluralize(@content.errors.count, "error") %> prohibited this content from being saved</h2>
 			<ul>
-				<% @content.errors.each do |error| %>
-					<%puts(error)%>
-					<li><%= error.full_message %></li>
-				<% end %>
-			</ul>
+				<%# @content.errors.each do |error| %>-->
+					<%#puts(error)%>
+<!--					<li><%#= error.full_message %></li>-->
+				<%# end %>
+<!--			</ul>
 		</div>
-	<% end %>
+	<%# end %>-->
 
 	<div class="row">
 		<div class="field col-lg-6 col-md-12">
@@ -30,28 +30,15 @@
 		</div>
 	</div>
 
-	<div class="row" data-controller='filepond'>
-		<div data-controller='fileSelect' 
-			data-fileSelect-extensions-value='["pdf","mp3","mp4"]' 
+	<!--<div class="row" data-controller='filepond'>-->
+	<div class="row">
+		<div data-controller='filepond' 
+			data-filepond-extensions-value='["application/pdf","audio/mp3","video/mp4"]' 
 			class="field col-lg-4 col-md-6 col-sm-12"
 		>
-			<%#= form.label :file, "File", class: "form-label" %>
-<!--			<div class="input-group">
-				<span class="input-group-text" id="file-name">Choose File</span>
-				<%# if @content.file.file.nil? %>-->
-<!--					<input type="text" class="form-control" id="Selected-File-Display" value="No File Selected"/>-->
-				<%# else %>
-<!--					<input type="text" class="form-control" id="Selected-File-Display" value="<%#=@content.file_identifier%>"/>-->
-				<%# end %>
-<!--			</div>-->
-			<%#= form.file_field :file, 
-				data: {action: 'change->fileSelect#onFileSelected'}, 
-				class: "file-input-hidden", 
-				wrapper: { class: 'mb-3', style: "height: 0px;"}, 
-				skip_label: true 
-			%>
-			<%= form.file_field_without_bootstrap :file, class: 'filepond', direct_upload: true, required: true %>
-			<%#= form.hidden_field :file_cache, required: true%>
+			<%= form.label :file, "File", class: "form-label" %>
+			<%= form.file_field :file, class: 'filepond', direct_upload: true, skip_label: true %>
+			<p class="error"><%= @content.errors.full_messages_for(:file)[0] %></p>
 		</div>
 
 		<div class="field col-lg-4 col-md-6 col-sm-12">
@@ -64,7 +51,7 @@
 	</div>
 	
 	<div class="field">
-		<%= form.text_area :copyright_notes %>
+		<%= form.text_area :additional_notes %>
 	</div>
 
 	<div class="mb-3">

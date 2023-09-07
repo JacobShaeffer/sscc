@@ -11,6 +11,8 @@
     "bootstrap-icons": "^1.10.5",
     "esbuild": "^0.17.18",
     "filepond": "^4.30.4",
+    "filepond-plugin-file-validate-size": "^2.2.8",
+    "filepond-plugin-file-validate-type": "^1.2.8",
     "jquery": "^3.6.4",
     "js-cookie": "^3.0.5",
     "sass": "^1.62.1"

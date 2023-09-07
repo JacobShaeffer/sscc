@@ -72,6 +72,6 @@ class CopyrightPermissionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def copyright_permission_params
-      params.require(:copyright_permission).permit(:notes, :organization_name, :organization_website, :organization_contact_information, :granted, :date_contacted, :date_of_response, :communication, :communication_cache)
+      params.require(:copyright_permission).permit(:notes, :organization_name, :organization_website, :organization_contact_information, :granted, :date_contacted, :date_of_response, :communication)
     end
 end

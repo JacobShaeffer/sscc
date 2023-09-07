@@ -11,6 +11,12 @@ export default class extends Controller {
 		this.element.addEventListener('blur', this.onBlur, true)
 		this.element.addEventListener('submit', this.onSubmit)
 		this.element.addEventListener('ajax:beforeSend', this.onSubmit)
+		window.addEventListener('keypress', (event) => {
+			if (event.key === 'Enter'){
+				event.preventDefault();
+				return false;
+			}
+		});
 	}
 
 	disconnect () {
@@ -35,17 +41,15 @@ export default class extends Controller {
 		let isValid = true
 		// Not using `find` because we want to validate all the fields
 		this.formFields.forEach((field) => {
-			// console.log(field);
 			if (this.shouldValidateField(field) && !this.validateField(field)) {
 				isValid = false;
+				console.log(field);
 			}
 		})
 		return isValid
 	}
 
 	validateField (field) {
-		if (!this.shouldValidateField(field))
-			return true
 		const isValid = field.checkValidity()
 		// field.setCustomValidity('this is a custom error message')
 		field.classList.toggle('invalid', !isValid)
@@ -54,7 +58,7 @@ export default class extends Controller {
 	}
 
 	shouldValidateField (field) {
-		return !field.disabled && !['reset', 'submit', 'button'].includes(field.type)
+		return !field.disabled && !field.classList.contains('hidden') && !['reset', 'submit', 'button'].includes(field.type)
 	}
 
 	refreshErrorForInvalidField (field, isValid) {

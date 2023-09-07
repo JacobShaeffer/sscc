@@ -48,8 +48,14 @@
     <div class="col-md-8">
       <p>
         <strong>Communications:</strong>
+        
       </p>
-      <iframe src='<%= @copyright_permission.communication_url unless @copyright_permission.communication.file.nil? %>' allowfullscreen="true" class="content-iframe"></iframe>
+      <p><%= @copyright_permission.communication.content_type %></p>
+      <%# if @copyright_permission.communication.content_type == "application/pdf" %>
+        <iframe src='<%= url_for(@copyright_permission.communication) %>' width="600" height="780"></iframe>
+      <%# elsif @copyright_permission.communication.representable? %>
+        <%#= image_tag @copyright_permission.communication.preview(resize_limit_to: [100, 100]) %>
+      <%# end %>
     </div>
 </div>
 

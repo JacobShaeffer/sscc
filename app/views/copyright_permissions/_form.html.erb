@@ -43,18 +43,13 @@
     <%= form.text_area :notes %>
   </div>
 
-	<div data-controller='fileSelect' data-fileSelect-extensions-value='["pdf","mp3","mp4"]' class="field">
+	<div data-controller='filepond' 
+    data-filepond-extensions-value='["application/pdf","image/png","image/jpg","image/jpeg"]' 
+    class="field"
+  >
 		<%= form.label :communication, "Communication" %>
-		<div class="input-group">
-			<span class="input-group-text" id="file-name">Choose File</span>
-			<% if @copyright_permission.communication.file.nil? %>
-				<input type="text" class="form-control" id="Selected-File-Display" value="No File Selected"/>
-			<% else %>
-				<input type="text" class="form-control" id="Selected-File-Display" value="<%=@copyright_permission.communication_identifier%>"/>
-			<% end %>
-		</div>
-		<%= form.file_field :communication, data: {action: 'change->fileSelect#onFileSelected'}, class: "file-input-hidden", wrapper: { class: 'mb-3', style: "height: 0px;"}, skip_label: true %>
-		<%= form.hidden_field :communication_cache, required: true%>
+    <%= form.file_field :communication, class: 'filepond', direct_upload: true, skip_label: true %>
+    <p class="error"><%= copyright_permission.errors.full_messages_for(:communication)[0] %></p>
 	</div>
 
   <div class="actions mb-3">

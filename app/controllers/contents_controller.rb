@@ -23,7 +23,6 @@ class ContentsController < ApplicationController
   def edit
     authorize @content
     @metadata_types = MetadataType.all
-    @content.file.cache! unless @content.file.file.nil?
   end
 
   # POST /contents or /contents.json
@@ -105,6 +104,6 @@ class ContentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def content_params
-      params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication, :copyright_notes, :copyright_permission_id, metadatum_ids: [])
+      params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication, :additional_notes, :copyright_permission_id, metadatum_ids: [])
     end
 end

@@ -50,6 +50,9 @@ export default class extends Controller {
 	}
 
 	validateField (field) {
+		if (typeof field.checkValidity !== 'function'){
+			return true;
+		}
 		const isValid = field.checkValidity()
 		// field.setCustomValidity('this is a custom error message')
 		field.classList.toggle('invalid', !isValid)

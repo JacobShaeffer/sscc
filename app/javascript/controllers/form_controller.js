@@ -6,6 +6,7 @@ export default class extends Controller {
   static targets = [];
 
 	connect () {
+		console.log("form controller connected")
 		this.element.setAttribute('novalidate', true)
 		this.element.addEventListener('blur', this.onBlur, true)
 		this.element.addEventListener('submit', this.onSubmit)
@@ -23,6 +24,7 @@ export default class extends Controller {
 	}
 
 	onSubmit = (event) => {
+		console.log("form controller submit")
 		if (!this.validateForm()) {
 			event.preventDefault()
 			this.firstInvalidField.focus()
@@ -33,8 +35,10 @@ export default class extends Controller {
 		let isValid = true
 		// Not using `find` because we want to validate all the fields
 		this.formFields.forEach((field) => {
-			console.log(field);
-			if (this.shouldValidateField(field) && !this.validateField(field)) isValid = false
+			// console.log(field);
+			if (this.shouldValidateField(field) && !this.validateField(field)) {
+				isValid = false;
+			}
 		})
 		return isValid
 	}

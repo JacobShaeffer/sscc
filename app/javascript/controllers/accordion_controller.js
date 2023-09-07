@@ -9,10 +9,8 @@ export default class extends Controller {
         type: String 
     };
 
-    //TODO: change this to use a custom cookieObject and use JSON.stringify/parse to interact with it
-    // and make the cookie name unique to the app aka sscc_collapse
-
     initialize() {
+				// console.log("accordion controller initialized")
         if (Cookies.get('collapse'+this.typeValue) == 'open') {
             this.collapseContentTarget.classList.add("show");
             this.collapseButtonTarget.classList.remove("collapsed");
@@ -26,8 +24,8 @@ export default class extends Controller {
             this.collapseButtonTarget.classList.add("collapsed");
             Cookies.remove(cookieName);
 
-            console.log(cookieName, " -- cookie removed");
-            console.log("all cookies: ", Cookies.get());
+            // console.log(cookieName, " -- cookie removed");
+            // console.log("all cookies: ", Cookies.get());
         } else {
             this.collapseContentTarget.classList.add("show");
             this.collapseButtonTarget.classList.remove("collapsed");
@@ -35,8 +33,8 @@ export default class extends Controller {
             expDate.setTime(expDate.getTime() + (4 * 60 * 60 * 1000));// 4 hours
             Cookies.set(cookieName, 'open', { expires: expDate });
 
-            console.log('collapse'+this.typeValue, " -- cookie added");
-            console.log("all cookies: ", Cookies.get());
+            // console.log('collapse'+this.typeValue, " -- cookie added");
+            // console.log("all cookies: ", Cookies.get());
         }
     }
 }

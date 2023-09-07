@@ -7,6 +7,12 @@ export default class extends Controller {
 		extensions: Array,
 		ae: String,
 	}
+
+	initialize() {
+		// Called once, when the controller is first instantiated
+		// console.log("fileSelect controller initialized")
+	}
+
 	onFileSelected(event) {
 		// Check the file type here and respond to the form with a stream to do real-time validation????
 		var allowedExtensions = this.extensionsValue;

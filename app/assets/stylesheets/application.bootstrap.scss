@@ -12,6 +12,7 @@ $secondary: #ffc627;
 
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+@import 'filepond/dist/filepond';
 
 .auto-complete {
 	border:0; outline:0;
@@ -154,64 +155,3 @@ $secondary: #ffc627;
 	--bs-bg-opacity: 1;
     background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity));
 }
-
-.direct-upload-modal-background {
-	position: fixed;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    background: grey;
-    opacity: 0.5;
-}
-
-.direct-upload-modal {
-	max-width: 500px;
-	padding: 1rem;
-	margin: 1.75rem auto;
-    background-color: white;
-    border-radius: 0.375rem;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid #666;
-    position: fixed;
-}
-
-.direct-upload {
-	// display: inline-block;
-	position: relative;
-	padding: 2px 4px;
-	margin: 0 3px 3px 0;
-	border: 1px solid rgba(0, 0, 0, 0.3);
-	border-radius: 3px;
-	// font-size: 11px;
-	// line-height: 13px;
-  }
-  
-  .direct-upload--pending {
-	opacity: 0.6;
-  }
-  
-  .direct-upload__progress {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	opacity: 0.2;
-	background: #0076ff;
-	transition: width 120ms ease-out, opacity 60ms 60ms ease-in;
-	transform: translate3d(0, 0, 0);
-  }
-  
-  .direct-upload--complete .direct-upload__progress {
-	opacity: 0.4;
-  }
-  
-  .direct-upload--error {
-	border-color: red;
-  }
-  
-  input[type=file][data-direct-upload-url][disabled] {
-	display: none;
-  }

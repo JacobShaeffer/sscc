@@ -10,9 +10,23 @@
     <% end %>
   </div>
   <div class="col-md-8">
-    <iframe src='<%= url_for(@content.file) %>' width="600" height="780"></iframe>
-    <%#= link_to @content.file %>
-    <%#= image_tag @content.file.preview(resize_limit_to: [100, 100]) %>
+    <p><%= @content.file.content_type %></p>
+    <% if @content.file.content_type == "application/pdf" %>
+      <object data="<%= url_for(@content.file) %>" type="application/pdf" width="600" height="780">
+        <iframe src='<%= url_for(@content.file) %>' width="600" height="780"></iframe>
+        <p>You browser does not support PDF. Download it here: <a href="<%= url_for(@content.file) %>"></a></p>
+      </object>
+    <% elsif @content.file.content_type == "video/mp4" %>
+      <video width="320" height="240" controls>
+        <source src="<%= url_for(@content.file) %>" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    <% elsif @content.file.content_type == "audio/mpeg" %>
+      <audio controls>
+        <source src="<%= url_for(@content.file) %>" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    <% end %>
   </div>
 </div>
 

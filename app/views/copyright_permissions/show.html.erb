@@ -51,8 +51,15 @@
         
       </p>
       <p><%= @copyright_permission.communication.content_type %></p>
+      <% if @copyright_permission.communication.content_type == "application/pdf" %> 
+        <object data="<%= url_for(@copyright_permission.communication) %>" type="application/pdf" width="600" height="780">
+          <iframe src='<%= url_for(@copyright_permission.communication) %>' width="600" height="780"></iframe>
+          <p>You browser does not support PDF. Download it here: <a href="<%= url_for(@content.file) %>"></a></p>
+        </object>
+      <% elsif @copyright_permission.communication.representable? %> 
+        <%= image_tag @copyright_permission.communication.representation(resize: 0.5), size: '500'  %>
+      <% end %>
       <%# if @copyright_permission.communication.content_type == "application/pdf" %>
-        <iframe src='<%= url_for(@copyright_permission.communication) %>' width="600" height="780"></iframe>
       <%# elsif @copyright_permission.communication.representable? %>
         <%#= image_tag @copyright_permission.communication.preview(resize_limit_to: [100, 100]) %>
       <%# end %>

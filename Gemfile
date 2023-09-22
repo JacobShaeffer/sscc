@@ -13,17 +13,14 @@ gem 'pg'
 
 gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
 
-# Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
-gem "jsbundling-rails"
+# Use Javascript with ESM import maps [https://github.com/rails/importmap-rails]
+gem "importmap-rails"
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
-
-# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
-gem "cssbundling-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
@@ -80,12 +77,12 @@ end
 # User session management
 gem 'devise', '~> 4.9'
 
-# File upload
-gem 'carrierwave', '~> 2.2', '>= 2.2.3'
-
 # rails_admin panel
 gem 'rails_admin', '~> 3.1', '>= 3.1.2'
 
+gem 'bootstrap', '~> 5.1', '>= 5.1.3'
 gem "sassc-rails"
 gem 'bootstrap_form', '~> 5.1'
 gem "pundit", "~> 2.3"
+gem "requestjs-rails"
+gem 'activestorage', '~> 7.0'

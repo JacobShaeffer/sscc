@@ -2,7 +2,7 @@ import { Controller } from '@hotwired/stimulus';
 import * as FilePond from "filepond";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import {DirectUpload} from "activestorage"
+import {DirectUpload} from "activestorage";
 
 export const string_identifier = 'filepond';
 

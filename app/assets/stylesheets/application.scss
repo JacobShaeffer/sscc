@@ -1,4 +1,3 @@
-
 $primary: #0676d8;
 $secondary: #ffc627;
 // $success: ;
@@ -10,9 +9,8 @@ $secondary: #ffc627;
 // $ASU-gold : #ffc627;
 // $ASU-maroon : #8c1d40;
 
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-icons/font/bootstrap-icons';
-@import 'filepond/dist/filepond';
+@import 'bootstrap';
+@import 'filepond';
 
 .auto-complete {
 	border:0; outline:0;

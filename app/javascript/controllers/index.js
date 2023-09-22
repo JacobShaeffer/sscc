@@ -2,21 +2,24 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from "./application"
+import { application } from "controllers/application"
 
-import fileSelectController, {string_identifier as fileSelect_id} from "./fileSelect_controller"
-application.register(fileSelect_id, fileSelectController)
+import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
+eagerLoadControllersFrom("controllers", application)
 
-import multiSelectController, {string_identifier as multiSelect_id} from "./multiSelect_controller"
-application.register(multiSelect_id, multiSelectController)
+// import fileSelectController, {string_identifier as fileSelect_id} from "./fileSelect_controller"
+// application.register(fileSelect_id, fileSelectController)
 
-import accordionController, {string_identifier as accordion_id} from "./accordion_controller"
-application.register(accordion_id, accordionController)
-import table_collapseController, {string_identifier as table_collapse_id} from "./table_collapse_controller"
-application.register(table_collapse_id, table_collapseController)
-import metadata_searchController, {string_identifier as metadata_search_id} from "./metadata_search_controller"
-application.register(metadata_search_id, metadata_searchController)
-import formController, {string_identifier as form_id} from "./form_controller"
-application.register(form_id, formController)
-import filepondController, {string_identifier as filepond_id} from "./filepond_controller"
-application.register(filepond_id, filepondController)
+// import multiSelectController, {string_identifier as multiSelect_id} from "./multiSelect_controller"
+// application.register(multiSelect_id, multiSelectController)
+
+// import accordionController, {string_identifier as accordion_id} from "./accordion_controller"
+// application.register(accordion_id, accordionController)
+// import table_collapseController, {string_identifier as table_collapse_id} from "./table_collapse_controller"
+// application.register(table_collapse_id, table_collapseController)
+// import metadata_searchController, {string_identifier as metadata_search_id} from "./metadata_search_controller"
+// application.register(metadata_search_id, metadata_searchController)
+// import formController, {string_identifier as form_id} from "./form_controller"
+// application.register(form_id, formController)
+// import filepondController, {string_identifier as filepond_id} from "./filepond_controller"
+// application.register(filepond_id, filepondController)

@@ -1,13 +1,20 @@
 class ContentsController < ApplicationController
+  include Filterable
   before_action :set_content, only: %i[ show edit update destroy ]
+  before_action :set_searchable_columns, only: %i[ index list ]
 	before_action :authenticate_user!
 
   # GET /contents or /contents.json
   def index
     authorize Content
-    @contents = Content.all
-  end
+    # contents_scope = filter!(Content)
+    # @pagy, @contents = pagy(contents_scope, items: 10)
 
+    clear_filters!(Content)
+    @pagy, @contents = pagy(Content.all, items: 10)
+  end
+  
+  
   # GET /contents/1 or /contents/1.json
   def show
     authorize Content
@@ -96,10 +103,23 @@ class ContentsController < ApplicationController
     end
   end
 
+  def list
+    authorize Content
+
+    contents_scope = filter!(Content)
+
+    @pagy, @contents = pagy(contents_scope, items: 10)
+    render(partial: "content", locals: { contents: @contents, pagy: @pagy })
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_content
       @content = Content.find(params[:id])
+    end
+
+    def set_searchable_columns
+      @searchable_columns = Content::SEARCHABLE_COLUMNS
     end
 
     # Only allow a list of trusted parameters through.

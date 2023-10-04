@@ -1,12 +1,107 @@
-<div id="<%= dom_id content %>">
-  <p>
-    <strong>Title:</strong>
-    <%= content.title %>
-  </p>
+  
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Search 
+  </button>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body">
+    <%= bootstrap_form_with url: list_contents_path, layout: :inline, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
+      <%= form.text_field :title, 
+            #hide_label: true,
+            #placeholder: "#{column_name}",
+            autocomplete: "off",
+            data: {action: "input->filters#filter"},
+            value: session.dig('content_filters',:title)
+      %>
+      <%= form.text_field :display_title, 
+            autocomplete: "off",
+            data: {action: "input->filters#filter"},
+            value: session.dig('content_filters',:display_title)
+      %>
+      <%= form.text_field :user,
+            autocomplete: "off",
+            data: {action: "input->filters#filter"},
+            value: session.dig('content_filters',:user)
+      %>
+      <%= form.select :copyright_permission, 
+            options_for_select(
+              CopyrightPermission.all.pluck(:organization_name, :id),
+              session.dig('content_filters',:copyright_permission)
+            ),
+            { include_blank: true },
+            data: {action: "input->filters#filter"}
+      %>
+      <%= form.number_field :year_of_publication_from, 
+            autocomplete: "off",
+            data: {action: "input->filters#filter"},
+            value: session.dig('content_filters',:year_of_publication_from)
+      %>
+      <%= form.number_field :year_of_publication_to, 
+            autocomplete: "off",
+            data: {action: "input->filters#filter"},
+            value: session.dig('content_filters',:year_of_publication_to)
+      %>
+      <%= form.text_field :description, 
+            autocomplete: "off",
+            data: {action: "input->filters#filter"},
+            value: session.dig('content_filters',:description)
+      %>
+    <% end %>
+    <%= bootstrap_form_with url: list_contents_path, layout: :inline, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
+      <% MetadataType.all.each do |metadata_type| %>
+        <%= form.text_field "metadata[#{metadata_type.id}]",
+              label: metadata_type.name,
+              autocomplete: "off",
+              data: {action: "input->filters#filter"},
+              value: session.dig('content_filters',metadata_type.id)
+        %>
+      <% end %>
+    <% end %>
+    </div>
+  </div>
+<%= turbo_frame_tag :content_table do %>
+  <p class="frame-loading">Loading…</p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <%= render partial: "sortable-header", locals: {column: "title"} %>
+        <%= render partial: "sortable-header", locals: {column: "display_title"} %>
+        <%= render partial: "sortable-header", locals: {column: "user"} %>
+        <%= render partial: "sortable-header", locals: {column: "copyright_permission"} %>
+        <%= render partial: "sortable-header", locals: {column: "year_of_publication"} %>
+        <%= render partial: "sortable-header", locals: {column: "description"} %>
 
-  <p>
-    <strong>User:</strong>
-    <%= content.user.name %>
-  </p>
+        <% MetadataType.all.each do |metadata_type| %>
+          <th class='hidden'><%= metadata_type.name %></th>
+        <% end %>
 
-</div>
+        <th colspan="2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% contents.each do |content| %>
+        <%= tag.tr id: dom_id(content) do %>
+          <td><%= content.title %></td>
+          <td><%= content.display_title %></td>
+          <td><%= content.user.name %></td>
+          <td><%= content.copyright_permission.organization_name %></td>
+          <td><%= content.year_of_publication %></td>
+          <td><%= content.description %></td>
+
+          <% MetadataType.all.each do |metadata_type| %>
+            <td class='hidden'><%= content.metadatas(metadata_type.id) %></td>
+          <% end %>
+
+          <td><%= link_to "Show", content, data: {"turbo-frame": "_top"} %></td>
+          <% if policy(content).edit? %>
+            <td><%= link_to "Edit", edit_content_path(content), data: {"turbo-frame": "_top"} %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <%= raw pagy_bootstrap_nav(pagy) %>
+<% end %>
+
+

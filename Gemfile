@@ -86,3 +86,4 @@ gem 'bootstrap_form', '~> 5.1'
 gem "pundit", "~> 2.3"
 gem "requestjs-rails"
 gem 'activestorage', '~> 7.0'
+gem 'pagy', '~> 6.0.4'

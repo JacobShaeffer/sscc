@@ -8,32 +8,10 @@
 </div>
 <div class="row">
   <div class="col">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Display Title</th>
-          <th>File</th>
-          <th>User</th>
-          <th colspan="2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @contents.each do |content| %>
-          <tr>
-            <td><%= content.title %></td>
-            <td><%= content.display_title %></td>
-            <td><%= content.file.filename %></td>
-            <td><%= content.user.name %></td>
-            <td><%= link_to "Show", content %></td>
-            <% if policy(content).edit? %>
-              <td><%= link_to "Edit", edit_content_path(content) %></td>
-            <% else %>
-              <td></td>
-            <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <%= render 'content', contents: @contents, pagy: @pagy %>
   </div>
 </div>

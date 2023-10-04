@@ -14,3 +14,4 @@ pin "filepond" # @4.30.4
 pin "filepond-plugin-file-validate-size" # @2.2.8
 pin "filepond-plugin-file-validate-type" # @1.2.8
 pin "activestorage", to: "https://ga.jspm.io/npm:activestorage@5.2.8-1/app/assets/javascripts/activestorage.js"
+pin "@rails/ujs", to: "https://ga.jspm.io/npm:@rails/ujs@7.0.8/lib/assets/compiled/rails-ujs.js"

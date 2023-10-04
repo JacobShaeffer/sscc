@@ -170,3 +170,10 @@ $secondary: #ffc627;
 	position: absolute;
 	z-index: 10;
 }
+
+/* Pagy navigation styles */
+.pagy-nav { padding: 2rem 0; }
+.pagy-nav .page { padding: 0 0.25rem; }
+
+.frame-loading { visibility: hidden; }
+turbo-frame[busy] .frame-loading { visibility: visible; }

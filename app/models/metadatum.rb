@@ -1,8 +1,4 @@
 class Metadatum < ApplicationRecord
-  include Ransackable
-
-  RANSACKABLE_ATTRIBUTES = %w[name].freeze
-
   belongs_to :user
   belongs_to :metadata_type
   has_many :content_metadata, dependent: :destroy

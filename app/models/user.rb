@@ -1,8 +1,4 @@
 class User < ApplicationRecord
-  include Ransackable
-
-  RANSACKABLE_ATTRIBUTES = %w[name role].freeze
-
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, and :omniauthable
   devise :database_authenticatable, :registerable,

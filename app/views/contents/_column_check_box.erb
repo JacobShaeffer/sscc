@@ -1,0 +1,25 @@
+<div class="form-check">
+    <% if session.dig("content_filters", "columns")&.include?(column) %>
+        <input 
+            data-action="input->filters#filter" 
+            value="<%= column %>" 
+            class="form-check-input" 
+            type="checkbox" 
+            name="columns[]" 
+            id="columns_<%= column %>"
+            checked
+        >
+    <% else %>
+        <input 
+            data-action="input->filters#filter" 
+            value="<%= column %>" 
+            class="form-check-input" 
+            type="checkbox" 
+            name="columns[]" 
+            id="columns_<%= column %>"
+        >
+    <% end %>
+    <label class="form-check-label" for="columns_<%= column %>">
+        <%= column.titleize %>
+    </label>
+</div>

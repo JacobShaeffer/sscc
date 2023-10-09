@@ -11,9 +11,9 @@ class Content < ApplicationRecord
   validates :description, presence: true, allow_blank: false
   validates :file, presence: true, allow_blank: false
 
-  # created_at, updated_at, year_of_publication
+  #List of searchable columns
   SEARCHABLE_COLUMNS = %i[ title user copyright_permission display_title description year_of_publication year_of_publication_from year_of_publication_to ].freeze
-  FILTER_PARAMS = [SEARCHABLE_COLUMNS + %i[sort direction], :metadata => {}].freeze
+  FILTER_PARAMS = [SEARCHABLE_COLUMNS + %i[sort direction], :columns => [], :metadata => {}].freeze
 
   scope :by_title,                      ->  (title) { where('lower(title) LIKE lower(?)', "%#{title}%") }
   scope :by_display_title,              ->  (display_title) { where('lower(display_title) LIKE lower(?)', "%#{display_title}%") }
@@ -23,35 +23,53 @@ class Content < ApplicationRecord
   scope :by_year_of_publication_to,     ->  (year_of_publication_to) { where('year_of_publication <= ?', year_of_publication_to) }
   scope :by_copyright_permission,       ->  (permission) { joins(:copyright_permission).where('lower(copyright_permissions.organization_name) LIKE lower(?)', "%#{permission}%") }
 
-  scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { has_metadata(type_id, "%#{metadata}%") }
-  # scope :by_collection_type, -> (collection_type) {joins(:metadata).where('metadata.metadata_type_id = 1').where('metadata.name = ?', collection_type)}
+  scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ?', type_id]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
 
   def self.filter(filters)
-    sorted = nil
-    if filters['direction'] == 'nil'
-      sorted = Content.all
-    else
-      sorted = Content.order("#{filters['sort']} #{filters['direction']}") 
-    end
-    sorted = sorted.by_title(filters['title']) if filters['title'].present?
-    sorted = sorted.by_display_title(filters['display_title']) if filters['display_title'].present?
-    sorted = sorted.by_user(filters['user']) if filters['user'].present?
-    sorted = sorted.by_description(filters['description']) if filters['description'].present?
-    sorted = sorted.by_year_of_publication_from(filters['year_of_publication_from']) if filters['year_of_publication_from'].present?
-    sorted = sorted.by_year_of_publication_to(filters['year_of_publication_to']) if filters['year_of_publication_to'].present?
-    sorted = sorted.by_copyright_permission(filters['copyright_permission']) if filters['copyright_permission'].present?
+    #start by getting all the records
+    filtered = Content.all
 
+    #filter by each column if there is a value
+    filtered = filtered.by_title(filters['title']) if filters['title'].present?
+    filtered = filtered.by_display_title(filters['display_title']) if filters['display_title'].present?
+    filtered = filtered.by_user(filters['user']) if filters['user'].present?
+    filtered = filtered.by_description(filters['description']) if filters['description'].present?
+    filtered = filtered.by_year_of_publication_from(filters['year_of_publication_from']) if filters['year_of_publication_from'].present?
+    filtered = filtered.by_year_of_publication_to(filters['year_of_publication_to']) if filters['year_of_publication_to'].present?
+    filtered = filtered.by_copyright_permission(filters['copyright_permission']) if filters['copyright_permission'].present?
+
+    #dynamc filtering for metadata
     if filters['metadata'].present?
       filters['metadata'].keys.each do |metadata_type_id|
         if filters['metadata'][metadata_type_id].present?
-          sorted = sorted.by_metadata_type_and_metadata(metadata_type_id, filters['metadata'][metadata_type_id])
+          puts "metadata_type_id: #{metadata_type_id}"
+          filtered = filtered.by_metadata_type_and_metadata(metadata_type_id, filters['metadata'][metadata_type_id])
         end
       end
     end
-    # sorted = sorted.by_collection_type('1', filters['metadata']) if filters['metadata'].present?
-    return sorted
+
+    # if there is a direction sort by given sort column
+    if filters['direction'].present?
+      case filters['sort']
+        #user is a special case because it is a belongs_to relationship
+        when 'user'
+          sorted = filtered.includes(:user).order("users.name #{filters['direction']}")
+        #metadata is a special case because it is a belongs_to relationship
+        when 'copyright_permission'
+          sorted = filtered.includes(:copyright_permission).order("copyright_permissions.organization_name #{filters['direction']}")
+        else
+          sorted = filtered.order("#{filters['sort']} #{filters['direction']}") 
+      end
+      # return the sorted resuts if there is a sort and direction
+      return sorted
+    end
+
+    # return the filtered results if there is no sort or direction
+    return filtered
   end
 
+  # List of metadata for a given metadata type
+  # Used in Content View
   def metadatas(metadata_type_id)
     metadata_record = metadata.where(metadata_type_id: metadata_type_id)
     if metadata_record.present?
@@ -61,27 +79,5 @@ class Content < ApplicationRecord
     end
     metadata
   end
-
-  # # lists content with a collection type metatatum and with the specific name of "collection_type"
-  # def self.has_collection_type(collection_type)
-  #   joins(:metadata).where('metadata.metadata_type_id = 1').where('metadata.name = ?', collection_type)
-  # end
-
-  def self.has_metadata(metadata_type_id, metadata_name)
-    joins(:metadata).where('metadata.metadata_type_id = ?', metadata_type_id).where('lower(metadata.name) LIKE lower(?)', metadata_name).distinct
-  end
-
-  # def self.has_metadata_type(metadata_type_id)
-  #   joins(:metadata).where('metadata.metadata_type_id = ?', metadata_type_id)
-  # end
-
-  # def self.has_metadata_type_and_metadata(metadata_type_id, metadata_name)
-  #   joins(:metadata).where('metadata.metadata_type_id = ?', metadata_type_id).where('metadata.name = ?', metadata_name)
-  # end
-
-  # # lists content with metadata that matches the metadata_type_id and is in the list of metadata_names
-  # def self.has_metadata_type_and_metadata_in(metadata_type_id, metadata_names)
-  #   joins(:metadata).where('metadata.metadata_type_id = ?', metadata_type_id).where('metadata.name IN (?)', metadata_names)
-  # end
 
 end

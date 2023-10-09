@@ -1,4 +1,6 @@
-<th>
-    <%= sortable_link(sort: column, label: column.titleize) %>
-    <%= sort_indicator if session.dig('content_filters', 'sort') == column %>  
-</th>
+<% if session.dig("content_filters", "columns")&.include?(column) %>
+    <th>
+        <%= sortable_link(sort: column, label: column.titleize) %>
+        <%= sort_indicator if session.dig('content_filters', 'sort') == column %>  
+    </th>
+<% end %>

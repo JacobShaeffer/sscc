@@ -11,6 +11,7 @@ class ContentsController < ApplicationController
     # @pagy, @contents = pagy(contents_scope, items: 10)
 
     clear_filters!(Content)
+    session["#{Content.to_s.underscore}_filters"] = {"columns" => ["title", "display_title", "user"]}
     @pagy, @contents = pagy(Content.all, items: 10)
   end
   

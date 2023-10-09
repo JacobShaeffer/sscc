@@ -58,6 +58,30 @@
     <% end %>
     </div>
   </div>
+  <div class="btn-group dropstart float-end">
+    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      Column Select
+    </button>
+    <div class="dropdown-menu p-3">
+      <%= bootstrap_form_with url: list_contents_path, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
+        <div class="mb-3">
+          <%= render partial: "column_check_box", locals: {column: "title"} %>
+          <%= render partial: "column_check_box", locals: {column: "display_title"} %>
+          <%= render partial: "column_check_box", locals: {column: "user"} %>
+          <%= render partial: "column_check_box", locals: {column: "copyright_permission"} %>
+          <%= render partial: "column_check_box", locals: {column: "year_of_publication"} %>
+          <%= render partial: "column_check_box", locals: {column: "description"} %>
+        </div>
+        <%= form.collection_check_boxes :columns,
+              MetadataType.order(:name), :id, :name,
+              label: "Metadata",
+              data: {action: "input->filters#filter"},
+              value: session.dig('content_filters',:columns),
+              class: "w-100"
+        %>
+      <% end %>
+    </div>
+  </div>
 <%= turbo_frame_tag :content_table do %>
   <p class="frame-loading">Loading…</p>
   <table class="table table-striped">
@@ -71,7 +95,10 @@
         <%= render partial: "sortable-header", locals: {column: "description"} %>
 
         <% MetadataType.all.each do |metadata_type| %>
-          <th class='hidden'><%= metadata_type.name %></th>
+          <%# puts session.dig("content_filters", "columns"), metadata_type.name, metadata_type.id %>
+          <% if session.dig("content_filters", "columns")&.include?(metadata_type.id.to_s) %>
+            <th><%= metadata_type.name %></th>
+          <% end %>
         <% end %>
 
         <th colspan="2">Actions</th>
@@ -80,15 +107,29 @@
     <tbody>
       <% contents.each do |content| %>
         <%= tag.tr id: dom_id(content) do %>
-          <td><%= content.title %></td>
-          <td><%= content.display_title %></td>
-          <td><%= content.user.name %></td>
-          <td><%= content.copyright_permission.organization_name %></td>
-          <td><%= content.year_of_publication %></td>
-          <td><%= content.description %></td>
+          <% if session.dig("content_filters", "columns")&.include?('title') %>
+            <td><%= content.title %></td>
+          <% end %>
+          <% if session.dig("content_filters", "columns")&.include?('display_title') %>
+            <td><%= content.display_title %></td>
+          <% end %>
+          <% if session.dig("content_filters", "columns")&.include?('user') %>
+            <td><%= content.user.name %></td>
+          <% end %>
+          <% if session.dig("content_filters", "columns")&.include?('copyright_permission') %>
+            <td><%= content.copyright_permission.organization_name %></td>
+          <% end %>
+          <% if session.dig("content_filters", "columns")&.include?('year_of_publication') %>
+            <td><%= content.year_of_publication %></td>
+          <% end %>
+          <% if session.dig("content_filters", "columns")&.include?('description') %>
+            <td><%= content.description %></td>
+          <% end %>
 
           <% MetadataType.all.each do |metadata_type| %>
-            <td class='hidden'><%= content.metadatas(metadata_type.id) %></td>
+            <% if session.dig("content_filters", "columns")&.include?(metadata_type.id.to_s) %>
+              <td><%= content.metadatas(metadata_type.id) %></td>
+            <% end %>
           <% end %>
 
           <td><%= link_to "Show", content, data: {"turbo-frame": "_top"} %></td>

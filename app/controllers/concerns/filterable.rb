@@ -17,7 +17,6 @@ module Filterable
     end
   
     def filter_params_for(resource)
-      # params.permit(resource::FILTER_PARAMS, :metadata => {})
       params.permit(resource::FILTER_PARAMS)
     end
   

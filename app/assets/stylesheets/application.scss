@@ -177,3 +177,7 @@ $secondary: #ffc627;
 
 .frame-loading { visibility: hidden; }
 turbo-frame[busy] .frame-loading { visibility: visible; }
+
+.dropdown-menu {
+	min-width: 13rem;
+}

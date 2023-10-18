@@ -1,9 +1,15 @@
 class CopyrightPermissionsController < ApplicationController
+  include Filterable
   before_action :set_copyright_permission, only: %i[ show edit update destroy ]
+  before_action :set_searchable_columns, only: %i[ index list ]
 	before_action :authenticate_user!
 
   def index
-    @copyright_permissions = CopyrightPermission.all
+    authorize CopyrightPermission
+
+    clear_filters!(CopyrightPermission)
+    session["#{CopyrightPermission.to_s.underscore}_filters"] = {"columns" => ["organization_name", "organization_website", "date_contacted", "date_of_response", "granted"]}
+    @pagy, @copyright_permissions = pagy(CopyrightPermission.all, items: 10)
   end
 
   # GET /copyright_permissions/1 or /copyright_permissions/1.json
@@ -64,10 +70,23 @@ class CopyrightPermissionsController < ApplicationController
     end
   end
 
+  def list
+    authorize CopyrightPermission
+
+    copyright_permissions_scope = filter!(CopyrightPermission)
+
+    @pagy, @copyright_permissions = pagy(copyright_permissions_scope, items: 10)
+    render(partial: 'copyright_permissions', locals: { copyright_permissions: @copyright_permissions, pagy: @pagy })
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_copyright_permission
       @copyright_permission = CopyrightPermission.find(params[:id])
+    end
+
+    def set_searchable_columns
+      @searchable_columns = CopyrightPermission::SEARCHABLE_COLUMNS
     end
 
     # Only allow a list of trusted parameters through.

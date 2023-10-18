@@ -18,7 +18,7 @@ class ContentsController < ApplicationController
   
   # GET /contents/1 or /contents/1.json
   def show
-    authorize Content
+    authorize @content
   end
 
   # GET /contents/new
@@ -66,7 +66,7 @@ class ContentsController < ApplicationController
 
   # DELETE /contents/1 or /contents/1.json
   def destroy
-    authorize Content
+    authorize @content
     @content.destroy
 
     respond_to do |format|

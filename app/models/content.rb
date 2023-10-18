@@ -49,7 +49,7 @@ class Content < ApplicationRecord
     end
 
     # if there is a direction sort by given sort column
-    if filters['direction'].present?
+    if filters['direction'].present? && filters['direction'] != 'none'
       case filters['sort']
         #user is a special case because it is a belongs_to relationship
         when 'user'
@@ -60,12 +60,12 @@ class Content < ApplicationRecord
         else
           sorted = filtered.order("#{filters['sort']} #{filters['direction']}") 
       end
-      # return the sorted resuts if there is a sort and direction
-      return sorted
+    else
+      # return the filtered results if there is no sort or direction
+      sorted = filtered
     end
 
-    # return the filtered results if there is no sort or direction
-    return filtered
+    sorted
   end
 
   # List of metadata for a given metadata type

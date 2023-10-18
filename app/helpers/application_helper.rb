@@ -22,4 +22,12 @@ module ApplicationHelper
 		end
 		html.join.html_safe
 	end
+
+    def sort_indicator(filters:)
+        direction = session.dig(filters, 'direction')
+        if direction.present?
+            render partial: 'shared/sort_indicator', locals: {direction: direction}
+        end
+    end
+
 end

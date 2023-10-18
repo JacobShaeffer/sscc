@@ -1,6 +1,7 @@
+<!--Sortable header for content table-->
 <% if session.dig("content_filters", "columns")&.include?(column) %>
     <th>
-        <%= sortable_link(sort: column, label: column.titleize) %>
-        <%= sort_indicator if session.dig('content_filters', 'sort') == column %>  
+        <%= sortable_link_contents(sort: column, label: column.titleize) %>
+        <%= sort_indicator(filters: "content_filters") if session.dig("content_filters", 'sort') == column %>  
     </th>
 <% end %>

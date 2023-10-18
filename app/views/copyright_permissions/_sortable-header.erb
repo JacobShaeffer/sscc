@@ -1,0 +1,6 @@
+<% if session.dig("copyright_permission_filters", "columns")&.include?(column) %>
+    <th>
+        <%= sortable_link_copyright_permissions(sort: column, label: column.titleize) %>
+        <%= sort_indicator(filters: "copyright_permission_filters") if session.dig("copyright_permission_filters", 'sort') == column %>  
+    </th>
+<% end %>

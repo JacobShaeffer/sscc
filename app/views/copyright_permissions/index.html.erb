@@ -12,36 +12,8 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Organization <i class="bi bi-chevron-up"></i></th>
-							<th>Granted</th>
-							<th>Date Contacted</th>
-							<th>Date of Response</th>
-							<th>User</th>
-							<th colspan="<%= [policy(CopyrightPermission).edit?, policy(CopyrightPermission).destroy?].count(true) + 1 %>">Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						<% @copyright_permissions.each do |crp| %>
-							<tr>
-								<td><%= crp.organization_name %></td>
-								<td><%= crp.granted %></td>
-								<td><%= crp.date_contacted %></td>
-								<td><%= crp.date_of_response %></td>
-								<td><%= crp.user.name %></td>
-								<td><%= link_to "Show", copyright_permission_path(crp) %></td>
-								<% if policy(CopyrightPermission).edit? %>
-									<td><%= link_to "Edit", edit_copyright_permission_path(crp) %></td>
-								<% end %>
-								<% if policy(CopyrightPermission).destroy? %>
-									<td><%= button_to "Destroy", copyright_permission_path(crp), method: :delete, data: { confirm: "Are you sure?" } %></td>
-								<% end %>
-							</tr>
-						<% end %>
-					</tbody>
-				</table>
+				<%= render 'copyright_permissions', copyright_permissions: 
+					@copyright_permissions, pagy: @pagy %>
 			</div>
 		</div>
 	</div>

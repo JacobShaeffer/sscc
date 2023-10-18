@@ -23,7 +23,11 @@ Rails.application.routes.draw do
       get :add_new_metadatum
     end
   end
-  resources :copyright_permissions
+  resources :copyright_permissions do
+    collection do
+      get :list
+    end
+  end
 
   # Filepond endpoints
   delete 'filepond/remove', to: 'filepond#remove'

@@ -4,7 +4,7 @@
   </button>
   <div class="collapse" id="collapseExample">
     <div class="card card-body">
-    <%= bootstrap_form_with url: list_contents_path, layout: :inline, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
+    <%= bootstrap_form_with url: list_contents_path, layout: :inline, method: :get, html: {class: "mb-2"}, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
       <%= form.text_field :title, 
             #hide_label: true,
             #placeholder: "#{column_name}",
@@ -46,6 +46,7 @@
             value: session.dig('content_filters',:description)
       %>
     <% end %>
+    <hr>
     <%= bootstrap_form_with url: list_contents_path, layout: :inline, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
       <% MetadataType.all.each do |metadata_type| %>
         <%= form.text_field "metadata[#{metadata_type.id}]",
@@ -65,12 +66,12 @@
     <div class="dropdown-menu p-3">
       <%= bootstrap_form_with url: list_contents_path, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
         <div class="mb-3">
-          <%= render partial: "column_check_box", locals: {column: "title"} %>
-          <%= render partial: "column_check_box", locals: {column: "display_title"} %>
-          <%= render partial: "column_check_box", locals: {column: "user"} %>
-          <%= render partial: "column_check_box", locals: {column: "copyright_permission"} %>
-          <%= render partial: "column_check_box", locals: {column: "year_of_publication"} %>
-          <%= render partial: "column_check_box", locals: {column: "description"} %>
+          <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "title"} %>
+          <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "display_title"} %>
+          <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "user"} %>
+          <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "copyright_permission"} %>
+          <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "year_of_publication"} %>
+          <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "description"} %>
         </div>
         <%= form.collection_check_boxes :columns,
               MetadataType.order(:name), :id, :name,

@@ -1,5 +1,5 @@
 <div class="form-check">
-    <% if session.dig("content_filters", "columns")&.include?(column) %>
+    <% if session.dig(filters, "columns")&.include?(column) %>
         <input 
             data-action="input->filters#filter" 
             value="<%= column %>" 

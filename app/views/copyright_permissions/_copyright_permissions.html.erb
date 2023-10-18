@@ -1,0 +1,124 @@
+<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Search 
+</button>
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        <%= bootstrap_form_with url: list_copyright_permissions_path, layout: :inline, method: :get, html: {class: "mb-2"}, data: {controller: "filters", filters_target: "form", turbo_frame: :copyright_permission_table} do |form| %>
+            <%= form.text_field :organization_name, 
+                autocomplete: "off",
+                data: {action: "input->filters#filter"},
+                value: session.dig('copyright_permission_filters',:organization_name)
+            %>
+            <%= form.text_field :organization_website, 
+                autocomplete: "off",
+                data: {action: "input->filters#filter"},
+                value: session.dig('copyright_permission_filters',:organization_website)
+            %>
+            <%= form.text_field :organization_contact_information, 
+                autocomplete: "off",
+                data: {action: "input->filters#filter"},
+                value: session.dig('copyright_permission_filters',:organization_contact_information)
+            %>
+            <%= form.number_field :date_contacted_from, 
+                autocomplete: "off",
+                data: {action: "input->filters#filter"},
+                value: session.dig('copyright_permission_filters',:date_contacted_from)
+            %>
+            <%= form.number_field :date_contacted_to, 
+                autocomplete: "off",
+                data: {action: "input->filters#filter"},
+                value: session.dig('copyright_permission_filters',:date_contacted_to)
+            %>
+            <%= form.number_field :date_of_response_from, 
+                autocomplete: "off",
+                data: {action: "input->filters#filter"},
+                value: session.dig('copyright_permission_filters',:date_of_response_from)
+            %>
+            <%= form.number_field :date_of_response_to, 
+                autocomplete: "off",
+                data: {action: "input->filters#filter"},
+                value: session.dig('copyright_permission_filters',:date_of_response_to)
+            %>
+            <%= form.text_field :granted, 
+                autocomplete: "off",
+                data: {action: "input->filters#filter"},
+                value: session.dig('copyright_permission_filters',:granted)
+            %>
+            <%= form.text_field :notes, 
+                autocomplete: "off",
+                data: {action: "input->filters#filter"},
+                value: session.dig('copyright_permission_filters',:notes)
+            %>
+        <% end %>
+    </div>
+</div>
+<div class="btn-group dropstart float-end">
+<button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Column Select
+</button>
+<div class="dropdown-menu p-3">
+    <%= bootstrap_form_with url: list_copyright_permissions_path, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :copyright_permission_table} do |form| %>
+        <div class="mb-3">
+            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "organization_name"} %>
+            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "organization_website"} %>
+            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "organization_contact_information"} %>
+            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "date_contacted"} %>
+            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "date_of_response"} %>
+            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "granted"} %>
+            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "notes"} %>
+        </div>
+    <% end %>
+</div>
+</div>
+<%= turbo_frame_tag :copyright_permission_table do %>
+    <p class="frame-loading">Loading...</p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <%= render partial: "sortable-header", locals: {column: "organization_name"} %>  
+                <%= render partial: "sortable-header", locals: {column: "organization_website"} %>  
+                <%= render partial: "sortable-header", locals: {column: "organization_contact_information"} %>  
+                <%= render partial: "sortable-header", locals: {column: "date_contacted"} %>  
+                <%= render partial: "sortable-header", locals: {column: "date_of_response"} %>  
+                <%= render partial: "sortable-header", locals: {column: "granted"} %>  
+                <%= render partial: "sortable-header", locals: {column: "notes"} %>  
+                <th colspan="<%= [policy(CopyrightPermission).edit?, policy(CopyrightPermission).destroy?].count(true) + 1 %>">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% copyright_permissions.each do |crp| %>
+                <tr>
+                    <% if session.dig("copyright_permission_filters", "columns")&.include?("organization_name") %>
+                        <td><%= crp.organization_name %></td>
+                    <% end %>
+                    <% if session.dig("copyright_permission_filters", "columns")&.include?("organization_website") %>
+                        <td><%= crp.organization_website %></td>
+                    <% end %>
+                    <% if session.dig("copyright_permission_filters", "columns")&.include?("organization_contact_information") %>
+                        <td><%= crp.organization_contact_information %></td>
+                    <% end %> 
+                    <% if session.dig("copyright_permission_filters", "columns")&.include?("date_contacted") %>
+                        <td><%= crp.date_contacted %></td>
+                    <% end %>
+                    <% if session.dig("copyright_permission_filters", "columns")&.include?("date_of_response") %>
+                        <td><%= crp.date_of_response %></td>
+                    <% end %>
+                    <% if session.dig("copyright_permission_filters", "columns")&.include?("granted") %>
+                        <td><%= crp.granted %></td>
+                    <% end %>
+                    <% if session.dig("copyright_permission_filters", "columns")&.include?("notes") %>
+                        <td><%= crp.notes %></td>
+                    <% end %>
+                    <td><%= link_to "Show", copyright_permission_path(crp) %></td>
+                    <% if policy(CopyrightPermission).edit? %>
+                        <td><%= link_to "Edit", edit_copyright_permission_path(crp) %></td>
+                    <% end %>
+                    <% if policy(CopyrightPermission).destroy? %>
+                        <td><%= button_to "Destroy", copyright_permission_path(crp), method: :delete, data: { confirm: "Are you sure?" } %></td>
+                    <% end %>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <%= raw pagy_bootstrap_nav(pagy) %>
+<% end %>

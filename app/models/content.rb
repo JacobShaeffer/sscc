@@ -9,7 +9,7 @@ class Content < ApplicationRecord
   validates :title, presence: true, allow_blank: false
   validates :display_title, presence: true, allow_blank: false
   validates :description, presence: true, allow_blank: false
-  validates :file, presence: true, allow_blank: false
+  validates :file, presence: true, blob: { content_type: ['application/pdf', 'audio/mpeg', 'video/mp4'], size_range: 0..(256.megabytes) }
 
   #List of searchable columns
   SEARCHABLE_COLUMNS = %i[ title user copyright_permission display_title description year_of_publication year_of_publication_from year_of_publication_to ].freeze

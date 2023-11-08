@@ -88,3 +88,4 @@ gem "requestjs-rails"
 gem 'activestorage', '~> 7.0'
 gem 'pagy', '~> 6.0.4'
 gem 'activerecord_where_assoc', '~> 1.0'
+gem 'activestorage-validator', '~> 0.4.0'

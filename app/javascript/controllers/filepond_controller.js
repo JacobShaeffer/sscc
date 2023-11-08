@@ -25,7 +25,6 @@ export default class extends Controller {
 
 		const submit = document.querySelector('input[type="submit"]');
 
-		// acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
 		FilePond.setOptions({
 			acceptedFileTypes: this.extensionsValue,
 			maxFileSize: '265MB',

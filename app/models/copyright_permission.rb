@@ -8,7 +8,7 @@ class CopyrightPermission < ApplicationRecord
 
   validates :granted, presence: true
   validates :date_contacted, presence: true
-  validates :communication, presence: true, allow_blank: false
+  validates :communication, presence: true, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'], size_range: 0..(10.megabytes) }
   validates :organization_name, presence: true, allow_blank: false
   validates :organization_contact_information, presence: true, allow_blank: false
 

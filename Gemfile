@@ -74,6 +74,7 @@ group :test do
   gem "webdrivers"
 end
 
+gem 'dotenv-rails', require: 'dotenv/rails-now', group: [:development, :test]
 # User session management
 gem 'devise', '~> 4.9'
 

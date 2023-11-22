@@ -39,6 +39,16 @@ export default class extends Controller {
 				}	
 				else {
 					submit.disabled = false;
+					// console.log("file: ", file);
+					// this file object has a property called serverId which is the id of the blob
+					// this can be used to show the content on the page after it's been uploaded
+					//
+					// The rails way to do this is the following:
+					//url_for(user.avatar)
+					//# => https://www.example.com/rails/active_storage/blobs/redirect/:signed_id/my-avatar.png
+					// but I don't know if we can do this in the controller unless it's through turbo, but even then 
+					// we would have to specify the controller and I don't know if we can do that
+
 				}
 			},
 			server: {

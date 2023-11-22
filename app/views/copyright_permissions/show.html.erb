@@ -1,79 +1,70 @@
+<div class="row">
+	<div class="actions mb-3">
+    <%= link_to "Back", copyright_permissions_path, class: "btn btn-secondary" %>
 
+		<div class="float-end">
+      <% if policy(@copyright_permission).edit? %>
+        <%= link_to "Edit this copyright permission", edit_copyright_permission_path(@copyright_permission), class: "btn btn-primary" %>
+			<% end %>
 
-<div id="<%= dom_id @copyright_permission %>">
-  <div class="row">
-    <div class="col-md-4">
-      <p>
-        <strong>Notes:</strong>
-        <%= @copyright_permission.notes %>
-      </p>
-
-      <p>
-        <strong>Organization name:</strong>
-        <%= @copyright_permission.organization_name %>
-      </p>
-
-      <p>
-        <strong>Organization website:</strong>
-        <%= @copyright_permission.organization_website %>
-      </p>
-
-      <p>
-        <strong>Organization contact information:</strong>
-        <%= @copyright_permission.organization_contact_information %>
-      </p>
-
-      <p>
-        <strong>Granted:</strong>
-        <%= @copyright_permission.granted %>
-      </p>
-
-      <p>
-        <strong>Date contacted:</strong>
-        <%= @copyright_permission.date_contacted %>
-      </p>
-
-      <p>
-        <strong>Date of response:</strong>
-        <%= @copyright_permission.date_of_response %>
-      </p>
-      
-
-      <p>
-        <strong>User:</strong>
-        <%= @copyright_permission.user.name %>
-      </p>
-    </div>
-
-    <div class="col-md-8">
-      <p>
-        <strong>Communications:</strong>
-        
-      </p>
-      <p><%= @copyright_permission.communication.content_type %></p>
-      <% if @copyright_permission.communication.content_type == "application/pdf" %> 
-        <object data="<%= url_for(@copyright_permission.communication) %>" type="application/pdf" width="600" height="780">
-          <iframe src='<%= url_for(@copyright_permission.communication) %>' width="600" height="780"></iframe>
-          <p>You browser does not support PDF. Download it here: <a href="<%= url_for(@content.file) %>"></a></p>
-        </object>
-      <% elsif @copyright_permission.communication.representable? %> 
-        <%= image_tag @copyright_permission.communication.representation(resize: 0.5), size: '500'  %>
-      <% end %>
-      <%# if @copyright_permission.communication.content_type == "application/pdf" %>
-      <%# elsif @copyright_permission.communication.representable? %>
-        <%#= image_tag @copyright_permission.communication.preview(resize_limit_to: [100, 100]) %>
-      <%# end %>
-    </div>
+      <% if policy(@copyright_permission).destroy? %>
+        <%= button_to "Destroy this copyright permission", @copyright_permission, method: :delete, class: "btn btn-danger d-inline-block", form_class: "d-inline-block" %>
+			<% end %>
+		</div>
+	</div>
 </div>
 
-<div>
-  <% if policy(@copyright_permission).edit? %>
-    <%= link_to "Edit this copyright permission", edit_copyright_permission_path(@copyright_permission) %> |
-  <% end %>
-  <%= link_to "Back", copyright_permissions_path %>
+<div class="row">
+  <div class="col-xl-6 col-lg-12 col-md-12">
+    <%= bootstrap_form_for [@copyright_permission] do |form| %>
 
-  <% if policy(@copyright_permission).destroy? %>
-    <%= button_to "Destroy this copyright permission", @copyright_permission, method: :delete %>
-  <% end %>
+      <div class="row">
+        <div class="field col-lg-4 col-md-6">
+          <%= form.text_field :organization_name, disabled: true %>
+        </div>
 
+        <div class="field col-lg-4 col-md-6">
+          <%= form.text_field :organization_website, label: "Website", disabled: true %>
+        </div>
+
+        <div class="field col-lg-4 col-md-6">
+          <%= form.text_field :organization_contact_information, label: "Contact Info", disabled: true %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field col-lg-6 col-md-12">
+          <%#= form.select :granted, CopyrightPermission.granteds.keys.map {|u| [u.titleize, u]}, {:prompt => 'Select One'}, disabled: true %>
+          <%= form.text_field :organization_contact_information, disabled: true %>
+        </div>
+
+        <div class="field col-lg-3 col-md-6">
+          <%= form.date_field :date_contacted, disabled: true %>
+        </div>
+
+        <div class="field col-lg-3 col-md-6">
+          <%= form.date_field :date_of_response, disabled: true %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.text_area :notes, disabled: true %>
+      </div>
+
+      <div class="field">
+				<%= form.text_field :communication, disabled: true, value: @copyright_permission.communication.filename %>
+      </div>
+
+    <% end %>
+  </div>
+  <div class="col-xl-6 col-lg-12">
+    <% if @copyright_permission.communication.content_type == "application/pdf" %> 
+      <object data="<%= url_for(@copyright_permission.communication) %>" type="application/pdf" style="width: 100%; aspect-ratio: 3/4;">
+        <iframe src='<%= url_for(@copyright_permission.communication) %>'></iframe>
+        <p>You browser does not support PDF. Download it here: <a href="<%= url_for(@content.file) %>"></a></p>
+      </object>
+    <% elsif @copyright_permission.communication.representable? %> 
+      <%= image_tag @copyright_permission.communication.representation(resize: 0.5), size: '500'  %>
+    <% end %>
+  </div>
 </div>

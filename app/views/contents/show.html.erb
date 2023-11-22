@@ -1,53 +1,103 @@
-
 <div class="row">
-  <div class="col-md-4">
-    <%#= render @content %>
-    <div id="<%= dom_id @content %>">
-      <p>
-        <strong>Title:</strong>
-        <%= @content.title %>
-      </p>
-      <p>
-        <strong>User:</strong>
-        <%= @content.user.name %>
-      </p>
-    </div>
-    <% @content.metadata.each do |metadatum| %>
-      <p>
-        <strong>Metadata:</strong>
-        <%= metadatum.name %>
-      </p>
-    <% end %>
-  </div>
-  <div class="col-md-8">
-    <p><%= @content.file.content_type %></p>
-    <% if @content.file.content_type == "application/pdf" %>
-      <object data="<%= url_for(@content.file) %>" type="application/pdf" width="600" height="780">
-        <iframe src='<%= url_for(@content.file) %>' width="600" height="780"></iframe>
-        <p>You browser does not support PDF. Download it here: <a href="<%= url_for(@content.file) %>"></a></p>
-      </object>
-    <% elsif @content.file.content_type == "video/mp4" %>
-      <video width="320" height="240" controls>
-        <source src="<%= url_for(@content.file) %>" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    <% elsif @content.file.content_type == "audio/mpeg" %>
-      <audio controls>
-        <source src="<%= url_for(@content.file) %>" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-    <% end %>
-  </div>
+	<div class="actions mb-3">
+		<%= link_to "Back to contents", contents_path, class: "btn btn-secondary"%>
+
+		<div class="float-end">
+			<% if policy(@content).edit? %>
+				<%= link_to "Edit this content", edit_content_path(@content), class: "btn btn-primary" %>
+			<% end %>
+
+			<% if policy(@content).destroy? %>
+				<%= button_to "Destroy this content", @content, method: :delete, class: "btn btn-danger d-inline-block", form_class: "d-inline-block" %>
+			<% end %>
+		</div>
+	</div>
 </div>
+<div class="row">
+	<div class="col-xl-6 col-lg-12 col-md-12">
+		<%= bootstrap_form_for [@metadata_type, @content] do |form| %>
+			<div class="row">
+				<div class="field col-lg-6 col-md-12">
+					<%= form.text_field :title, disabled: true %>
+				</div>
 
+				<div class="field col-lg-6 col-md-12">
+					<%= form.text_field :display_title, disabled: true %>
+				</div>
+			</div>
 
-<div>
-  <% if policy(@content).edit? %>
-    <%= link_to "Edit this content", edit_content_path(@content) %> |
-  <% end %>
-  <%= link_to "Back to contents", contents_path %>
+			<div class="row">
+				<div class="field">
+					<%= form.text_area :description, disabled: true %>
+				</div>
+			</div>
 
-  <% if policy(@content).destroy? %>
-    <%= button_to "Destroy this content", @content, method: :delete %>
-  <% end %>
+			<div class="row">
+				<div class="field col-lg-4 col-md-6 col-sm-12">
+					<%#= form.label :file, "File", class: "form-label" %>
+					<%#= form.file_field :file, class: 'filepond', direct_upload: true, skip_label: true %>
+					<%= form.text_field :file, disabled: true, value: @content.file.filename %>
+				</div>
+
+				<div class="field col-lg-4 col-md-6 col-sm-12">
+					<%= form.number_field :year_of_publication, disabled: true %>
+				</div>
+
+				<div class="field col-lg-4 col-md-6 col-sm-12">
+					<%#= form.collection_select(:copyright_permission_id, CopyrightPermission.all, :id, :organization_name, {:prompt => "Select"}, disabled: true ) %>
+					<%#= form.label :copyright_permission_id, "Copyright Permission", class: "form-label" %>
+					<%= form.text_field :copyright_permission_id, disabled: true, value: @content.copyright_permission.organization_name %>
+				</div>
+			</div>
+
+			<div class="field">
+				<%= form.text_area :additional_notes, disabled: true %>
+			</div>
+
+			<div class="mb-3">
+				<label class="form-label">Metadata</label>
+				<div class="form-control">
+					<% MetadataType.all.order(:order).each do |metadata_type| %>
+
+						<div class="mb-3" 
+							id="multiSelectFor=<%= metadata_type.id %>" 
+							class="field"
+						>
+							<label class="form-label-sm"><%= metadata_type.name %></label>
+							<div class="form-control" 
+								id="metadataInput_<%= metadata_type.id %>_container"
+							>
+								<% metadata_type.metadata.each do |metadatum| %>
+									<% if @content.metadata.include?(metadatum) %>
+										<span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>">
+											<%= metadatum.name %>
+										</span>
+									<% end %>
+								<% end %>
+							</div>
+						</div>
+					<% end %>
+				</div>
+			</div>
+		<% end %>
+	</div>
+
+	<div class="col-xl-6 col-lg-12 col-md-12">
+		<% if @content.file.content_type == "application/pdf" %>
+			<object data="<%= url_for(@content.file) %>" type="application/pdf" style="width: 100%; aspect-ratio: 3/4;">
+				<iframe src='<%= url_for(@content.file) %>' ></iframe>
+				<p>You browser does not support PDF. Download it here: <a href="<%= url_for(@content.file) %>"></a></p>
+			</object>
+		<% elsif @content.file.content_type == "video/mp4" %>
+			<video width="320" height="240" controls>
+				<source src="<%= url_for(@content.file) %>" type="video/mp4">
+				Your browser does not support the video tag.
+			</video>
+		<% elsif @content.file.content_type == "audio/mpeg" %>
+			<audio controls>
+				<source src="<%= url_for(@content.file) %>" type="audio/mpeg">
+				Your browser does not support the audio element.
+			</audio>
+		<% end %>
+	</div>
 </div>

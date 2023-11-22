@@ -1,0 +1,53 @@
+
+<div class="row">
+  <div class="col-md-4">
+    <%#= render @content %>
+    <div id="<%= dom_id @content %>">
+      <p>
+        <strong>Title:</strong>
+        <%= @content.title %>
+      </p>
+      <p>
+        <strong>User:</strong>
+        <%= @content.user.name %>
+      </p>
+    </div>
+    <% @content.metadata.each do |metadatum| %>
+      <p>
+        <strong>Metadata:</strong>
+        <%= metadatum.name %>
+      </p>
+    <% end %>
+  </div>
+  <div class="col-md-8">
+    <p><%= @content.file.content_type %></p>
+    <% if @content.file.content_type == "application/pdf" %>
+      <object data="<%= url_for(@content.file) %>" type="application/pdf" width="600" height="780">
+        <iframe src='<%= url_for(@content.file) %>' width="600" height="780"></iframe>
+        <p>You browser does not support PDF. Download it here: <a href="<%= url_for(@content.file) %>"></a></p>
+      </object>
+    <% elsif @content.file.content_type == "video/mp4" %>
+      <video width="320" height="240" controls>
+        <source src="<%= url_for(@content.file) %>" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    <% elsif @content.file.content_type == "audio/mpeg" %>
+      <audio controls>
+        <source src="<%= url_for(@content.file) %>" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    <% end %>
+  </div>
+</div>
+
+
+<div>
+  <% if policy(@content).edit? %>
+    <%= link_to "Edit this content", edit_content_path(@content) %> |
+  <% end %>
+  <%= link_to "Back to contents", contents_path %>
+
+  <% if policy(@content).destroy? %>
+    <%= button_to "Destroy this content", @content, method: :delete %>
+  <% end %>
+</div>

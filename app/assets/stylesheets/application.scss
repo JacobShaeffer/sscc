@@ -21,9 +21,14 @@ $secondary: #ffc627;
 
 .auto-complete-selected {
 	display: contents;
-	font-weight: 100;
 	font-size: large;
 	cursor: pointer;
+}
+
+.metadata-badge {
+	display: contents;
+	font-size: large;
+	cursor: default;
 }
 
 .btn-tools {

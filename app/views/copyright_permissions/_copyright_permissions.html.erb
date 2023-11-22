@@ -53,22 +53,22 @@
     </div>
 </div>
 <div class="btn-group dropstart float-end">
-<button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Column Select
-</button>
-<div class="dropdown-menu p-3">
-    <%= bootstrap_form_with url: list_copyright_permissions_path, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :copyright_permission_table} do |form| %>
-        <div class="mb-3">
-            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "organization_name"} %>
-            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "organization_website"} %>
-            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "organization_contact_information"} %>
-            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "date_contacted"} %>
-            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "date_of_response"} %>
-            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "granted"} %>
-            <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "notes"} %>
-        </div>
-    <% end %>
-</div>
+    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Column Select
+    </button>
+    <div class="dropdown-menu p-3">
+        <%= bootstrap_form_with url: list_copyright_permissions_path, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :copyright_permission_table} do |form| %>
+            <div class="mb-3">
+                <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "organization_name"} %>
+                <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "organization_website"} %>
+                <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "organization_contact_information"} %>
+                <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "date_contacted"} %>
+                <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "date_of_response"} %>
+                <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "granted"} %>
+                <%= render partial: "shared/column_check_box", locals: {filters: "copyright_permission_filters", column: "notes"} %>
+            </div>
+        <% end %>
+    </div>
 </div>
 <%= turbo_frame_tag :copyright_permission_table do %>
     <p class="frame-loading">Loading...</p>
@@ -109,13 +109,13 @@
                     <% if session.dig("copyright_permission_filters", "columns")&.include?("notes") %>
                         <td><%= crp.notes %></td>
                     <% end %>
-                    <td><%= link_to "Show", copyright_permission_path(crp) %></td>
+                    <td><%= link_to "Show", copyright_permission_path(crp), data: {"turbo-frame": "_top"} %></td>
                     <% if policy(CopyrightPermission).edit? %>
-                        <td><%= link_to "Edit", edit_copyright_permission_path(crp) %></td>
+                        <td><%= link_to "Edit", edit_copyright_permission_path(crp), data: {"turbo-frame": "_top"} %></td>
                     <% end %>
-                    <% if policy(CopyrightPermission).destroy? %>
-                        <td><%= button_to "Destroy", copyright_permission_path(crp), method: :delete, data: { confirm: "Are you sure?" } %></td>
-                    <% end %>
+                    <%# if policy(CopyrightPermission).destroy? %>
+<!--                        <td><%#= button_to "Destroy", copyright_permission_path(crp), method: :delete, data: { confirm: "Are you sure?" } %></td>-->
+                    <%# end %>
                 </tr>
             <% end %>
         </tbody>

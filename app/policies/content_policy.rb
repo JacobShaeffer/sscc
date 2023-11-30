@@ -46,6 +46,14 @@ class ContentPolicy < ApplicationPolicy
     @user.admin? || @user.intern?
   end
 
+  def download?
+    @user.admin?
+  end
+
+  def download_zip?
+    @user.admin?
+  end
+
   class Scope < Scope
     # NOTE: Be explicit about which records you allow access to!
     # def resolve

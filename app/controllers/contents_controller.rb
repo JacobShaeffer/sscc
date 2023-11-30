@@ -1,5 +1,6 @@
 class ContentsController < ApplicationController
   include Filterable
+  include ActiveStorage::SendZip  
   before_action :set_content, only: %i[ show edit update destroy ]
   before_action :set_searchable_columns, only: %i[ index list ]
 	before_action :authenticate_user!
@@ -113,6 +114,17 @@ class ContentsController < ApplicationController
     render(partial: "content", locals: { contents: @contents, pagy: @pagy })
   end
 
+  def download
+    authorize Content
+    send_data Content.to_csv, filename: "ContentCuration-metadata-#{Date.today}.csv"
+  end
+
+  def download_zip
+    authorize Content
+    #https://github.com/madeindjs/active_storage-send_zip
+    send_zip Content.all.map(&:file), filename: "ContentCuration-content-#{Date.today}.zip"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_content
@@ -127,4 +139,5 @@ class ContentsController < ApplicationController
     def content_params
       params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication, :additional_notes, :copyright_permission_id, metadatum_ids: [])
     end
+
 end

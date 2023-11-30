@@ -11,6 +11,10 @@ export default class extends Controller {
 		target: String
 	}
 
+	connect () {
+		console.log("metadata controller connected");
+	}
+
 	onSearchInput(event) {
         this.nameinputTarget.value = event.target.value;
 		this.autoComplete(event.target.value);

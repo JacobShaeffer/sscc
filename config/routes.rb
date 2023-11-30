@@ -21,6 +21,8 @@ Rails.application.routes.draw do
       get :search
       get :list
       get :add_new_metadatum
+      get :download
+      get :download_zip
     end
   end
   resources :copyright_permissions do

@@ -1,6 +1,6 @@
 require 'csv'
 
-File.open("upload.csv", "r") do |f|
+File.open("Updated Subcategories CC Website.csv", "r") do |f|
     CSV.foreach(f, :headers => true) do |row|
         user = User.first()
         metadata_type = MetadataType.find_by(name: row[0])

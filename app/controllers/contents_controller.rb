@@ -13,7 +13,7 @@ class ContentsController < ApplicationController
 
     clear_filters!(Content)
     session["#{Content.to_s.underscore}_filters"] = {"columns" => ["title", "display_title", "user"]}
-    @pagy, @contents = pagy(Content.all, items: 10)
+    @pagy, @contents = pagy(Content.order(created_at: :desc), items: 10)
   end
   
   
@@ -110,19 +110,19 @@ class ContentsController < ApplicationController
 
     contents_scope = filter!(Content)
 
-    @pagy, @contents = pagy(contents_scope, items: 10)
+    @pagy, @contents = pagy(contents_scope.order(created_at: :desc), items: 10)
     render(partial: "content", locals: { contents: @contents, pagy: @pagy })
   end
 
   def download
     authorize Content
-    send_data Content.to_csv, filename: "ContentCuration-metadata-#{Date.today}.csv"
+    send_data Content.order(created_at: :desc).to_csv, filename: "ContentCuration-metadata-#{Date.today}.csv"
   end
 
   def download_zip
     authorize Content
     #https://github.com/madeindjs/active_storage-send_zip
-    send_zip Content.all.map(&:file), filename: "ContentCuration-content-#{Date.today}.zip"
+    send_zip Content.order(created_at: :desc).all.map(&:file), filename: "ContentCuration-content-#{Date.today}.zip"
   end
 
   private

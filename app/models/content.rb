@@ -82,12 +82,32 @@ class Content < ApplicationRecord
 
   # List of metadata for a given metadata type name
   def metadatas_by_name(metadata_type_name)
-    metadatas(MetadataType.find_by(name: metadata_type_name).id)
+		metadataType = MetadataType.find_by(name: metadata_type_name)
+		# FIXME: metadataType might be nil
+		if metadataType == nil
+			['']
+		else
+    	metadatas(metadataType.id)
+		end
   end
 
   def self.to_csv()
     CSV.generate(headers: true) do |csv|
-      csv << ['Title', 'Display Title', 'File Name', 'Description', 'Modified On', 'Copyright Notes', 'Rights Statement', 'Additional Notes', 'Year Published', 'Reviewed On', 'Active', 'Duplicatable', 'Filesize', 'Audience', 'Collection Type', 'Creator', 'Education Level', 'Format', 'Keywords', 'Language', 'Resource Type', 'Rights Holder', 'Subcategory', 'Subject' ]
+      csv << [
+				'Title', 
+				'Display Title', 
+				'File Name', 
+				'Description', 
+				'Modified On', 
+				'Copyright Notes', 
+				'Additional Notes', 
+				'Year Published', 
+				'Reviewed On', 
+				'Active', 
+				'Duplicatable', 
+				'Filesize', 
+				'Language', 
+			].concat(MetadataType.all.map{|type| type.name})
       all.each do |content|
         csv << [
           content.title, 
@@ -96,26 +116,15 @@ class Content < ApplicationRecord
           content.description, 
           '', #check this (Modified On)
           '', #check this (Copywrite Notes)
-          content.metadatas_by_name("Rights Statement").join(' | '), 
           content.additional_notes, 
           content.year_of_publication, 
           '', #check this (Reviewed On)
           'True', 
           'False', 
           content.file.byte_size, #does this work?
-# multiple values should be separated by a pipe (|)
-          content.metadatas_by_name("Primary User").join(' | '),# content.audience, 
-          content.metadatas_by_name("Collection Type").join(' | '),# content.collection_type, 
-          content.metadatas_by_name("Author").join(' | '),# content.creator, 
-          content.metadatas_by_name("Education Level").join(' | '),# content.education_level, 
-          content.metadatas_by_name("Format").join(' | '),# content.format, 
-          content.metadatas_by_name("Keywords").join(' | '),# content.keywords, 
-          'English', #Language
-          content.metadatas_by_name("Resource Type").join(' | '),# content.resource_type, 
-          content.metadatas_by_name("Rights Holder").join(' | '),# content.rights_holder, 
-          content.metadatas_by_name("Subcategory").join(' | '),# content.subcategory, 
-          content.metadatas_by_name("Subject").join(' | '),# content.subject
-        ]
+          'English' #Language
+				].concat(MetadataType.all.map{|type| content.metadatas_by_name(type.name).join(' | ')})
+					# multiple values should be separated by a pipe (|)
       end
     end
   end

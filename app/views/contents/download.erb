@@ -1,0 +1,13 @@
+
+    <div class="col">
+      <%= link_to "Download Metadata Spreadsheet", download_spreadsheet_contents_path, class: "btn btn-primary" %>
+      <%= link_to "Create New Content Zip", create_download_contents_path, class: "btn btn-primary" %>
+    </div>
+    <div style="margin-top: 15px;">
+    <% @filenames.each do |filename| %>
+        <p>
+        <%= link_to filename, download_zip_contents_path(filename: filename) %>
+        <%= link_to 'delete', delete_download_contents_path(filename: filename), style: "color: red;"%>
+        </p>
+    <% end %>
+    </div>

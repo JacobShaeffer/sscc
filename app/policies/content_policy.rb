@@ -50,6 +50,18 @@ class ContentPolicy < ApplicationPolicy
     @user.admin?
   end
 
+  def delete_download?
+    @user.admin?
+  end
+
+  def create_download?
+    @user.admin?
+  end
+
+  def download_spreadsheet?
+    @user.admin?
+  end
+
   def download_zip?
     @user.admin?
   end

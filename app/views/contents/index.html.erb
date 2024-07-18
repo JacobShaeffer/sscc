@@ -7,10 +7,7 @@
   </div>
   <% if policy(Content).download? %>
     <div class="col">
-      <%= link_to "Download Metadata Spreadsheet", download_contents_path, class: "btn btn-primary" %>
-    </div>
-    <div class="col">
-      <%= link_to "Download Content", download_zip_contents_path, class: "btn btn-primary" %>
+      <%= link_to "Download Content", download_contents_path, class: "btn btn-primary" %>
     </div>
   <% end %>
 </div>

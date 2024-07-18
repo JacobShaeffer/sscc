@@ -1,6 +1,5 @@
 class ContentsController < ApplicationController
   include Filterable
-  include ActiveStorage::SendZip  
   before_action :set_content, only: %i[ show edit update destroy ]
   before_action :set_searchable_columns, only: %i[ index list ]
 	before_action :authenticate_user!
@@ -116,13 +115,38 @@ class ContentsController < ApplicationController
 
   def download
     authorize Content
+    raw_names = Dir[ Rails.root.join("tmp", "bulk_content_download_*.zip") ]
+    @filenames = raw_names.map { |path| File.basename(path) }
+  end
+
+  def create_download
+    ContentDownloadJob.perform_later()
+  end
+
+  def delete_download
+    authorize Content
+    zip_filename = params[:filename]
+    puts(zip_filename)
+    raw_names = Dir[ Rails.root.join("tmp", "bulk_content_download_*.zip") ]
+    full_path = Rails.root.join('tmp', zip_filename)
+
+    if full_path in raw_names
+      puts(full_path)
+      puts(File.exist?(full_path))
+      File.delete(full_path) if File.exist?(full_path)
+    end
+
+  end
+
+  def download_spreadsheet
+    authorize Content
     send_data Content.order(created_at: :desc).to_csv, filename: "ContentCuration-metadata-#{Date.today}.csv"
   end
 
   def download_zip
     authorize Content
-    #https://github.com/madeindjs/active_storage-send_zip
-    send_zip Content.order(created_at: :desc).all.map(&:file), filename: "ContentCuration-content-#{Date.today}.zip"
+    zip_filename = params[:filename]
+    send_file Rails.root.join('tmp', zip_filename)
   end
 
   private

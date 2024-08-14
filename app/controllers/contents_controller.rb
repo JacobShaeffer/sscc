@@ -117,10 +117,18 @@ class ContentsController < ApplicationController
     authorize Content
     raw_names = Dir[ Rails.root.join("tmp", "bulk_content_download_*.zip") ]
     @filenames = raw_names.map { |path| File.basename(path) }
+    require 'yaml'
+    #@runnning_jobs = Delayed::Job.all.map(|job| YAML.load_stream(job.handler)[0].job_data["job_id"])
+    if Delayed::Job.all.size > 0
+      @running_jobs = YAML.load_stream(Delayed::Job.first.handler)[0].job_data["job_id"]
+      @jobs = Delayed::Job.all.map{ |job| [YAML.load_stream(job.handler)[0].job_data["job_id"], job.locked_at] }
+    end
   end
 
   def create_download
-    ContentDownloadJob.perform_later()
+    @job_id = ContentDownloadJob.perform_later().job_id
+    #figure out how to use job_id to check the status of the job???
+    # or use the existance of the unfinished zip as a status indicator
   end
 
   def delete_download

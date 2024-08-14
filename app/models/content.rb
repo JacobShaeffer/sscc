@@ -6,7 +6,7 @@ class Content < ApplicationRecord
 
   has_one_attached :file
 
-  validates :title, presence: true, allow_blank: false
+  validates :title, presence: true, allow_blank: false, uniqueness: { case_sensitive: false, message: "Title must be unique" }
   validates :display_title, presence: true, allow_blank: false
   validates :description, presence: true, allow_blank: false
   validates :file, presence: true, blob: { content_type: ['application/pdf', 'audio/mpeg', 'video/mp4'], size_range: 0..(256.megabytes) }

@@ -27,7 +27,6 @@ class ContentDownloadJob < ApplicationJob
             end
         end
     
-        user.update!(download_link: zipfile_path)
     end
 
     private 

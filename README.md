@@ -21,6 +21,7 @@ https://rvm.io/rvm/install
 
 ## test project
 ``` rails s ```
+Then navigate to localhost:3000 in any browser
 
 ## Congrats
 

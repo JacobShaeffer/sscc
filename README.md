@@ -1,24 +1,25 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Project Setup
 
-Things you may want to cover:
+## Install Ruby 3.2.1
 
-* Ruby version
+### Either directly
+https://www.ruby-lang.org/en/documentation/installation/#rubyinstaller
 
-* System dependencies
+### Or via Ruby Version Manager if you think you may ever want to have multiple versions of Ruby for different projects
+https://rvm.io/rvm/install
 
-* Configuration
+## make sure sqlite3 is installed
+``` sqlite3 --version ```
 
-* Database creation
+## install gems
+``` bundle install ```
 
-* Database initialization
+## migrate database
+``` rails db:migrate ```
 
-* How to run the test suite
+## test project
+``` rails s ```
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Congrats

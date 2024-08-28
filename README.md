@@ -23,3 +23,11 @@ https://rvm.io/rvm/install
 ``` rails s ```
 
 ## Congrats
+
+
+# Add an admin user
+## Create the user via console
+```
+rails c 
+User.create!({:email => "test@test.com", :role => "admin", :password => "password", :password_confirmation => "password", :name => "test" })
+```

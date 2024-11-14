@@ -106,7 +106,6 @@ class Content < ApplicationRecord
 				'Active', 
 				'Duplicatable', 
 				'Filesize', 
-				'Language', 
 			].concat(MetadataType.all.map{|type| type.name})
       all.each do |content|
         csv << [
@@ -122,11 +121,34 @@ class Content < ApplicationRecord
           'True', 
           'False', 
           content.file.byte_size, #does this work?
-          'English' #Language
 				].concat(MetadataType.all.map{|type| content.metadatas_by_name(type.name).join(' | ')})
 					# multiple values should be separated by a pipe (|)
       end
     end
   end
 
+end
+
+html_file_path = Rails.root.join('contents.html')
+
+# Open a new HTML file for writing
+File.open(html_file_path, 'w') do |file|
+  file.puts "<html><body><table border='1'>"
+
+  # Add header row
+  file.puts "<tr><th>ID</th><th>Title</th><th>Description</th><th>File Name</th><th>Created At</th><th>Updated At</th></tr>"
+
+  # Add data rows
+  contents.find_each do |content|
+    file.puts "<tr>"
+    file.puts "<td>#{content.id}</td>"
+    file.puts "<td>#{content.title}</td>"
+    file.puts "<td>#{content.description}</td>"
+    file.puts "<td>#{content.file_name}</td>"
+    file.puts "<td>#{content.created_at.strftime('%Y-%m-%d %H:%M:%S')}</td>"
+    file.puts "<td>#{content.updated_at.strftime('%Y-%m-%d %H:%M:%S')}</td>"
+    file.puts "</tr>"
+  end
+
+  file.puts "</table></body></html>"
 end

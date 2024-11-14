@@ -61,7 +61,7 @@
     <% if @copyright_permission.communication.content_type == "application/pdf" %> 
       <object data="<%= url_for(@copyright_permission.communication) %>" type="application/pdf" style="width: 100%; aspect-ratio: 3/4;">
         <iframe src='<%= url_for(@copyright_permission.communication) %>'></iframe>
-        <p>You browser does not support PDF. Download it here: <a href="<%= url_for(@content.file) %>"></a></p>
+        <p>You browser does not support PDF. Download it here: <a href="<%= url_for(@copyright_permission.communication) %>"></a></p>
       </object>
     <% elsif @copyright_permission.communication.representable? %> 
       <%= image_tag @copyright_permission.communication.representation(resize: 0.5), size: '500'  %>

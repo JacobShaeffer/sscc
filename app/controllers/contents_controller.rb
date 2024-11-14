@@ -120,8 +120,13 @@ class ContentsController < ApplicationController
     require 'yaml'
     #@runnning_jobs = Delayed::Job.all.map(|job| YAML.load_stream(job.handler)[0].job_data["job_id"])
     if Delayed::Job.all.size > 0
-      @running_jobs = YAML.load_stream(Delayed::Job.first.handler)[0].job_data["job_id"]
-      @jobs = Delayed::Job.all.map{ |job| [YAML.load_stream(job.handler)[0].job_data["job_id"], job.locked_at] }
+      @jobs = Delayed::Job.all.map do |job|
+        handler = YAML.load_stream(job.handler)[0]
+        if handler.job_data["job_class"].include?("ContentDownloadJob")
+          [handler.job_data["job_id"], job.locked_at]
+        end
+      end.compact
+      # @jobs = Delayed::Job.all.map{ |job| [YAML.load_stream(job.handler)[0].job_data["job_id"], job.locked_at] }
     end
   end
 

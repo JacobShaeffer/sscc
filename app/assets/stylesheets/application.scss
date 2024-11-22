@@ -1,188 +1,858 @@
+// Global Variables
 $primary: #0676d8;
 $secondary: #ffc627;
-// $success: ;
-// $info: ; 
-// $warning: ;
-// $danger: ;
-// $light: ;
-// $dark: ;
-// $ASU-gold : #ffc627;
-// $ASU-maroon : #8c1d40;
 
+// Importing Bootstrap
 @import 'bootstrap';
-@import 'filepond';
 
-.auto-complete {
-	border:0; outline:0;
-}
-.auto-complete:focus {
-	border:0; outline:0;
+/* ------------------ Global Styles ------------------ */
+
+// Reset margin and padding on all elements
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.auto-complete-selected {
-	display: contents;
-	font-size: large;
-	cursor: pointer;
+// Ensure body and html have no padding or margin
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Reset margin and padding for navbar and container */
+.navbar, .header, .container-fluid, .row {
+  margin: 0;
+  padding: 0;
+}
+
+/* ------------------ Layout & Structure ------------------ */
+
+// General spacing for margins
+.mt-5 {
+  margin-top: 2rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+/* List Group Styles */
+.list-group-striped {
+  .list-group-item:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+
+  .list-group-item:last-child {
+    border-bottom: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+  }
+}
+
+// Reset container-fluid and rows
+.container-fluid, .row, section {
+  margin: 0;
+  padding: 0;
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  min-width: 13rem;
+}
+
+/* ------------------ Navbar Styles ------------------ */
+
+.navbar {
+  background-color: $primary !important;
+  padding: 5px 0;
+  width: 100vw;
+  max-width: 100%;
+  position: fixed; /* Keep the navbar fixed on top */
+  top: 0;
+  z-index: 1000; /* Ensure the navbar stays on top of the content */
+  border-bottom: none;
+
+  .container {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+  margin-left: -90px;
+
+  .logo {
+    width: 80px;
+    height: auto;
+    margin-right: 10px;
+  }
+}
+
+.navbar-nav {
+  margin-left: auto;
+
+  .nav-item {
+    margin-left: 25px;
+  }
+}
+
+/* Styling for Sign Up button */
+.navbar .nav-item .btn {
+  margin-left: 10px; /* Space between buttons */
+  background-color: #ffc627 !important; /* Force yellow background */
+  color: black !important; /* Force black text color */
+  padding: 10px 20px; /* Add padding for button */
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px; /* Round the corners */
+  border: none !important; /* Ensure no border is applied */
+  text-align: center;
+  display: inline-block;
+  text-transform: none; /* Ensure proper text casing */
+  box-shadow: none !important; /* Remove any box shadow */
+  
+  &:hover {
+    background-color: darken(#ffc627, 10%) !important; /* Darken the yellow on hover */
+    color: black !important; /* Ensure text remains black */
+  }
+
+  &:focus, &:active {
+    outline: none !important; /* Remove the focus outline */
+    background-color: #ffc627 !important; /* Ensure yellow remains on focus */
+    box-shadow: none !important; /* Remove any focus shadow */
+  }
+}
+
+
+ul.navbar-nav.ms-auto {
+  margin-right: -90px;
+}
+
+/* Responsive Navbar Adjustments */
+@media (max-width: 992px) {
+  .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-item {
+    margin-left: 0;
+    margin-bottom: 15px;
+  }
+}
+
+/* ------------------ Hero Section Styles ------------------ */
+.hero-section {
+  background-image: image-url('HomePage.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 50vh; /* Use full viewport height to cover the screen */
+  width: 100vw;
+  max-width: 100%;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  z-index: 0;
+  margin-top: -30px;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
+    z-index: 1;
+  }
+
+  .container-fluid {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    width: 100vw;
+    padding: 0;
+    margin: 0;
+  }
+
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%; // Centers vertically
+    left: 50%; // Centers horizontally
+    transform: translate(-50%, -50%); // Centers text accurately
+    z-index: 3;
+  
+    h1 {
+      font-size: 2.5rem;
+      color: white;
+      text-align: center; // Center text
+      margin: 0;
+      padding: 0;
+    }
+  }  
+
+  .gif-container {
+    margin-right: 200px;
+    margin-left: -500px;
+    max-width: 450px;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    color: white;
+    text-align: center; /* Center-align the text */
+    line-height: 1.2; /* Adjust line height to control space between lines */
+    margin: 0;
+    padding: 0;
+}
+}
+
+
+/* ------------------ Card Styles ------------------ */
+
+.card {
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  height: 100%;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  align-items: center;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+/* ------------------ Yellow Section Styles ------------------ */
+
+.yellow-section {
+  background-color: #ffc627;
+  padding: 40px 0;
+  margin-bottom: 0;
+
+  .row {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .yellow-box {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .box-title {
+      background-color: $secondary;
+    }
+
+    &:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      transform: scale(1.02);
+    }
+  }
+
+  .box-title {
+    background-color: $secondary;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+    min-height: 50px;
+  
+    h3 {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: black;
+    }
+  }
+
+  .card-title {
+    font-size: 1.4rem;
+    color: black;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+/* ------------------ Button Styles ------------------ */
+
+button.btn {
+  background-color: #0676d8 !important;
+  border-radius: 5px;
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: bold;
+  margin-top: auto;
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+
+  &:hover {
+    background-color: lighten($primary, 10%);
+  }
+}
+
+/* ------------------ Footer Styles ------------------ */
+
+// Footer Top (Blue Section with Image and Content)
+.footer-top {
+  background-color: #0676d8;
+  color: white;
+  padding: 40px 20px;
+  margin-top: 0;
+
+  .text-white {
+    color: white;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .learn-more-link {
+    color: white;
+    text-decoration: underline;
+
+    &:hover {
+      color: lighten(white, 10%);
+    }
+  }
+
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+}
+
+// Footer Bottom (White Section with Logos and Links)
+.footer-bottom {
+  background-color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .logo {
+    width: 150px;
+    height: auto;
+  }
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+
+    .footer-link {
+      color: #00509e;
+      font-size: 1rem;
+      margin-right: 15px;
+
+      &:hover {
+        color: lighten(#00509e, 10%);
+      }
+    }
+  }
+}
+
+/* ------------------ Miscellaneous Styles ------------------ */
+
+.auto-complete, .auto-complete:focus {
+  border: 0;
+  outline: 0;
 }
 
 .metadata-badge {
-	display: contents;
-	font-size: large;
-	cursor: default;
+  display: contents;
+  font-size: large;
+  cursor: default;
 }
 
 .btn-tools {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .thin-column {
-	width: 183px;
-}
-
-.list-group-striped {
-	.list-group-item:nth-child(odd) {
-		background-color: #f9f9f9;
-	}
-	.list-group-item:last-child {
-		border-bottom: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
-	}
-}
-
-.list-group-header {
-	border-bottom-width: 1px !important;
+  width: 183px;
 }
 
 .bold {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .hidden {
-	display: none;
+  display: none;
 }
 
 .error {
-	width: 100%;
-    margin-top: 0.25rem;
-    font-size: 0.875em;
-    color: #dc3545;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc3545;
 }
 
 .content-iframe {
-	width: 600px;
-	height: 600px;
-	resize: both;
-	overflow: auto;
-}
-
-.custom-tooltip {
-	--bs-tooltip-max-width: 400px;
-}
-
-.tooltip-holder {
-	width: fit-content;
-	border: 1px solid black;
-    border-radius: 100%;
-    padding: 0px 5px;
-    line-height: initial;
-	cursor: pointer;
-}
-
-.tooltip-field {
-	display: flex;
-	align-items: baseline;
-}
-
-.home-button {
-	min-height: 186px;
-	min-width: 261px;
-}
-
-.highlight-text {
-	color: $secondary;
-}
-
-.corner-ribbon {
-    position: relative;
-}
-
-.corner-ribbon__inner {
-    /* Displayed at the top left corner */
-    left: 0px;
-    position: absolute;
-    top: 0px;
-
-    /* Size */
-    height: 7rem;
-    width: 7rem;
-
-    /* Hide the part of its children which is displayed outside */
-    overflow: hidden;
-}
-
-.corner-ribbon__ribbon {
-	color: red;
-    /* Position */
-    left: 0rem;
-    position: absolute;
-    top: 2rem;
-
-    /* Size */
-    // height: 1.5rem;
-    width: 10rem;
-
-    /* Displayed diagonally */
-    transform: translate(-38px, -8px) rotate(-45deg);
-
-    /* Background color */
-    background-color: #d1d5db;
-
-    /* Centerize the text content */
-    text-align: center;
+  width: 600px;
+  height: 600px;
+  resize: both;
+  overflow: auto;
 }
 
 .file-input-button {
-	border-bottom-right-radius: 0;
-	border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .file-input-hidden {
-	z-index: 4;
-	position: relative;
-	opacity: 0;
-	top: -38px;
+  z-index: 4;
+  position: relative;
+  opacity: 0;
+  top: -38px;
 }
 
 .list-group-item {
-	--bs-bg-opacity: 1;
-    background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity));
-	cursor: pointer;
-	// max-width: 500px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+  background-color: rgba(var(--bs-light-rgb), 1);
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .badge {
-	max-width: 300px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+  max-width: 300px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .error-special {
-	position: absolute;
-	z-index: 10;
+  position: absolute;
+  z-index: 10;
 }
 
-/* Pagy navigation styles */
-.pagy-nav { padding: 2rem 0; }
-.pagy-nav .page { padding: 0 0.25rem; }
+.pagy-nav {
+  padding: 2rem 0;
+}
 
-.frame-loading { visibility: hidden; }
-turbo-frame[busy] .frame-loading { visibility: visible; }
+.pagy-nav .page {
+  padding: 0 0.25rem;
+}
 
-.dropdown-menu {
-	min-width: 13rem;
+.frame-loading {
+  visibility: hidden;
+}
+
+turbo-frame[busy] .frame-loading {
+  visibility: visible;
+}
+
+.corner-ribbon {
+  position: relative;
+}
+
+.corner-ribbon__inner {
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  height: 7rem;
+  width: 7rem;
+  overflow: hidden;
+}
+
+.corner-ribbon__ribbon {
+  color: red;
+  left: 0rem;
+  position: absolute;
+  top: 2rem;
+  width: 10rem;
+  transform: translate(-38px, -8px) rotate(-45deg);
+  background-color: #d1d5db;
+  text-align: center;
+}
+
+.file-input-button {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.file-input-hidden {
+  z-index: 4;
+  position: relative;
+  opacity: 0;
+  top: -38px;
+}
+
+.home-button {
+  min-height: 186px;
+  min-width: 261px;
+}
+
+.getting-started-section {
+  padding-left: 2rem; // Adjust for left spacing
+  padding-right: 2rem; // Adjust for right spacing
+  padding-top: 2rem; // Adjust this value for top spacing
+  padding-bottom: 2rem; // Adjust this value for bottom spacing
+}
+
+
+/* app/assets/stylesheets/application.scss */
+
+// Sign Up Page Styles
+.role-card {
+  background-color: #FFFFFF;  // White background
+  border-radius: 8px;
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .role-image {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 1.5rem;
+    object-fit: contain;
+  }
+
+  .role-title {
+    background-color: #ffc627;  // Yellow background for title only
+    color: #000000;
+    font-weight: bold;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .role-description {
+    color: #000000;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .role-subdescription {
+    color: #4B5563;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .join-button {
+    background-color: #0676d8;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: darken(#0676d8, 5%);
+    }
+  }
+}
+
+// Container background
+
+
+// Header Styles
+h2 {
+  font-size: 2rem;
+  color: #000000;
+}
+
+// Footer Styles
+.footer {
+  background-color: white;
+  padding: 1.5rem 0;
+
+  .footer-logo {
+    height: 40px;
+    width: auto;
+  }
+
+  .footer-links {
+    a {
+      color: #0676d8;
+      text-decoration: none;
+      margin-left: 2rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* Sign Up Page Specific Styles */
+.signup-header {
+  position: relative;
+  z-index: 2;
+  padding: 2rem 0;
+  text-align: center;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #000000;
+    font-size: 1rem;
+    margin-bottom: 0;
+  }
+}
+
+// .yellow-section {
+//   background-color: $secondary;
+//   padding: 40px 0 60px;
+//   margin-top: -1px;
+
+//   .container {
+//     background-color: transparent;
+//     max-width: 1200px;
+//     margin: 0 auto;
+//     padding: 0 15px;
+//   }
+// }
+
+.role-card {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  padding: 2rem;
+  height: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  .card-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+
+  .role-image {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 1.5rem;
+  }
+
+  .role-title {
+    background-color: $secondary;
+    color: #000000;
+    font-weight: bold;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+
+  .role-description, .role-subdescription {
+    color: #000000;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    max-width: 300px;
+  }
+
+  .role-subdescription {
+    color: #4B5563;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+
+  .join-button {
+    background-color: $primary;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: auto;
+
+    &:hover {
+      background-color: darken($primary, 5%);
+    }
+  }
+}
+
+/* Modal Styles */
+.modal-content {
+  border-radius: 10px;
+  
+  .modal-header {
+    border-bottom: none;
+    padding: 20px 20px 0;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 12px;
+    font-weight: bold;
+  }
+}
+
+/* Footer Styles */
+.footer {
+  background-color: white;
+  padding: 1.5rem 0;
+
+  .container {
+    background-color: transparent;
+    padding: 0 15px;
+  }
+
+  .footer-logo {
+    height: 40px;
+    width: auto;
+  }
+
+  .footer-links {
+    a {
+      color: $primary;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .role-card {
+    margin-bottom: 20px;
+  }
+}
+
+
+// Join Button Style
+.join-button {
+  background-color: #0676d8;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: lighten(#0676d8, 10%);
+  }
+}
+
+// Role Card Style
+.role-card {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .role-image {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 1.5rem;
+    object-fit: contain;
+  }
+
+  .role-title {
+    background-color: #ffc627;
+    color: #000000;
+    font-weight: bold;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .role-description, .role-subdescription {
+    color: #000000;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    max-width: 300px;
+  }
+
+  .role-subdescription {
+    color: #4B5563;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+}
+
+#join-page {
+  background-color: white; // Ensure the page has a consistent white background
+  padding-top: 80px;
+
+  .container {
+    max-width: 800px;
+    background-color: white !important; // Explicitly set white background
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .signup-header {
+    text-align: center;
+
+    h2 {
+      font-size: 2rem;
+      color: #000000; // Black text color
+    }
+  }
 }

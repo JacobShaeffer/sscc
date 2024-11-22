@@ -23,3 +23,5 @@ eagerLoadControllersFrom("controllers", application)
 // application.register(form_id, formController)
 // import filepondController, {string_identifier as filepond_id} from "./filepond_controller"
 // application.register(filepond_id, filepondController)
+import signupController, {string_identifier as signup_id} from "./signup_controller"
+application.register(signup_id, signupController)

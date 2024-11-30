@@ -1,0 +1,89 @@
+<div data-controller="signup">
+  <!-- Hero Section -->
+  <div class="hero-section px-5 py-4 rounded-3">
+    <div class="container-fluid text-center position-relative">
+      <div class="content-wrapper">
+        <h1 class="display-6 fw-bold text-white">
+          Welcome to ASU SolarSPELL Content Curation
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign Up Header Section -->
+  <div class="signup-header text-center mt-4">
+    <h2>Sign up</h2>
+    <p>Select the description that best fits your role</p>
+  </div>
+
+  <!-- Role Cards Section -->
+  <div class="container">
+    <div class="row justify-content-center g-4">
+      
+      <!-- Intern Card -->
+      <div class="col-lg-4 col-md-6">
+        <div class="role-card">
+          <div class="card-body">
+            <%= image_tag 'intern.png', class: 'role-image' %>
+            <div class="role-title">I am an Intern</div>
+            <p class="role-description">
+              I am a student intern working with SolarSPELL's Digital Librarian.
+            </p>
+            <p class="role-subdescription">
+              I will be using this site to curate content, edit metadata, and/or track copyright permission requests.
+            </p>
+             <%= button_to "Join", new_user_registration_path, method: :get, class: 'btn btn-warning ms-2' %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Volunteer Card -->
+      <div class="col-lg-4 col-md-6">
+        <div class="role-card">
+          <div class="card-body">
+            <%= image_tag 'volunteer.png', class: 'role-image' %>
+            <div class="role-title">I am a Volunteer</div>
+            <p class="role-description">
+              I am helping as a volunteer at a SolarSPELL Curate-a-Thon or Tag-a-Thon.
+            </p>
+            <p class="role-subdescription">
+              I will be using this site to curate and tag new library content.
+            </p>
+            <%= button_to "Join", new_user_registration_path, method: :get, class: 'btn btn-warning ms-2' %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community Partner Card -->
+      <div class="col-lg-4 col-md-6">
+        <div class="role-card">
+          <div class="card-body">
+            <%= image_tag 'partner.png', class: 'role-image' %>
+            <div class="role-title">I am a Community Partner</div>
+            <p class="role-description">
+              I work for an organization that is partnering with SolarSPELL.
+            </p>
+            <p class="role-subdescription">
+              I will be using this site to contribute new content and help tag resources with metadata.
+            </p>
+           <%= button_to "Join", new_user_registration_path, method: :get, class: 'btn btn-warning ms-2' %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <%= image_tag 'image 4.png', alt: 'SolarSPELL Logo', class: 'footer-logo' %>
+      </div>
+      <div class="footer-links">
+        <a href="#" class="me-4">SPELL-CC</a>
+        <a href="mailto:example@email.com">Email</a>
+      </div>
+    </div>
+  </div>
+</div>

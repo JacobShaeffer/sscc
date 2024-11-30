@@ -11,7 +11,8 @@ gem "sprockets-rails"
 
 gem 'pg'
 
-gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
+#gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
+gem "puma", "~> 5.0"
 
 # Use Javascript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
@@ -62,7 +63,6 @@ group :development do
   # gem "spring"
 
   # Use the Puma web server [https://github.com/puma/puma]
-  # gem "puma", "~> 5.0"
   # Use sqlite3 as the database for Active Record
   gem "sqlite3", "~> 1.4"
 end

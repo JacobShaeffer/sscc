@@ -10,6 +10,6 @@ class FilepondController < ApplicationController
         else
             head :not_found
         end
-    end
+        metadata_types_path
 
 end

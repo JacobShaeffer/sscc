@@ -1,24 +1,52 @@
-<h2>Log in</h2>
-
-<%= bootstrap_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+<div class="login-page">
+  <div class="hero-section">
+    <div class="overlay"></div>
+    <div class="content-wrapper">
+      <h1 class="text-white text-center">Welcome to ASU SolarSPELL Content Curation</h1>
     </div>
-  <% end %>
+  </div>
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
+  <div class="container form-section">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="card login-form">
+          <div class="card-body">
+            <h2 class="text-center fw-bold">Log in</h2>
+            <%= bootstrap_form_for(resource, as: resource_name, url: session_path(resource_name), class: "mt-4") do |f| %>
+              <div class="mb-3">
+                <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Enter your email", class: "form-control", label: false %>
+              </div>
+              <div class="mb-3">
+                <%= f.password_field :password, autocomplete: "current-password", placeholder: "Enter your password", class: "form-control", label: false %>
+              </div>
+              <% if devise_mapping.rememberable? %>
+  <div class="form-check mb-4">
+    <%= f.check_box :remember_me %>
   </div>
 <% end %>
+              <div class="d-grid">
+                <%= f.submit "Log in", class: "btn btn-primary" %>
+              </div>
+            <% end %>
+            <div class="text-center mt-3">
+              <small>Don’t have an account? <%= link_to "Sign up", new_user_registration_path, class: "text-primary" %></small>
+              <br>
+              <small><%= link_to "Forgot your password?", new_user_password_path, class: "text-primary" %></small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<%= render "devise/shared/links" %>
+  <div class="row footer-bottom p-4">
+    <div class="col-lg-6 col-md-12 text-left d-flex align-items-center">
+      <%= image_tag 'image 4.png', alt: 'SolarSPELL Logo', class: 'img-fluid logo me-3' %>
+    </div>
+
+    <div class="col-lg-6 col-md-12 text-right footer-links d-flex justify-content-end align-items-center">
+      <a href="#" class="footer-link me-3">SPELL-CC</a>
+      <a href="mailto:email@example.com" class="footer-link">Email</a>
+    </div>
+  </div>
+</div>

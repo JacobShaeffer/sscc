@@ -151,20 +151,19 @@ ul.navbar-nav.ms-auto {
   }
 }
 
-/* ------------------ Hero Section Styles ------------------ */
 .hero-section {
   background-image: image-url('HomePage.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 50vh; /* Use full viewport height to cover the screen */
+  height: 50vh; /* Full viewport height */
   width: 100vw;
   max-width: 100%;
   position: relative;
   padding: 0;
   margin: 0;
   z-index: 0;
-  margin-top: -30px;
+  margin-top: -20px;
 
   &:before {
     content: '';
@@ -187,45 +186,42 @@ ul.navbar-nav.ms-auto {
   }
 
   .content-wrapper {
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 50%; // Centers vertically
-    left: 50%; // Centers horizontally
-    transform: translate(-50%, -50%); // Centers text accurately
+    height: 100%;
     z-index: 3;
-  
-    h1 {
-      font-size: 2.5rem;
-      color: white;
-      text-align: center; // Center text
-      margin: 0;
-      padding: 0;
+
+    .gif-container {
+      position: absolute;
+      left: 2%; /* Adjust this value to control how far left the GIF is */
+      top: 70%; /* Center vertically */
+      transform: translateY(-50%); /* Correct vertical centering */
+      max-width: 450px; /* Adjust the size of the GIF */
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+      }
     }
-  }  
 
-  .gif-container {
-    margin-right: 200px;
-    margin-left: -500px;
-    max-width: 450px;
+    .text-container {
+      flex: 1; /* Allow the text container to take the remaining space */
+      position: relative;
+      margin-top: 5rem; /* Move the text downward */
+      margin-left: 20%; /* Move the text towards the right */
+      text-align: left;
 
-    img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
+      h1 {
+        font-size: 2.5rem;
+        color: white;
+        margin: 0;
+        padding: 0;
+      }
     }
   }
-
-  h1 {
-    font-size: 2.5rem;
-    color: white;
-    text-align: center; /* Center-align the text */
-    line-height: 1.2; /* Adjust line height to control space between lines */
-    margin: 0;
-    padding: 0;
-}
 }
 
 
@@ -572,7 +568,7 @@ turbo-frame[busy] .frame-loading {
   }
 
   .role-subdescription {
-    color: #4B5563;
+    color: #000000;
     margin-bottom: 2rem;
     font-size: 0.95rem;
   }
@@ -699,7 +695,7 @@ h2 {
   }
 
   .role-subdescription {
-    color: #4B5563;
+    color: #000000;
     font-size: 0.95rem;
     margin-bottom: 2rem;
   }
@@ -829,7 +825,7 @@ h2 {
   }
 
   .role-subdescription {
-    color: #4B5563;
+    color: #000000;
     font-size: 0.95rem;
     margin-bottom: 2rem;
   }
@@ -856,3 +852,112 @@ h2 {
     }
   }
 }
+
+.login-page {
+  background-color: white; // Ensure the page has a consistent white background
+  padding-top: 80px;
+
+  .hero-section {
+    background-image: image-url('HomePage.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50vh; // Full viewport height
+    position: relative;
+
+    .overlay {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5); // Dark overlay for readability
+      z-index: 1;
+    }
+
+    .content-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      z-index: 2;
+
+      h1 {
+        font-size: 2.5rem;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+
+  .form-section {
+    .card.login-form {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+      .card-body {
+        padding: 2rem;
+
+        h2 {
+          font-size: 1.75rem;
+          color: #000;
+          margin-bottom: 1rem;
+        }
+
+        .form-label {
+          font-weight: bold;
+          color: #333;
+        }
+
+        .form-control {
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+
+        .btn-primary {
+          background-color: $primary;
+          color: white;
+          border: none;
+          padding: 0.75rem 2rem;
+          font-size: 1rem;
+          border-radius: 5px;
+
+          &:hover {
+            background-color: lighten($primary, 10%);
+          }
+        }
+
+        .text-primary {
+          color: $primary;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    background-color: white;
+    padding: 1.5rem 0;
+
+    .footer-links {
+      a {
+        color: $primary;
+        text-decoration: none;
+        font-weight: 500;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+

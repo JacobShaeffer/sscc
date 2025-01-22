@@ -6,7 +6,7 @@ export default class extends Controller {
   static targets = [];
 
 	connect () {
-		console.log("form controller connected")
+		// console.log("form controller connected")
 		this.element.setAttribute('novalidate', true)
 		this.element.addEventListener('blur', this.onBlur, true)
 		this.element.addEventListener('submit', this.onSubmit)

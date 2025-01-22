@@ -7,8 +7,6 @@ class ContentsController < ApplicationController
   # GET /contents or /contents.json
   def index
     authorize Content
-    # contents_scope = filter!(Content)
-    # @pagy, @contents = pagy(contents_scope, items: 10)
 
     clear_filters!(Content)
     session["#{Content.to_s.underscore}_filters"] = {"columns" => ["title", "display_title", "user"]}
@@ -19,18 +17,29 @@ class ContentsController < ApplicationController
   # GET /contents/1 or /contents/1.json
   def show
     authorize @content
+    @metadata_types = MetadataType.all.order(:order)
+    @metadata = {}
+    @metadata_types.each do |metadata_type|
+      @metadata[metadata_type] = @content.metadata.where(metadata_type_id: metadata_type.id)
+    end
   end
 
   # GET /contents/new
   def new
     authorize Content
     @content = Content.new
+    @metadata_types = MetadataType.all.order(:order)
+    @metadata = {}
   end
 
   # GET /contents/1/edit
   def edit
     authorize @content
-    @metadata_types = MetadataType.all
+    @metadata_types = MetadataType.all.order(:order)
+    @metadata = {}
+    @metadata_types.each do |metadata_type|
+      @metadata[metadata_type] = @content.metadata.where(metadata_type_id: metadata_type.id)
+    end
   end
 
   # POST /contents or /contents.json
@@ -153,7 +162,7 @@ class ContentsController < ApplicationController
 
   def download_spreadsheet
     authorize Content
-    send_data Content.order(created_at: :desc).to_csv, filename: "ContentCuration-metadata-#{Date.today}.csv"
+    send_data Content.order(created_at: :desc).to_xlsx, filename: "ContentCuration-metadata-#{Date.today}.xlsx"
   end
 
   def download_zip

@@ -57,7 +57,7 @@
 	<div class="mb-3">
 		<label class="form-label">Metadata</label>
 		<div class="form-control">
-			<% MetadataType.all.order(:order).each do |metadata_type| %>
+			<% @metadata_types.each do |metadata_type| %>
 
 				<div class="mb-3" 
 					data-controller='multiSelect' 
@@ -71,9 +71,9 @@
 						data-action="click->multiSelect#onSearchInputClick"
 						id="metadataInput_<%= metadata_type.id %>_container"
 					>
-						<% metadata_type.metadata.each do |metadatum| %>
-							<% is_checked = @content.metadata.include?(metadatum) %>
-							<div class="auto-complete-selected <%= is_checked ? "" : "hidden" %>" 
+						<% if @metadata[metadata_type] %>
+							<% @metadata[metadata_type].each do |metadatum| %>
+							<div class="auto-complete-selected" 
 								id="metadatum_badge_<%= metadatum.id%>" 
 								data-action="mousedown->multiSelect#onBadgeClicked"
 							>
@@ -81,30 +81,21 @@
 									<%= metadatum.name %>
 								</span>
 							</div>
-							<% if is_checked%>
-								<input class="hidden" 
-										type="checkbox" 
-										name="content[metadatum_ids][]" 
-										id="content_metadatum_ids_<%= metadatum.id %>" 
-										value="<%= metadatum.id %>"
-										data-multiSelect-target="checkbox"
-										checked	
-								>
-							<% else %>
-								<input class="hidden" 
-										type="checkbox" 
-										name="content[metadatum_ids][]" 
-										id="content_metadatum_ids_<%= metadatum.id %>" 
-										value="<%= metadatum.id %>"
-										data-multiSelect-target="checkbox"
-								>
+							<input class="hidden" 
+									type="checkbox" 
+									name="content[metadatum_ids][]" 
+									id="content_metadatum_ids_<%= metadatum.id %>" 
+									value="<%= metadatum.id %>"
+									data-multiSelect-target="checkbox"
+									checked	
+							>
 							<% end %>
 						<% end %>
 						<input class="auto-complete" 
 								placeholder="Search" 
 								id="metadataInput_<%= metadata_type.id %>" 
 								data-multiSelect-target="searchInput"
-								data-action="input->multiSelect#onSearchInput" 
+								data-action="input->multiSelect#onSearchInput mouseover->multiSect#onSearchInputClick" 
 								autoComplete="off"
 								size="35"
 						>
@@ -112,9 +103,9 @@
 					<!--<p class="error">Please select metadata values</p>-->
 					
 					<div class="list-group hidden" id="metadataInput_<%= metadata_type.id %>_list">
-						<% metadata_type.metadata.first(10).each do |metadatum| %>
-							<%= render 'list-group-item', is_active: @content.metadata.include?(metadatum), metadatum: metadatum %>
-						<% end %>
+						<%# metadata_type.metadata.first(10).each do |metadatum| %>
+							<%#= render 'list-group-item', is_active: @content.metadata.include?(metadatum), metadatum: metadatum %>
+						<%# end %>
 					</div>
 				</div>
 			<% end %>

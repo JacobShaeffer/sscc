@@ -9,6 +9,11 @@ export default class extends Controller {
 		type: String
 	}
 
+    // initialize() {
+    // 	// Called once, when the controller is first instantiated
+	// 	console.log("multiselect controller initialized")
+	// }
+
 	onAddSelected(event) {
 		let name = this.searchInputTarget.value;
 		this.searchInputTarget.value = "";
@@ -55,6 +60,7 @@ export default class extends Controller {
 
 	onSearchFocusIn(event) {
 		// console.log("onSearchFocusIn", event.target.id);
+		this.autoComplete(this.typeValue, '');
 		document.getElementById(event.target.id + "_list").classList.toggle("hidden");
 	}
 
@@ -64,10 +70,12 @@ export default class extends Controller {
 	}
 
 	onSearchInput(event) {
+		// console.log("onSearchInput")
 		this.autoComplete(this.typeValue, event.target.value);
 	}
 
 	onSearchInputClick(){
+		// console.log("onSearchInputClick")
 		this.searchInputTarget.focus();
 	}
 

@@ -13,7 +13,7 @@ export default class extends Controller {
 
     initialize() {
     	// Called once, when the controller is first instantiated
-		console.log("filepond controller initialized")
+		// console.log("filepond controller initialized")
 		FilePond.registerPlugin(FilePondPluginFileValidateType);
 		FilePond.registerPlugin(FilePondPluginFileValidateSize);
 

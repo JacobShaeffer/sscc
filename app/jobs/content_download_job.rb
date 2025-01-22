@@ -4,7 +4,7 @@ class ContentDownloadJob < ApplicationJob
     around_perform :around_cleanup
 
     def perform()
-        require 'zip'
+        # require 'zip'
 
         # zip_filename = "bulk_content_download_#{Time.now.strftime('%m-%d-%y %H:%M')}.zip"
         # zipfile_path = Rails.root.join('tmp', zip_filename)
@@ -28,7 +28,8 @@ class ContentDownloadJob < ApplicationJob
         # end
 
         # Download all files to a temp directory
-        folder_path = Rails.root.join('tmp', 'unzipped')
+        folder_name = "bulk_content_download_#{Time.now.strftime('%m-%d-%y %H:%M')}"
+        folder_path = Rails.root.join('tmp', folder_name)
         Content.all.each do |content|
           filename = content.file.filename.to_s
           File.open(folder_path.join(filename), 'wb') do |file|

@@ -57,7 +57,7 @@
 			<div class="mb-3">
 				<label class="form-label">Metadata</label>
 				<div class="form-control">
-					<% MetadataType.all.order(:order).each do |metadata_type| %>
+					<% @metadata_types.each do |metadata_type| %>
 
 						<div class="mb-3" 
 							id="multiSelectFor=<%= metadata_type.id %>" 
@@ -67,11 +67,11 @@
 							<div class="form-control" 
 								id="metadataInput_<%= metadata_type.id %>_container"
 							>
-								<% metadata_type.metadata.each do |metadatum| %>
-									<% if @content.metadata.include?(metadatum) %>
-										<span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>">
-											<%= metadatum.name %>
-										</span>
+								<% if @metadata[metadata_type] %>
+									<% @metadata[metadata_type].each do |metadatum| %>
+											<span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>">
+												<%= metadatum.name %>
+											</span>
 									<% end %>
 								<% end %>
 							</div>

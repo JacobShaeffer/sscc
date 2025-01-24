@@ -71,26 +71,28 @@
 						data-action="click->multiSelect#onSearchInputClick"
 						id="metadataInput_<%= metadata_type.id %>_container"
 					>
-						<% if @metadata[metadata_type] %>
-							<% @metadata[metadata_type].each do |metadatum| %>
-							<div class="auto-complete-selected" 
-								id="metadatum_badge_<%= metadatum.id%>" 
-								data-action="mousedown->multiSelect#onBadgeClicked"
-							>
-								<span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>">
-									<%= metadatum.name %>
-								</span>
-							</div>
-							<input class="hidden" 
-									type="checkbox" 
-									name="content[metadatum_ids][]" 
-									id="content_metadatum_ids_<%= metadatum.id %>" 
-									value="<%= metadatum.id %>"
-									data-multiSelect-target="checkbox"
-									checked	
-							>
+						<div id="metadataBadge_<%= metadata_type.id %>_container">
+							<% if @metadata[metadata_type] %>
+								<% @metadata[metadata_type].each do |metadatum| %>
+								<div class="auto-complete-selected" 
+									id="metadatum_badge_<%= metadatum.id%>" 
+									data-action="mousedown->multiSelect#onBadgeClicked"
+								>
+									<span class="badge text-bg-primary" id="metadatum_badge_span_<%= metadatum.id%>">
+										<%= metadatum.name %>
+									</span>
+								</div>
+								<input class="hidden" 
+										type="checkbox" 
+										name="content[metadatum_ids][]" 
+										id="content_metadatum_ids_<%= metadatum.id %>" 
+										value="<%= metadatum.id %>"
+										data-multiSelect-target="checkbox"
+										checked	
+								>
+								<% end %>
 							<% end %>
-						<% end %>
+						</div>
 						<input class="auto-complete" 
 								placeholder="Search" 
 								id="metadataInput_<%= metadata_type.id %>" 

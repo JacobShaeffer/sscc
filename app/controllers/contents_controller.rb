@@ -105,11 +105,22 @@ class ContentsController < ApplicationController
     @metadatum = @metadata_type.metadata.create(name: params[:name], user: current_user)
     respond_to do |format|
       if @metadatum.save
-        format.turbo_stream
+        format.turbo_stream { render "add_metadatum"}
       else
         @target = @target + "_container"
         format.turbo_stream { render "add_new_metadatum_error"}
       end
+    end
+  end
+
+  def add_existing_metadatum
+    authorize Content
+    #Add a new metadatum to the database while createing a content record
+    @target = params[:target]
+    @metadata_type = MetadataType.find(params[:metadata_type_id])
+    @metadatum = @metadata_type.metadata.find(params[:metadatum_id])
+    respond_to do |format|
+      format.turbo_stream { render "add_metadatum"}
     end
   end
 

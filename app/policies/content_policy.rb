@@ -46,6 +46,10 @@ class ContentPolicy < ApplicationPolicy
     @user.admin? || @user.intern?
   end
 
+  def add_existing_metadatum?
+    true
+  end
+
   def download?
     @user.admin?
   end

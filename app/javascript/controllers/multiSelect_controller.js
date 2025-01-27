@@ -21,7 +21,7 @@ export default class extends Controller {
 
 		let params = new URLSearchParams();
 
-		let target = `metadataInput_${this.typeValue}`;
+		let target = `metadataBadge_${this.typeValue}_container`;
 
 		params.append("target", target);
 		params.append("metadata_type_id", this.typeValue);
@@ -29,17 +29,39 @@ export default class extends Controller {
 
 		get(`/contents/add_new_metadatum?${params}`, {
 			responseKind: "turbo-stream", 
-		})
+		});
 	}
 
 	onItemSelected(event) {
 		// console.log("onItemSelected", event.target.id);
-		var target_id = event.target.id.substr(13);
-		var badge_id = "metadatum_badge_" + target_id;
-		this.toggleCheckBox(target_id);
-		// console.log("badge_id", badge_id)
-		document.getElementById(badge_id).classList.toggle("hidden");
-		event.target.classList.toggle("active");
+		var metadatum_id = event.target.id.substr(13);
+		var badge_id = "metadatum_badge_" + metadatum_id;
+
+		var checkbox_id = "content_metadatum_ids_" + metadatum_id;
+		var checkbox = document.getElementById(checkbox_id);
+		if (!!checkbox){
+			// this checkbox already exists 
+			var isChecked = checkbox.checked;
+			document.getElementById(checkbox_id).checked = !isChecked;
+
+			document.getElementById(badge_id).classList.toggle("hidden");
+			event.target.classList.toggle("active");
+		}
+		else{
+			// checkbox does not exist
+			let params = new URLSearchParams();
+			let target = `metadataBadge_${this.typeValue}_container`;
+
+			params.append("target", target);
+			params.append("metadata_type_id", this.typeValue);
+			params.append("metadatum_id", metadatum_id);
+			console.log(target, this.typeValue, metadatum_id);
+
+			get(`/contents/add_existing_metadatum?${params}`, {
+				responseKind: "turbo-stream",
+			});
+		}
+
 
 		this.searchInputTarget.value = "";
 		this.autoComplete(this.typeValue, "");
@@ -50,7 +72,11 @@ export default class extends Controller {
 		var target_id = event.target.id.substr(21);
 		// console.log("target_id", target_id);
 		var listItem_id = "selector_for=" + target_id;
-		this.toggleCheckBox(target_id);
+
+		var checkbox_id = "content_metadatum_ids_" + target_id;
+		var isChecked = document.getElementById(checkbox_id).checked;
+		document.getElementById(checkbox_id).checked = !isChecked;
+
 		let selector_for = document.getElementById(listItem_id);
 		if (selector_for) {
 			selector_for.classList.toggle("active");

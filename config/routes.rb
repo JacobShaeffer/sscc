@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       get :search
       get :list
       get :add_new_metadatum
+      get :add_existing_metadatum
       get :download
       get :create_download
       get :delete_download

@@ -2,10 +2,9 @@
     <% @metadata.first(10).each do |metadatum| %>
         <%= render 'list-group-item', is_active: @selected.include?(metadatum.id.to_s), metadatum: metadatum %>
     <% end %>
-    <!--TODO:-->
-    <% if @metadata.count <= 0 %>
+    <%# if @metadata.count <= 0 %>
         <% if policy(Metadatum).create? %>
             <a class="list-group-item" data-action="mousedown->multiSelect#onAddSelected" id="adder_for=<%=@metadata_type.id%>">Add New</a>
         <% end %>
-    <% end %>
+    <%# end %>
 <% end %>

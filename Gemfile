@@ -11,7 +11,7 @@ gem "sprockets-rails"
 
 gem 'pg'
 
-gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
+gem "passenger", "= 6.0.17", require: "phusion_passenger/rack_handler"
 
 # Use Javascript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
@@ -96,3 +96,4 @@ gem 'delayed_job_active_record', '~> 4.1', '>= 4.1.2'
 gem 'daemons'
 # gem 'rest-client'
 gem 'caxlsx_rails'
+gem 'concurrent-ruby', '<= 1.3.4'

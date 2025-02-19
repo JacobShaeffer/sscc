@@ -1,5 +1,5 @@
 <%= turbo_stream.update "metadata_types_list" do %>
-    <% @metadata_types.each do |metadata_type| %>
+    <% @metadata_types.first(10).each do |metadata_type| %>
         <%#= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
         <%= render "metadata_type", metadata_type: metadata_type %>
     <% end %>

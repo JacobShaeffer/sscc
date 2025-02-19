@@ -6,6 +6,11 @@ class MetadataTypesController < ApplicationController
   def index
     authorize MetadataType
     @metadata_types = MetadataType.all.order(:order)
+    @metadata_hash = {}
+    MetadataType.all.order(:order).each do | metadataType |
+      @metadata_hash[metadataType] = metadataType.metadata
+    end
+
   end
 
   def list

@@ -1,5 +1,5 @@
     <div class="accordion" >
-      <% metadata_types.each do |metadata_type| %>
+      <% metadata_hash.each_key do |metadata_type| %>
         <div class="accordion-item" data-controller="accordion" data-accordion-type-value="<%= metadata_type.id %>">
           <h1 class="accordion-header" id="heading<%= metadata_type.id %>">
             <button class="accordion-button collapsed" 
@@ -58,7 +58,7 @@
                 </div>
               </div>
               <div class="list-group list-group-striped list-group-flush" id="metadataTable_<%= metadata_type.id %>">	
-                  <% metadata_type.metadata.each do |metadatum| %>
+                  <% metadata_hash[metadata_type].first(10).each do |metadatum| %>
                     <%= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
                   <% end %>
               </div>

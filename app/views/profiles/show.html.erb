@@ -1,0 +1,22 @@
+
+<h2>Hello <%= @user.name.to_s.humanize %></h2>
+
+<%= bootstrap_form_for(@user, url: "#") do |f| %>
+  <div class="field">
+    <%= f.email_field :email, disabled: true %>
+  </div>
+
+  <div class="field">
+    <%= f.text_field :name, disabled: true %>
+  </div>
+
+  <div class="field">
+    <%= f.text_field :role, disabled: true %>
+  </div>
+<% end %>
+
+
+<br />
+<%= link_to "Edit Information / Change Password", edit_user_registration_path, :class => "btn btn-warning mb-3"%>
+
+<!--<div><%#= button_to "Delete Account", registration_path(@user), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, :class => "btn btn-danger" %></div>-->

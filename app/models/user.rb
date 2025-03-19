@@ -10,7 +10,9 @@ class User < ApplicationRecord
     has_many :metadata
 
     # define user roles
-    enum :role, {guest: 0, organization: 1, volunteer: 2, intern: 3, admin: 99}
+    ROLES = {guest: 0, organization: 1, volunteer: 2, intern: 3, admin: 99}
+    enum role: ROLES 
+    enum suggested_role: ROLES, _prefix: :suggested
 
     # set default user role
     after_initialize :set_default_role

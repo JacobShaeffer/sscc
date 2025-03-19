@@ -4,7 +4,7 @@ $secondary: #ffc627;
 // $info: ; 
 // $warning: ;
 // $danger: ;
-// $light: ;
+$light: #ffffff;
 // $dark: ;
 // $ASU-gold : #ffc627;
 // $ASU-maroon : #8c1d40;
@@ -23,6 +23,29 @@ $secondary: #ffc627;
 	display: contents;
 	font-size: large;
 	cursor: pointer;
+}
+
+.welcome-bilboard {
+	background-image: image-url('cc_banner_cropped_tinted.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.custom-alert {
+	// width: calc(100% - 24px);
+	width: calc(100% - var(--bs-gutter-x));
+	position: absolute;
+}
+
+.attribution-text {
+	font-size: 0.5rem;
+	line-height: 0.5rem;
+	display: block;
+}
+
+.no-bg-no-border {
+	border: none;
+	background-color: transparent;
 }
 
 .metadata-badge {

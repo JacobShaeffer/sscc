@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: 'my_devise/registrations'
+  }
 
   resources :metadata_types, except: [:new, :show] do
     collection do
@@ -38,6 +40,10 @@ Rails.application.routes.draw do
   # Filepond endpoints
   delete 'filepond/remove', to: 'filepond#remove'
 
+  get 'profile', to: 'profiles#show', as: :profile
+
   get 'home/about'
+  get 'home/join'
+  get 'home/welcome'
   root 'home#index'
 end

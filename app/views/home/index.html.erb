@@ -6,64 +6,105 @@
 <a href="/?locale=es">Spanish</a>
 <a href="/?locale=fr">French</a>-->
 
-<div class="px-5 py-4 rounded-3">
-    <div class="container py-3">
-        <h1 class="display-6 fw-bold text-primary">Welcome to the SolarSPELL <br> Content Curation Website</h1>
-        <p>This is temporary text to show what it would look like if we put a description of the website here.</p>
+<div class="row welcome-bilboard">
+    <div class="col">
+        <div class="row">
+            <div class="offset-xl-2 offset-lg-1 offset-0 col-xl-2 col-lg-3 col-4 justify-content-center">
+                <%= image_tag("SPELLY-standard.png", class:"mx-auto d-block m-4", width:"192", height:"177") %>
+            </div>
+            <div class="col-xl-6 col-lg-7 col-8 d-flex justify-content-center align-items-center text-center">
+                <h1 class="fw-bold text-light">Welcome to ASU SolarSPELL <br> Content Curation</h1>
+            </div>
+        </div>
     </div>
 </div>
-<div class="row px-5">
-    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title">Content</h2>
-                <p class="mt-2 mb-0 highlight-text"><strong>use the content page to:</strong></p>
-                <ol>
-                    <li>submit and tag new content.</li>
-                    <li>view your own/all content that has already been submitted and tagged.</li>
-                    <li>edit content that has already been submitted and tagged.</li>
-                </ol>
-                <!--<a href="" class="btn btn-primary">Start Now</a>-->
-                <%= link_to "Start Now", contents_path, class: "btn btn-primary" %>
+<div class="row my-2 p-4">
+        <h5>Getting Started</h3>
+        <p>In order to meet the global need for credible, relevant information, the ASU SolarSPELL Initiative relies on people like you to help us curate and tag shareable content. Scroll down to learn how to get started!</p>
+</div>
+<div class="row bg-secondary gy-3 pb-3 px-4">
+    <div class="col-lg-4 offset-lg-0 col-md-8 offset-md-2 col-sm-12">
+        <div class="card h-100">
+            <div class="text-center">
+                <%= image_tag("work_illustrations_storyset/Image upload-amico.png", width:"200") %>
+                <a class="attribution-text text-primary" href="https://storyset.com/work" >Work illustrations by Storyset</a>
+            </div>
+            <div class="card-body px-6">
+                <div class="card-title text-center mb-4">
+                    <div class="d-inline-block bg-secondary px-2 py-1">
+                        <h4 class="mb-0">Content</h4>
+                    </div>
+                </div>
+                <ul>
+                    <li>Subimt & tag new content.</li>
+                    <li>View or edit content that has already been submitted & tagged.</li>
+                </ul>
+            </div>
+            <div class="card-footer no-bg-no-border">
+                <div class="text-center mb-2">
+                    <%= link_to "Get Started", contents_path, class: "btn btn-primary" %>
+                </div>
             </div>
         </div>	
-<!--        <button type="button" class="corner-ribbon btn btn-outline-primary btn-lg btn-block py-3 home-button">
-            <h1 class="text-center">Content</h1>
-            <div class="corner-ribbon__inner"><div class="corner-ribbon__ribbon">Start Here</div></div>
-        </button>
-        <div class="px-3">
-            <p class="mt-2 mb-0"><strong>use the content page to:</strong></p>
-            <ol>
-                <li>submit and tag new content.</li>
-                <li>view your own/all content that has already been submitted and tagged.</li>
-                <li>edit content that has already been submitted and tagged.</li>
-            </ol>
-        </div>-->
     </div>
-    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title">Copyright Permission Requests</h2>
-                <p class="mt-2 mb-0 highlight-text"><strong>Use the Copyright page to:</strong></p>
-                <ol>
-                    <li>View organizations that we have already contacted for permission to share their content.</li>
-                    <li>Edit copyright permission information for organizations.</li>
-                    <li>Document any new organizations you have contacted for permission to share their content.</li>
-                </ol>
-                <!--<a href="#" class="btn btn-primary">Go Now</a>-->
-                <%= link_to "Go Now", copyright_permissions_path, class: "btn btn-primary" %>
+    <!--<div class="col-xl-4 col-lg-12 col-md-6 col-sm-12">-->
+    <div class="col-lg-4 offset-lg-0 col-md-8 offset-md-2 col-sm-12">
+        <div class="card h-100">
+            <div class="text-center">
+                <%= image_tag("work_illustrations_storyset/Developer activity-bro.png", class:"mx-auto d-block", width:"200") %>
+                <a class="attribution-text text-primary" href="https://storyset.com/work" >Work illustrations by Storyset</a>
+            </div>
+            <div class="card-body px-6">
+                <div class="card-title text-center mb-4">
+                    <div class="d-inline-block bg-secondary px-2 py-1">
+                        <h4 class="mb-0">Metadata</h4>
+                    </div>
+                </div>
+                <ul>
+                    <li>View metadata tags that have already been used.</li>
+                    <li>Metadata interns & MLIS students can edit metadata fields here.</li>
+                </ul>
+            </div>
+            <div class="card-footer no-bg-no-border">
+                <div class="text-center mb-2">
+                    <%= link_to "Get Started", copyright_permissions_path, class: "btn btn-primary" %>
+                </div>
             </div>
         </div>	
-<!--        <button type="button" class="btn btn-outline-primary btn-lg btn-block py-3 home-button">
-            <h1 class="text-center">Copyright Permission Requests</h1>
-        </button>
-        <div class="px-3">
-            <p class="mt-2 mb-0"><strong>Use the Copyright page to:</strong></p>
-            <ol>
-                <li>View organizations that we have already contacted for permission to share their content.</li>
-                <li>Edit copyright permission information for organizations.</li>
-                <li>Document any new organizations you have contacted for permission to share their content.</li>
-            </ol>
-        </div>-->
+    </div>
+    <!--<div class="col-xl-4 col-lg-12 col-md-6 col-sm-12">-->
+    <div class="col-lg-4 offset-lg-0 col-md-8 offset-md-2 col-sm-12">
+        <div class="card h-100">
+            <div class="text-center">
+                <%= image_tag("work_illustrations_storyset/Connecting teams-rafiki.png", width:"200") %>
+                <a class="attribution-text text-primary" href="https://storyset.com/work" >Work illustrations by Storyset</a>
+            </div>
+            <div class="card-body px-6">
+                <div class="card-title text-center mb-4">
+                    <div class="d-inline-block bg-secondary px-2 py-1">
+                        <h4 class="mb-0">Copyright Permission Requests</h4>
+                    </div>
+                </div>
+                <ul>
+                    <li>View or edit copyright permission information for organizations we've already contected.</li>
+                    <li>Document new organizations you've contacted for permission to share their content.</li>
+                </ul>
+            </div>
+            <div class="card-footer no-bg-no-border">
+                <div class="text-center mb-2">
+                    <%= link_to "Get Started", copyright_permissions_path, class: "btn btn-primary" %>
+                </div>
+            </div>
+        </div>	
+    </div>
+</div>
+<div class="row bg-primary py-3 px-4 align-items-center">
+    <div class="col-xl-3 col-lg-4 col-md-5">
+        <%= image_tag("SolarSPELL-Lesotho.jpg", class:"rounded-2 img-fluid mx-auto d-block", width:"300") %>
+    </div>
+    <div class="col-xl-9 col-lg-8 col-md-7">
+        <h3 class="text-light">What is the SolarSPELL Initiative?</h3>
+        <p class="text-light">The ASU SolarSPELL Initiative empowers offline communities globally by providing localized libraries and building 21st century skills that people need to make informed decisions, increase their self-reliance, and improve their quality of life.</p>
+        <p class="text-light">Thanks to help from students, volunteers and community partners, our library collections contain more than 45,000 multimedia resources, and counting!</p>
     </div>
 </div>

@@ -1,0 +1,89 @@
+<div class="row welcome-bilboard">
+    <div class="col">
+        <div class="row">
+            <div class="d-flex justify-content-center align-items-center text-center">
+                <h1 class="fw-bold text-light">Welcome to ASU SolarSPELL <br> Content Curation</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row my-2 p-4 text-center">
+        <h5>Sign up</h3>
+        <p>Select the description that best fits your role</p>
+</div>
+<div class="row gy-3 pb-3 px-4">
+    <div class="col-lg-4 offset-lg-0 col-md-8 offset-md-2 col-sm-12">
+        <div class="card h-100">
+            <div class="text-center">
+                <%= image_tag("work_illustrations_storyset/Image upload-amico.png", width:"200") %>
+                <a class="attribution-text text-primary" href="https://storyset.com/work" >Work illustrations by Storyset</a>
+            </div>
+            <div class="card-body px-6">
+                <div class="card-title text-center mb-4">
+                    <div class="d-inline-block bg-secondary px-2 py-1">
+                        <h4 class="mb-0">I am an Intern</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>I am a student intern working with SolarSPELL's Digital Librarian.</p>
+                    <p>I will be using this site to curate content, edit metadata, and/or track copyright permission requests.</p>
+                </div>
+            </div>
+            <div class="card-footer no-bg-no-border">
+                <div class="text-center mb-2">
+                    <%= link_to "Join", new_user_registration_path(:suggested_role => "intern"), class: "btn btn-primary" %>
+                </div>
+            </div>
+        </div>	
+    </div>
+    <!--<div class="col-xl-4 col-lg-12 col-md-6 col-sm-12">-->
+    <div class="col-lg-4 offset-lg-0 col-md-8 offset-md-2 col-sm-12">
+        <div class="card h-100">
+            <div class="text-center">
+                <%= image_tag("work_illustrations_storyset/Developer activity-bro.png", class:"mx-auto d-block", width:"200") %>
+                <a class="attribution-text text-primary" href="https://storyset.com/work" >Work illustrations by Storyset</a>
+            </div>
+            <div class="card-body px-6">
+                <div class="card-title text-center mb-4">
+                    <div class="d-inline-block bg-secondary px-2 py-1">
+                        <h4 class="mb-0">I am a Volunteer</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>I am helping as a volunteer at a SolarSPELL Curate-a-Thon or Tag-a-Thon.</p>
+                    <p>I will be using the site to curate and tag new library content.</p>
+                </div>
+            </div>
+            <div class="card-footer no-bg-no-border">
+                <div class="text-center mb-2">
+                    <%= link_to "Join", new_user_registration_path(:suggested_role => "volunteer"), class: "btn btn-primary" %>
+                </div>
+            </div>
+        </div>	
+    </div>
+    <!--<div class="col-xl-4 col-lg-12 col-md-6 col-sm-12">-->
+    <div class="col-lg-4 offset-lg-0 col-md-8 offset-md-2 col-sm-12">
+        <div class="card h-100">
+            <div class="text-center">
+                <%= image_tag("work_illustrations_storyset/Connecting teams-rafiki.png", width:"200") %>
+                <a class="attribution-text text-primary" href="https://storyset.com/work" >Work illustrations by Storyset</a>
+            </div>
+            <div class="card-body px-6">
+                <div class="card-title text-center mb-4">
+                    <div class="d-inline-block bg-secondary px-2 py-1">
+                        <h4 class="mb-0">I am a Community Partner</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>I work for an organization that is partnering with SolarSPELL.</p>
+                    <p>I will be using this site to contribute new content and help tag resources with metadata.</p>
+                </body>
+            </div>
+            <div class="card-footer no-bg-no-border">
+                <div class="text-center mb-2">
+                    <%= link_to "Join", new_user_registration_path(:suggested_role => "organization"), class: "btn btn-primary" %>
+                </div>
+            </div>
+        </div>	
+    </div>
+</div>

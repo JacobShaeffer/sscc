@@ -12,7 +12,7 @@
 
   <body class="body">
     <%= render "layouts/navbar" %>
-    <div class="container pt-3">
+    <div class="container-fluid">
       <div id="alert">
         <%= render "layouts/alert" %>
       </div>
@@ -21,5 +21,6 @@
       </div>
       <%= yield %>
     </div>
+    <%= render "layouts/footer" %>
   </body>
 </html>

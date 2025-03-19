@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_01_220955) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_13_235042) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -90,6 +90,60 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_01_220955) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "libraries", force: :cascade do |t|
+    t.string "name"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_libraries_on_user_id"
+  end
+
+  create_table "library_contents", force: :cascade do |t|
+    t.integer "library_id", null: false
+    t.integer "parent_folder_id", null: false
+    t.integer "content_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_library_contents_on_content_id"
+    t.index ["library_id"], name: "index_library_contents_on_library_id"
+    t.index ["parent_folder_id"], name: "index_library_contents_on_parent_folder_id"
+    t.index ["user_id"], name: "index_library_contents_on_user_id"
+  end
+
+  create_table "library_folders", force: :cascade do |t|
+    t.integer "library_id", null: false
+    t.integer "parent_folder_id", null: false
+    t.string "name"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["library_id"], name: "index_library_folders_on_library_id"
+    t.index ["parent_folder_id"], name: "index_library_folders_on_parent_folder_id"
+    t.index ["user_id"], name: "index_library_folders_on_user_id"
+  end
+
+  create_table "library_modules", force: :cascade do |t|
+    t.integer "library_id", null: false
+    t.integer "smodule_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["library_id"], name: "index_library_modules_on_library_id"
+    t.index ["smodule_id"], name: "index_library_modules_on_smodule_id"
+    t.index ["user_id"], name: "index_library_modules_on_user_id"
+  end
+
+  create_table "library_versions", force: :cascade do |t|
+    t.integer "library_id", null: false
+    t.decimal "version", precision: 5, scale: 3
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["library_id"], name: "index_library_versions_on_library_id"
+    t.index ["user_id"], name: "index_library_versions_on_user_id"
+  end
+
   create_table "metadata", force: :cascade do |t|
     t.string "name"
     t.integer "metadata_type_id", null: false
@@ -109,6 +163,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_01_220955) do
     t.index ["user_id"], name: "index_metadata_types_on_user_id"
   end
 
+  create_table "smodules", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_smodules_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -124,6 +187,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_01_220955) do
     t.datetime "updated_at", null: false
     t.integer "role"
     t.string "name"
+    t.integer "suggested_role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -133,7 +197,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_01_220955) do
   add_foreign_key "contents", "copyright_permissions"
   add_foreign_key "contents", "users"
   add_foreign_key "copyright_permissions", "users"
+  add_foreign_key "libraries", "users"
+  add_foreign_key "library_contents", "contents"
+  add_foreign_key "library_contents", "libraries"
+  add_foreign_key "library_contents", "library_folders", column: "parent_folder_id"
+  add_foreign_key "library_contents", "users"
+  add_foreign_key "library_folders", "libraries"
+  add_foreign_key "library_folders", "library_folders", column: "parent_folder_id"
+  add_foreign_key "library_folders", "users"
+  add_foreign_key "library_modules", "libraries"
+  add_foreign_key "library_modules", "smodules"
+  add_foreign_key "library_modules", "users"
+  add_foreign_key "library_versions", "libraries"
+  add_foreign_key "library_versions", "users"
   add_foreign_key "metadata", "metadata_types"
   add_foreign_key "metadata", "users"
   add_foreign_key "metadata_types", "users"
+  add_foreign_key "smodules", "users"
 end

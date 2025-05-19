@@ -13,7 +13,6 @@ class ContentsController < ApplicationController
     @pagy, @contents = pagy(Content.order(created_at: :desc), items: 10)
   end
   
-  
   # GET /contents/1 or /contents/1.json
   def show
     authorize @content
@@ -151,9 +150,8 @@ class ContentsController < ApplicationController
   end
 
   def create_download
-    @job_id = ContentDownloadJob.perform_later().job_id
-    #figure out how to use job_id to check the status of the job???
-    # or use the existance of the unfinished zip as a status indicator
+    contents_scope = filter!(Content)
+    @job_id = ContentDownloadJob.perform_later(contents_scope.pluck(:id)).job_id
   end
 
   def delete_download
@@ -173,7 +171,8 @@ class ContentsController < ApplicationController
 
   def download_spreadsheet
     authorize Content
-    send_data Content.order(created_at: :desc).to_xlsx, filename: "ContentCuration-metadata-#{Date.today}.xlsx"
+    contents_scope = filter!(Content)
+    send_data contents_scope.order(created_at: :desc).to_xlsx, filename: "ContentCuration-metadata-#{Date.today}.xlsx"
   end
 
   def download_zip

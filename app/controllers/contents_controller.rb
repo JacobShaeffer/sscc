@@ -9,7 +9,14 @@ class ContentsController < ApplicationController
     authorize Content
 
     clear_filters!(Content)
-    session["#{Content.to_s.underscore}_filters"] = {"columns" => ["title", "display_title", "user"]}
+
+    log("This is a test")
+    warn("this is a warning")
+    err("this is an error")
+
+    if(session["#{Content.to_s.underscore}_filters"].blank?)
+      session["#{Content.to_s.underscore}_filters"] = {"columns" => ["title", "display_title", "user"]}
+    end
     @pagy, @contents = pagy(Content.order(created_at: :desc), items: 10)
   end
   
@@ -157,13 +164,13 @@ class ContentsController < ApplicationController
   def delete_download
     authorize Content
     zip_filename = params[:filename]
-    puts(zip_filename)
+    log(zip_filename)
     raw_names = Dir[ Rails.root.join("tmp", "bulk_content_download_*.zip") ]
     full_path = Rails.root.join('tmp', zip_filename)
 
     if full_path in raw_names
-      puts(full_path)
-      puts(File.exist?(full_path))
+      log(full_path)
+      log(File.exist?(full_path))
       File.delete(full_path) if File.exist?(full_path)
     end
 

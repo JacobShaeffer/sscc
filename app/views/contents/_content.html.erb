@@ -6,8 +6,6 @@
     <div class="card card-body">
     <%= bootstrap_form_with url: list_contents_path, layout: :inline, method: :get, html: {class: "mb-2"}, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
       <%= form.text_field :title, 
-            #hide_label: true,
-            #placeholder: "#{column_name}",
             autocomplete: "off",
             data: {action: "input->filters#filter"},
             value: session.dig('content_filters',:title)
@@ -107,7 +105,6 @@
         <%= render partial: "sortable-header", locals: {column: "updated_at"} %>
 
         <% MetadataType.all.each do |metadata_type| %>
-          <%# puts session.dig("content_filters", "columns"), metadata_type.name, metadata_type.id %>
           <% if session.dig("content_filters", "columns")&.include?(metadata_type.id.to_s) %>
             <th><%= metadata_type.name %></th>
           <% end %>

@@ -44,7 +44,6 @@ class Content < ApplicationRecord
     if filters['metadata'].present?
       filters['metadata'].keys.each do |metadata_type_id|
         if filters['metadata'][metadata_type_id].present?
-          puts "metadata_type_id: #{metadata_type_id}"
           filtered = filtered.by_metadata_type_and_metadata(metadata_type_id, filters['metadata'][metadata_type_id])
         end
       end
@@ -186,27 +185,3 @@ class Content < ApplicationRecord
   end
 
 end
-
-# html_file_path = Rails.root.join('contents.html')
-
-# # Open a new HTML file for writing
-# File.open(html_file_path, 'w') do |file|
-#   file.puts "<html><body><table border='1'>"
-
-#   # Add header row
-#   file.puts "<tr><th>ID</th><th>Title</th><th>Description</th><th>File Name</th><th>Created At</th><th>Updated At</th></tr>"
-
-#   # Add data rows
-#   contents.find_each do |content|
-#     file.puts "<tr>"
-#     file.puts "<td>#{content.id}</td>"
-#     file.puts "<td>#{content.title}</td>"
-#     file.puts "<td>#{content.description}</td>"
-#     file.puts "<td>#{content.file_name}</td>"
-#     file.puts "<td>#{content.created_at.strftime('%Y-%m-%d %H:%M:%S')}</td>"
-#     file.puts "<td>#{content.updated_at.strftime('%Y-%m-%d %H:%M:%S')}</td>"
-#     file.puts "</tr>"
-#   end
-
-#   file.puts "</table></body></html>"
-# end

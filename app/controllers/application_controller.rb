@@ -13,6 +13,16 @@ class ApplicationController < ActionController::Base
 		I18n.with_locale(locale, &action)
 	end
 
+	def log(string)
+		puts "\e[38;2;0;255;0m#{string}\e[0m"
+	end
+	def warn(string)
+		puts "\e[38;2;255;255;0m#{string}\e[0m"
+	end
+	def err(string)
+		puts "\e[38;2;255;0;0m#{string}\e[0m"
+	end
+
 	protected
 
 	def configure_permitted_parameters

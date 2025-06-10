@@ -1,29 +1,51 @@
+  <%= debug(session.dig('content_filters')) %> 
+  <% 
+
+    filter_values = get_filter_values 
+
+    metadata_type_values = {} 
+    are_metadata_filters_active = false
+    MetadataType.all.each do |metadata_type|
+      value = session.dig('content_filters', 'metadata', metadata_type.id.to_s) || ""
+      metadata_type_values[metadata_type.id] = value
+      if !value.empty? 
+        are_metadata_filters_active = true
+      end
+    end
+
+    are_filters_active = !title.empty? || !display_title.empty? ||
+                          !user.empty? || !copyright_permission.empty? ||
+                          !year_of_publication_from.empty? || !year_of_publication_to.empty? ||
+                          !description.empty? || !filename.empty? ||
+                          are_metadata_filters_active
+  %>
+
   
   <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-    Search 
+    Filters 
   </button>
-  <div class="collapse" id="collapseExample">
+  <div class="collapse <%= are_filters_active ? "show" : "" %>" id="collapseExample">
     <div class="card card-body">
-    <%= bootstrap_form_with url: list_contents_path, layout: :inline, method: :get, html: {class: "mb-2"}, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
+    <%= content_filters_form(url: list_contents_path) do |form| %>
       <%= form.text_field :title, 
             autocomplete: "off",
             data: {action: "input->filters#filter"},
-            value: session.dig('content_filters',:title)
+            value: filter_values[:title]
       %>
       <%= form.text_field :display_title, 
             autocomplete: "off",
             data: {action: "input->filters#filter"},
-            value: session.dig('content_filters',:display_title)
+            value: filter_values[:display_title]
       %>
       <%= form.text_field :user,
             autocomplete: "off",
             data: {action: "input->filters#filter"},
-            value: session.dig('content_filters',:user)
+            value: filter_values[:user]
       %>
       <%= form.select :copyright_permission, 
             options_for_select(
               CopyrightPermission.all.pluck(:organization_name, :id),
-              session.dig('content_filters',:copyright_permission)
+              filter_values[:copyright_permission]
             ),
             { include_blank: true },
             data: {action: "input->filters#filter"}
@@ -31,32 +53,32 @@
       <%= form.number_field :year_of_publication_from, 
             autocomplete: "off",
             data: {action: "input->filters#filter"},
-            value: session.dig('content_filters',:year_of_publication_from)
+            value: filter_values[:year_of_publication_from]
       %>
       <%= form.number_field :year_of_publication_to, 
             autocomplete: "off",
             data: {action: "input->filters#filter"},
-            value: session.dig('content_filters',:year_of_publication_to)
+            value: filter_values[:year_of_publication_to]
       %>
       <%= form.text_field :description, 
             autocomplete: "off",
             data: {action: "input->filters#filter"},
-            value: session.dig('content_filters',:description)
+            value: filter_values[:description]
       %>
       <%= form.text_field :filename, 
             autocomplete: "off",
             data: {action: "input->filters#filter"},
-            value: session.dig('content_filters',:filename)
+            value: filter_values[:filename]
       %>
     <% end %>
     <hr>
-    <%= bootstrap_form_with url: list_contents_path, layout: :inline, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
+    <%= content_filtes_form(url: list_contents_path) do |form| %>
       <% MetadataType.all.each do |metadata_type| %>
         <%= form.text_field "metadata[#{metadata_type.id}]",
               label: metadata_type.name,
               autocomplete: "off",
               data: {action: "input->filters#filter"},
-              value: session.dig('content_filters',metadata_type.id)
+              value: metadata_type_values[metadata_type.id]
         %>
       <% end %>
     <% end %>
@@ -67,7 +89,7 @@
       Column Select
     </button>
     <div class="dropdown-menu p-3">
-      <%= bootstrap_form_with url: list_contents_path, method: :get, data: {controller: "filters", filters_target: "form", turbo_frame: :content_table} do |form| %>
+      <%= content_filtes_form(url: list_contents_path) do |form| %>
         <div class="mb-3">
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "title"} %>
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "display_title"} %>
@@ -106,7 +128,8 @@
 
         <% MetadataType.all.each do |metadata_type| %>
           <% if session.dig("content_filters", "columns")&.include?(metadata_type.id.to_s) %>
-            <th><%= metadata_type.name %></th>
+            <!--<th><%#= metadata_type.name %></th>-->
+            <%= render partial: "sortable-header", locals: {column: metadata_type.name} %>
           <% end %>
         <% end %>
 
@@ -161,6 +184,13 @@
     </tbody>
   </table>
   <%= raw pagy_bootstrap_nav(pagy) %>
+  <%= content_filters_form(url: list_contents_path) do |form| %>
+    <%= form.select :items_per_page, 
+      options_for_select(["10", "20", "50", "100"], session.dig('content_filters', :items_per_page.to_s) || "10"),
+      { },
+      data: {action: "input->filters#filter"}
+    %>
+  <% end %>
 <% end %>
 
 

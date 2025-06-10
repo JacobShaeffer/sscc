@@ -12,9 +12,9 @@ class CopyrightPermission < ApplicationRecord
   validates :organization_name, presence: true, allow_blank: false
   validates :organization_contact_information, presence: true, allow_blank: false
 
-  #List of searchable columns
-  SEARCHABLE_COLUMNS = %i[ organization_name organization_website organization_contact_information date_contacted date_contacted_from date_contacted_to date_of_response date_of_response_from date_of_response_to granted notes ].freeze
-  FILTER_PARAMS = [SEARCHABLE_COLUMNS + %i[sort direction], :columns => []].freeze
+  #List of filterable columns
+  FILTERABLE_COLUMNS = %i[ organization_name organization_website organization_contact_information date_contacted date_contacted_from date_contacted_to date_of_response date_of_response_from date_of_response_to granted notes ].freeze
+  FILTER_PARAMS = [FILTERABLE_COLUMNS + %i[sort direction], :columns => []].freeze
 
   scope :by_organization_name,                      ->  (organization_name) { where('lower(organization_name) LIKE lower(?)', "%#{organization_name}%") }
   scope :by_organization_website,                   ->  (organization_website) { where('lower(organization_website) LIKE lower(?)', "%#{organization_website}%") }

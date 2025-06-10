@@ -13,18 +13,16 @@
       end
     end
 
-    are_filters_active = !title.empty? || !display_title.empty? ||
-                          !user.empty? || !copyright_permission.empty? ||
-                          !year_of_publication_from.empty? || !year_of_publication_to.empty? ||
-                          !description.empty? || !filename.empty? ||
-                          are_metadata_filters_active
+    are_filters_active = filter_values.values.any? { |v| v.to_s.strip != ""}
+
+    filters_active = are_filters_active || are_metadata_filters_active
   %>
 
   
   <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
     Filters 
   </button>
-  <div class="collapse <%= are_filters_active ? "show" : "" %>" id="collapseExample">
+  <div class="collapse <%= filters_active ? "show" : "" %>" id="collapseExample">
     <div class="card card-body">
     <%= content_filters_form(url: list_contents_path) do |form| %>
       <%= form.text_field :title, 
@@ -72,7 +70,7 @@
       %>
     <% end %>
     <hr>
-    <%= content_filtes_form(url: list_contents_path) do |form| %>
+    <%= content_filters_form(url: list_contents_path) do |form| %>
       <% MetadataType.all.each do |metadata_type| %>
         <%= form.text_field "metadata[#{metadata_type.id}]",
               label: metadata_type.name,
@@ -89,7 +87,7 @@
       Column Select
     </button>
     <div class="dropdown-menu p-3">
-      <%= content_filtes_form(url: list_contents_path) do |form| %>
+      <%= content_filters_form(url: list_contents_path) do |form| %>
         <div class="mb-3">
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "title"} %>
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "display_title"} %>
@@ -101,11 +99,12 @@
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "created_at"} %>
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "updated_at"} %>
         </div>
+        <!--FIXME: The session values are not being properly rendered, on page refresh the checkboxes are unchecked-->
         <%= form.collection_check_boxes :columns,
               MetadataType.order(:name), :id, :name,
               label: "Metadata",
               data: {action: "input->filters#filter"},
-              value: session.dig('content_filters',:columns),
+              value: session.dig('content_filters',:columns.to_s),
               class: "w-100"
         %>
       <% end %>
@@ -116,23 +115,23 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <%= render partial: "sortable-header", locals: {column: "title"} %>
-        <%= render partial: "sortable-header", locals: {column: "display_title"} %>
-        <%= render partial: "sortable-header", locals: {column: "user"} %>
-        <%= render partial: "sortable-header", locals: {column: "copyright_permission"} %>
-        <%= render partial: "sortable-header", locals: {column: "year_of_publication"} %>
-        <%= render partial: "sortable-header", locals: {column: "description"} %>
-        <%= render partial: "sortable-header", locals: {column: "filename"} %>
-        <%= render partial: "sortable-header", locals: {column: "created_at"} %>
-        <%= render partial: "sortable-header", locals: {column: "updated_at"} %>
-
-        <% MetadataType.all.each do |metadata_type| %>
-          <% if session.dig("content_filters", "columns")&.include?(metadata_type.id.to_s) %>
-            <!--<th><%#= metadata_type.name %></th>-->
-            <%= render partial: "sortable-header", locals: {column: metadata_type.name} %>
-          <% end %>
-        <% end %>
-
+        <%#= render partial: "sortable-header", locals: {column: "title"} %>
+        <%#= render partial: "sortable-header", locals: {column: "display_title"} %>
+        <%#= render partial: "sortable-header", locals: {column: "user"} %>
+        <%#= render partial: "sortable-header", locals: {column: "copyright_permission"} %>
+        <%#= render partial: "sortable-header", locals: {column: "year_of_publication"} %>
+        <%#= render partial: "sortable-header", locals: {column: "description"} %>
+        <%#= render partial: "sortable-header", locals: {column: "filename"} %>
+        <%#= render partial: "sortable-header", locals: {column: "created_at"} %>
+        <%#= render partial: "sortable-header", locals: {column: "updated_at"} %>
+<!---->
+        <%# MetadataType.all.each do |metadata_type| %>
+          <%# if session.dig("content_filters", "columns")&.include?(metadata_type.id.to_s) %>
+<!--            <th><%#= metadata_type.name %></th>-->
+          <%# end %>
+        <%# end %>
+<!---->
+        <%= content_table_headers %>
         <th colspan="2">Actions</th>
       </tr>
     </thead>

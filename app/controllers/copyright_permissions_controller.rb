@@ -1,7 +1,7 @@
 class CopyrightPermissionsController < ApplicationController
   include Filterable
   before_action :set_copyright_permission, only: %i[ show edit update destroy ]
-  before_action :set_searchable_columns, only: %i[ index list ]
+  before_action :set_filterable_columns, only: %i[ index list ]
 	before_action :authenticate_user!
 
   def index
@@ -85,8 +85,8 @@ class CopyrightPermissionsController < ApplicationController
       @copyright_permission = CopyrightPermission.find(params[:id])
     end
 
-    def set_searchable_columns
-      @searchable_columns = CopyrightPermission::SEARCHABLE_COLUMNS
+    def set_filterable_columns
+      @filterable_columns = CopyrightPermission::FILTERABLE_COLUMNS
     end
 
     # Only allow a list of trusted parameters through.

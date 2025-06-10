@@ -1,23 +1,25 @@
 class ContentsController < ApplicationController
   include Filterable
   before_action :set_content, only: %i[ show edit update destroy ]
-  before_action :set_searchable_columns, only: %i[ index list ]
+  before_action :set_filterable_columns, only: %i[ index list ]
 	before_action :authenticate_user!
 
   # GET /contents or /contents.json
   def index
     authorize Content
 
-    clear_filters!(Content)
+    # clear_filters!(Content)
 
-    log("This is a test")
-    warn("this is a warning")
-    err("this is an error")
+    # log("This is a test")
+    # warn("this is a warning")
+    # err("this is an error")
 
     if(session["#{Content.to_s.underscore}_filters"].blank?)
       session["#{Content.to_s.underscore}_filters"] = {"columns" => ["title", "display_title", "user"]}
     end
-    @pagy, @contents = pagy(Content.order(created_at: :desc), items: 10)
+    items_per_page = session.dig('content_filters', :items_per_page.to_s)
+
+    @pagy, @contents = pagy(Content.order(created_at: :desc), items: items_per_page || 10)
   end
   
   # GET /contents/1 or /contents/1.json
@@ -135,7 +137,9 @@ class ContentsController < ApplicationController
 
     contents_scope = filter!(Content)
 
-    @pagy, @contents = pagy(contents_scope.order(created_at: :desc), items: 10)
+    items_per_page = session.dig('content_filters', :items_per_page.to_s)
+
+    @pagy, @contents = pagy(contents_scope.order(created_at: :desc), items: items_per_page || 10) 
     render(partial: "content", locals: { contents: @contents, pagy: @pagy })
   end
 
@@ -194,8 +198,8 @@ class ContentsController < ApplicationController
       @content = Content.find(params[:id])
     end
 
-    def set_searchable_columns
-      @searchable_columns = Content::SEARCHABLE_COLUMNS
+    def set_filterable_columns
+      @filterable_columns = Content::FILTERABLE_COLUMNS
     end
 
     # Only allow a list of trusted parameters through.

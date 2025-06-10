@@ -11,9 +11,9 @@ class Content < ApplicationRecord
   validates :description, presence: true, allow_blank: false
   validates :file, presence: true, blob: { content_type: ['application/pdf', 'audio/mpeg', 'video/mp4'], size_range: 0..(256.megabytes) }
 
-  #List of searchable columns
-  SEARCHABLE_COLUMNS = %i[ title user copyright_permission display_title description year_of_publication year_of_publication_from year_of_publication_to filename ].freeze
-  FILTER_PARAMS = [SEARCHABLE_COLUMNS + %i[sort direction], :columns => [], :metadata => {}].freeze
+  #List of filterable columns
+  FILTERABLE_COLUMNS = %i[ title user copyright_permission display_title description year_of_publication year_of_publication_from year_of_publication_to filename ].freeze
+  FILTER_PARAMS = [FILTERABLE_COLUMNS + %i[sort direction], :items_per_page, :columns => [], :metadata => {}].freeze
 
   scope :by_title,                      ->  (title) { where('lower(title) LIKE lower(?)', "%#{title}%") }
   scope :by_display_title,              ->  (display_title) { where('lower(display_title) LIKE lower(?)', "%#{display_title}%") }
@@ -27,6 +27,7 @@ class Content < ApplicationRecord
   scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ?', type_id]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
 
   def self.filter(filters)
+    puts "\e[38;2;0;255;0m#{filters}\e[0m"
     #start by getting all the records
     filtered = Content.all
 
@@ -60,8 +61,14 @@ class Content < ApplicationRecord
           sorted = filtered.includes(:copyright_permission).order("copyright_permissions.organization_name #{filters['direction']}")
         when 'filename'
           sorted = filtered.includes(file_attachment: :blob).order("active_storage_blobs.filename #{filters['direction']}")
+      else
+        # Check if the sort key is a metadata_type id
+        if MetadataType.exists?(filters['sort'])
+          sorted = filtered.includes(:metadata)
+                            .order("metadata.name #{filters['direction']}")
         else
           sorted = filtered.order("#{filters['sort']} #{filters['direction']}") 
+        end
       end
     else
       # return the filtered results if there is no sort or direction

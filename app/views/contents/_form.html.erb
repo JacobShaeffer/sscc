@@ -22,7 +22,16 @@
 			class="field col-lg-4 col-md-6 col-sm-12"
 		>
 			<%= form.label :file, "File", class: "form-label" %>
-			<%= form.file_field :file, class: 'filepond', direct_upload: true, skip_label: true %>
+			<%= form.file_field :file, 
+				class: 'filepond', 
+				direct_upload: true, 
+				skip_label: true,
+				data: {
+					'filepond-file-id': form.object.file.attached? ? form.object.file.signed_id : nil,
+					'filepond-file-name': form.object.file.attached? ? form.object.file.filename : nil,
+					'filepond-file-size': form.object.file.attached? ? form.object.file.blob.byte_size : nil,
+				}
+			%>
 		</div>
 
 		<div class="field col-lg-4 col-md-6 col-sm-12">

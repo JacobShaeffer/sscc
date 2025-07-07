@@ -9,4 +9,11 @@ export default class extends Controller {
             Rails.fire(this.formTarget, 'submit');
         }, 200);
     }
+
+    immediate_filter() {
+        if(this.timeout)
+            clearTimeout(this.timeout);
+
+        Rails.fire(this.formTarget, 'submit');
+    }
 }

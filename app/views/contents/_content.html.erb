@@ -1,4 +1,4 @@
-  <%= debug(session.dig('content_filters')) %> 
+  <%#= debug(session.dig('content_filters')) %> 
   <% 
 
     filter_values = get_filter_values 
@@ -168,7 +168,13 @@
 
           <% MetadataType.all.each do |metadata_type| %>
             <% if session.dig("content_filters", "columns")&.include?(metadata_type.id.to_s) %>
-              <td><%= content.metadatas(metadata_type.id) %></td>
+              <td>
+                <% content.metadatas(metadata_type.id).each do |metadatum| %>
+                  <span class="badge text-bg-primary">
+                    <%= metadatum %>
+                  </span>
+                <% end %>
+              </td>
             <% end %>
           <% end %>
 
@@ -182,14 +188,21 @@
       <% end %>
     </tbody>
   </table>
-  <%= raw pagy_bootstrap_nav(pagy) %>
-  <%= content_filters_form(url: list_contents_path) do |form| %>
-    <%= form.select :items_per_page, 
-      options_for_select(["10", "20", "50", "100"], session.dig('content_filters', :items_per_page.to_s) || "10"),
-      { },
-      data: {action: "input->filters#filter"}
-    %>
-  <% end %>
+  <div class="row">
+    <div class="col">
+      <%= raw pagy_bootstrap_nav(pagy) %>
+    </div>
+    <div class="col">
+      <%= content_filters_form(url: list_contents_path) do |form| %>
+        <%= form.select :items_per_page, 
+          options_for_select(["10", "20", "50", "100"], session.dig('content_filters', :items_per_page.to_s) || "10"),
+          { hide_label: true },
+          { data: {action: "input->filters#immediate_filter"} }
+        %>
+        <%= form.label :items_per_page %>
+      <% end %>
+    </div>
+  </div>
 <% end %>
 
 

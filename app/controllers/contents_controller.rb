@@ -53,6 +53,8 @@ class ContentsController < ApplicationController
   # POST /contents or /contents.json
   def create
     # content_params[:metadatum_ids].reject!(&:blank?) if content_params[:metadatum_ids]
+    err("content params")
+    log(content_params)
     @content = Content.new(content_params.merge(user: current_user))
     authorize @content
 
@@ -61,6 +63,28 @@ class ContentsController < ApplicationController
         format.html { redirect_to content_url(@content), notice: "Content was successfully created." }
         format.json { render :show, status: :created, location: @content }
       else
+        @metadata_types = MetadataType.all.order(:order)
+        @metadata = {}
+
+        #put the file back
+        log(content_params)
+        if content_params[:file].present?
+          @content.file.attach(content_params[:file]) 
+          warn(content_params[:file])
+        else
+          err("content file not present")
+        end
+
+        # put the metadata back
+        if content_params[:metadatum_ids].present?
+          @metadata_types.each do |metadata_type|
+            @metadata[metadata_type] = Metadatum.where(
+              id: content_params[:metadatum_ids],
+              metadata_type_id: metadata_type.id
+            )
+          end
+        end
+
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @content.errors, status: :unprocessable_entity }
       end
@@ -75,6 +99,11 @@ class ContentsController < ApplicationController
         format.html { redirect_to content_url(@content), notice: "Content was successfully updated." }
         format.json { render :show, status: :ok, location: @content }
       else
+        @metadata_types = MetadataType.all.order(:order)
+        @metadata = {}
+        @metadata_types.each do |metadata_type|
+          @metadata[metadata_type] = @content.metadata.where(metadata_type_id: metadata_type.id)
+        end
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @content.errors, status: :unprocessable_entity }
       end

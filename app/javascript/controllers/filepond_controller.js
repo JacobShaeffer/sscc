@@ -51,6 +51,9 @@ export default class extends Controller {
 
 				}
 			},
+			onrestore: (error, file) => {
+				submit.disabled = false;
+			},
 			server: {
 				process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
 					const uploader = new DirectUpload(file, directUploadUrl, {
@@ -78,6 +81,17 @@ export default class extends Controller {
 						abort: () => abort()
 					}
 				},
+				load: (source, load, error, progress, abort, headers) => {
+					fetch(source.url)
+						.then(response => response.blob())
+						.then(load);
+					
+					return {
+						abort: () => {
+							abort();
+						}
+					};
+				},
 				revert: {
 					url: '/filepond/remove'
 				},
@@ -88,7 +102,25 @@ export default class extends Controller {
 		})
 
 		if (input) {
-			FilePond.create( input );
+			const fileId= input.dataset.filepondFileId;
+			const fileName = input.dataset.filepondFileName;
+			const fileSize = input.dataset.filepondFileSize;
+
+			FilePond.create( input, {
+				files: fileId && fileName ? [{
+					// This tells FilePond this is an existing file
+					source: fileId,
+					options: {
+						type: 'local',
+						file: {
+							name: fileName,
+							size: fileSize,
+							type: 'application/pdf',
+						}
+					}
+				}] : []
+			});
+
 		}
 	}
 }

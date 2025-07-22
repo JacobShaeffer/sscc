@@ -24,10 +24,12 @@ class Content < ApplicationRecord
   scope :by_copyright_permission,       ->  (permission) { joins(:copyright_permission).where('lower(copyright_permissions.organization_name) LIKE lower(?)', "%#{permission}%") }
   scope :by_filename,                   ->  (filename) { joins(file_attachment: :blob).where('lower(active_storage_blobs.filename) LIKE lower(?)', "%#{filename}%") }
 
-  scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ?', type_id]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
+  # scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ?', type_id]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
+  #scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ? AND lower(name) LIKE lower(?)', type_id, "%#{metadata}%"]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
+  scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { joins(:metadata).where(metadata: { metadata_type_id: type_id}).where('LOWER(metadata.name) LIKE LOWER(?)', "%#{metadata}%").distinct }
 
   def self.filter(filters)
-    puts "\e[38;2;0;255;0m#{filters}\e[0m"
+    # puts "\e[38;2;0;255;0m#{filters}\e[0m"
     #start by getting all the records
     filtered = Content.all
 

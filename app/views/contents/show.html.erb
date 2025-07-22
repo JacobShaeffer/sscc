@@ -43,11 +43,6 @@
 					<%= form.number_field :year_of_publication, disabled: true %>
 				</div>
 
-				<div class="field col-lg-4 col-md-6 col-sm-12">
-					<%#= form.collection_select(:copyright_permission_id, CopyrightPermission.all, :id, :organization_name, {:prompt => "Select"}, disabled: true ) %>
-					<%#= form.label :copyright_permission_id, "Copyright Permission", class: "form-label" %>
-					<%= form.text_field :copyright_permission_id, disabled: true, value: @content.copyright_permission.organization_name %>
-				</div>
 			</div>
 
 			<div class="field">

@@ -40,14 +40,6 @@
             data: {action: "input->filters#filter"},
             value: filter_values[:user]
       %>
-      <%= form.select :copyright_permission, 
-            options_for_select(
-              CopyrightPermission.all.pluck(:organization_name, :id),
-              filter_values[:copyright_permission]
-            ),
-            { include_blank: true },
-            data: {action: "input->filters#filter"}
-      %>
       <%= form.number_field :year_of_publication_from, 
             autocomplete: "off",
             data: {action: "input->filters#filter"},
@@ -92,7 +84,6 @@
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "title"} %>
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "display_title"} %>
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "user"} %>
-          <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "copyright_permission"} %>
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "year_of_publication"} %>
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "description"} %>
           <%= render partial: "shared/column_check_box", locals: {filters: "content_filters", column: "filename"} %>
@@ -118,7 +109,6 @@
         <%#= render partial: "sortable-header", locals: {column: "title"} %>
         <%#= render partial: "sortable-header", locals: {column: "display_title"} %>
         <%#= render partial: "sortable-header", locals: {column: "user"} %>
-        <%#= render partial: "sortable-header", locals: {column: "copyright_permission"} %>
         <%#= render partial: "sortable-header", locals: {column: "year_of_publication"} %>
         <%#= render partial: "sortable-header", locals: {column: "description"} %>
         <%#= render partial: "sortable-header", locals: {column: "filename"} %>
@@ -146,9 +136,6 @@
           <% end %>
           <% if session.dig("content_filters", "columns")&.include?('user') %>
             <td><%= content.user.name %></td>
-          <% end %>
-          <% if session.dig("content_filters", "columns")&.include?('copyright_permission') %>
-            <td><%= content.copyright_permission.organization_name %></td>
           <% end %>
           <% if session.dig("content_filters", "columns")&.include?('year_of_publication') %>
             <td><%= content.year_of_publication %></td>

@@ -29,7 +29,6 @@ module ContentsHelper
             title: session.dig('content_filters', :title.to_s) || "",
             display_title: session.dig('content_filters', :display_title.to_s) || "",
             user: session.dig('content_filters', :user.to_s) || "",
-            copyright_permission: session.dig('content_filters', :copyright_permission.to_s) || "",
             year_of_publication_from: session.dig('content_filters', :year_of_publication_from.to_s) || "",
             year_of_publication_to: session.dig('content_filters', :year_of_publication_to.to_s) || "",
             description: session.dig('content_filters', :description.to_s) || "",
@@ -39,7 +38,7 @@ module ContentsHelper
 
     def content_table_headers
         base_columns = %w[
-            title display_title user copyright_permission
+            title display_title user
             year_of_publication description filename
             created_at updated_at
         ]

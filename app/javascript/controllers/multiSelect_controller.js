@@ -6,7 +6,8 @@ export const string_identifier = "multiSelect";
 export default class extends Controller {
 	static targets = ["searchInput", "checkbox"]
 	static values = {
-		type: String
+		type: String,
+		count: Number
 	}
 
     // initialize() {
@@ -17,7 +18,7 @@ export default class extends Controller {
 	onAddSelected(event) {
 		let name = this.searchInputTarget.value;
 		this.searchInputTarget.value = "";
-		this.autoComplete(this.typeValue, "");
+		this.autoComplete("");
 
 		let params = new URLSearchParams();
 
@@ -64,7 +65,7 @@ export default class extends Controller {
 
 
 		this.searchInputTarget.value = "";
-		this.autoComplete(this.typeValue, "");
+		this.autoComplete("");
 	}
 
 	onBadgeClicked(event) {
@@ -85,19 +86,17 @@ export default class extends Controller {
 	}
 
 	onSearchFocusIn(event) {
-		// console.log("onSearchFocusIn", event.target.id);
-		this.autoComplete(this.typeValue, '');
+		this.autoComplete(this.searchInputTarget.value);
 		document.getElementById(event.target.id + "_list").classList.toggle("hidden");
 	}
 
 	onSearchFocusOut(event) {
-		// console.log("onSearchFocusOut", event.target.id);
 		document.getElementById(event.target.id + "_list").classList.toggle("hidden");
 	}
 
 	onSearchInput(event) {
 		// console.log("onSearchInput")
-		this.autoComplete(this.typeValue, event.target.value);
+		this.autoComplete(event.target.value);
 	}
 
 	onSearchInputClick(){
@@ -105,20 +104,30 @@ export default class extends Controller {
 		this.searchInputTarget.focus();
 	}
 
+	onShowMore(event){
+		// preventDefault and stopPropagation to prevent focus from shifting to button
+		event.preventDefault();
+		event.stopPropagation();
+
+		this.countValue += 5;
+		this.autoComplete(this.searchInputTarget.value);
+	}
+
 	// Private
 
-	autoComplete(metadata_type_id, search){
+	autoComplete(search){
 		let params = new URLSearchParams();
 
 		let selected_ids = this.checkboxTargets.filter((checkbox) => 
 			checkbox.checked).map((checkbox) => checkbox.value).join(",");
 
-		let target = `metadataInput_${metadata_type_id}_list`;
+		let target = `metadataInput_${this.typeValue}_list`;
 
 		params.append("target", target);
-		params.append("metadata_type_id", metadata_type_id);
+		params.append("metadata_type_id", this.typeValue);
 		params.append("search", search);
 		params.append("selected_ids", selected_ids);
+		params.append("metadatum_count", this.countValue);
 
 		get(`/contents/search?${params}`, {
 			responseKind: "turbo-stream", 

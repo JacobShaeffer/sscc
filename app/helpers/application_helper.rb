@@ -1,6 +1,16 @@
 module ApplicationHelper
 	include Pagy::Frontend
 
+    def log(string)
+      puts "\e[38;2;0;255;0m#{string}\e[0m"
+    end
+    def warn(string)
+      puts "\e[38;2;255;255;0m#{string}\e[0m"
+    end
+    def err(string)
+      puts "\e[38;2;255;0;0m#{string}\e[0m"
+    end
+
 	def current_controller?(names)
 		names.include?(params[:controller])
 	end

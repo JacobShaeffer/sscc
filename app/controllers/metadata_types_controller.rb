@@ -8,7 +8,7 @@ class MetadataTypesController < ApplicationController
     @metadata_types = MetadataType.all.order(:order)
     @metadata_hash = {}
     MetadataType.all.order(:order).each do | metadataType |
-      @metadata_hash[metadataType] = metadataType.metadata
+      @metadata_hash[metadataType] = metadataType.metadata.first(10)
     end
 
   end

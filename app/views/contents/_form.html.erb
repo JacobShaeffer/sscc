@@ -54,6 +54,7 @@
 					id="multiSelectFor=<%= metadata_type.id %>" 
 					data-action="focusin->multiSelect#onSearchFocusIn focusout->multiSelect#onSearchFocusOut" 
 					data-multiSelect-type-value="<%= metadata_type.id%>"
+					data-multiSelect-count-value="10"
 					class="field"
 				>
 					<label class="form-label-sm"><%= metadata_type.name %></label>
@@ -95,6 +96,7 @@
 					
 					<div class="list-group hidden" id="metadataInput_<%= metadata_type.id %>_list">
 					</div>
+
 				</div>
 			<% end %>
 		</div>

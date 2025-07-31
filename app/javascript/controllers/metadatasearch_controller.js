@@ -8,11 +8,22 @@ export default class extends Controller {
 	static values = {
 		type: String,
 		url: String,
-		target: String
+		target: String,
+		count: Number
+	}
+
+	initialize(){
+		console.log("metadatasearch controller initialized");
+		console.log(this.countValue);
 	}
 
 	connect () {
 		console.log("metadata controller connected");
+	}
+
+	onShowMore(){
+		this.countValue += 5;
+		this.autoComplete(this.nameinputTarget.value);//FIXME: this should get the correct value to pass to autocomplete
 	}
 
 	onSearchInput(event) {
@@ -21,7 +32,6 @@ export default class extends Controller {
 	}
 
 	onClear() {
-		this.nameTarget.value = "";
 		this.nameinputTarget.value = "";
 		this.autoComplete("");
 		let errorMsg = document.getElementById(this.typeValue + "_error");
@@ -35,6 +45,7 @@ export default class extends Controller {
 
 		params.append("target", this.targetValue + this.typeValue);
 		params.append("search", search);
+		params.append("count", this.countValue);
 
 		get(`${this.urlValue}?${params}`, {
 			responseKind: "turbo-stream", 

@@ -29,6 +29,7 @@
                 data-metadatasearch-type-value="<%= metadata_type.id %>"
                 data-metadatasearch-target-value="metadataTable_"
                 data-metadatasearch-url-value="/metadata_types/<%= metadata_type.id %>/metadata/search"
+                data-metadatasearch-count-value="10"
               >	
                 <div class="list-group-item">
                   <div class="row">
@@ -56,11 +57,20 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="list-group list-group-striped list-group-flush" id="metadataTable_<%= metadata_type.id %>">	
-                  <% metadata_hash[metadata_type].first(10).each do |metadatum| %>
-                    <%= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
-                  <% end %>
+                <div class="list-group list-group-striped list-group-flush" id="metadataTable_<%= metadata_type.id %>">	
+                    <% metadata_hash[metadata_type].each do |metadatum| %>
+                      <%= render "metadata_types/metadata/metadatum", metadatum: metadatum %>
+                    <% end %>
+                </div>
+
+                  <div class="list-group-item">
+                    <div class="row">
+                      <div class="col">
+                        <button class="btn btn-primary" data-action="click->metadatasearch#onShowMore">Show More</button>
+                      </div>
+                    </div>
+                  </div>
+
               </div>
 
             </div>

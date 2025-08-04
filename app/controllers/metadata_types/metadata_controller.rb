@@ -60,7 +60,7 @@ class MetadataTypes::MetadataController < ApplicationController
     authorize Metadatum
     @target = params[:target]
     @metadatum_count = params[:count].to_i
-    @metadata = @metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%")
+    @metadata = @metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%").order(Arel.sql("length(name), name"))
     respond_to do |format|
       format.turbo_stream
     end

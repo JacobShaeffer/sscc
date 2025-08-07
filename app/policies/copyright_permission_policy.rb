@@ -19,7 +19,7 @@ class CopyrightPermissionPolicy < ApplicationPolicy
   end
 
   def create?
-    @user.admin? || @user.intern?
+    @user.admin? || @user.editor? || @user.intern?
   end
 
   def new?
@@ -27,7 +27,7 @@ class CopyrightPermissionPolicy < ApplicationPolicy
   end
 
   def update?
-    @user.admin? || @user.intern?
+    @user.admin? || @user.editor? || @user.intern?
   end
 
   def edit?
@@ -35,7 +35,7 @@ class CopyrightPermissionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    @user.admin?
+    @user.admin? || @user.editor?  
   end
 
   class Scope < Scope

@@ -7,19 +7,19 @@ class MetadatumPolicy < ApplicationPolicy
   end
 
   def edit?
-    @user.admin? || @user.intern?
+    @user.admin? || @user.editor? || @user.intern?
   end
 
   def create?
-    @user.admin? || @user.intern?
+    @user.admin? || @user.editor? || @user.intern?
   end
 
   def update?
-    @user.admin? || @user.intern?
+    @user.admin? || @user.editor? || @user.intern?
   end
 
   def destroy?
-    @user.admin?
+    @user.admin? || @user.editor?
   end
 
   def search?

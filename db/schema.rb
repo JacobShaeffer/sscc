@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_13_235042) do
+ActiveRecord::Schema[7.0].define(version: 2025_08_07_235651) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -105,20 +105,26 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_13_235042) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "library_version_id", null: false
+    t.integer "library_version_id_removed"
     t.index ["content_id"], name: "index_library_contents_on_content_id"
     t.index ["library_id"], name: "index_library_contents_on_library_id"
+    t.index ["library_version_id"], name: "index_library_contents_on_library_version_id"
     t.index ["parent_folder_id"], name: "index_library_contents_on_parent_folder_id"
     t.index ["user_id"], name: "index_library_contents_on_user_id"
   end
 
   create_table "library_folders", force: :cascade do |t|
     t.integer "library_id", null: false
-    t.integer "parent_folder_id", null: false
+    t.integer "parent_folder_id"
     t.string "name"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "library_version_id", null: false
+    t.integer "library_version_id_removed"
     t.index ["library_id"], name: "index_library_folders_on_library_id"
+    t.index ["library_version_id"], name: "index_library_folders_on_library_version_id"
     t.index ["parent_folder_id"], name: "index_library_folders_on_parent_folder_id"
     t.index ["user_id"], name: "index_library_folders_on_user_id"
   end
@@ -129,7 +135,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_13_235042) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "library_version_id", null: false
+    t.integer "library_version_id_removed"
     t.index ["library_id"], name: "index_library_modules_on_library_id"
+    t.index ["library_version_id"], name: "index_library_modules_on_library_version_id"
     t.index ["smodule_id"], name: "index_library_modules_on_smodule_id"
     t.index ["user_id"], name: "index_library_modules_on_user_id"
   end
@@ -150,6 +159,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_13_235042) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.boolean "needs_review", default: true
     t.index ["metadata_type_id"], name: "index_metadata_on_metadata_type_id"
     t.index ["user_id"], name: "index_metadata_on_user_id"
   end
@@ -201,11 +211,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_13_235042) do
   add_foreign_key "library_contents", "contents"
   add_foreign_key "library_contents", "libraries"
   add_foreign_key "library_contents", "library_folders", column: "parent_folder_id"
+  add_foreign_key "library_contents", "library_versions"
   add_foreign_key "library_contents", "users"
   add_foreign_key "library_folders", "libraries"
   add_foreign_key "library_folders", "library_folders", column: "parent_folder_id"
+  add_foreign_key "library_folders", "library_versions"
   add_foreign_key "library_folders", "users"
   add_foreign_key "library_modules", "libraries"
+  add_foreign_key "library_modules", "library_versions"
   add_foreign_key "library_modules", "smodules"
   add_foreign_key "library_modules", "users"
   add_foreign_key "library_versions", "libraries"

@@ -141,6 +141,9 @@ class ContentsController < ApplicationController
     @metadata_type = MetadataType.find(params[:metadata_type_id])
     @target = params[:target]
     @metadatum = @metadata_type.metadata.create(name: params[:name], user: current_user)
+    if( current_user.admin? || current_user.editor? )
+      @metadatum.needs_review = false
+    end
     respond_to do |format|
       if @metadatum.save
         format.turbo_stream { render "add_metadatum"}

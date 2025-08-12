@@ -106,22 +106,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <%#= render partial: "sortable-header", locals: {column: "title"} %>
-        <%#= render partial: "sortable-header", locals: {column: "display_title"} %>
-        <%#= render partial: "sortable-header", locals: {column: "user"} %>
-        <%#= render partial: "sortable-header", locals: {column: "year_of_publication"} %>
-        <%#= render partial: "sortable-header", locals: {column: "description"} %>
-        <%#= render partial: "sortable-header", locals: {column: "filename"} %>
-        <%#= render partial: "sortable-header", locals: {column: "created_at"} %>
-        <%#= render partial: "sortable-header", locals: {column: "updated_at"} %>
-<!---->
-        <%# MetadataType.all.each do |metadata_type| %>
-          <%# if session.dig("content_filters", "columns")&.include?(metadata_type.id.to_s) %>
-<!--            <th><%#= metadata_type.name %></th>-->
-          <%# end %>
-        <%# end %>
-<!---->
-        <%= content_table_headers %>
+        <%= content_table_headers %> 
         <th colspan="2">Actions</th>
       </tr>
     </thead>

@@ -60,8 +60,20 @@ class Content < ApplicationRecord
       else
         # Check if the sort key is a metadata_type id
         if MetadataType.exists?(filters['sort'])
-          sorted = filtered.includes(:metadata)
-                            .order("metadata.name #{filters['direction']}")
+          # sorted = filtered.includes(:metadata).order("metadata.name #{filters['direction']}")
+          metadata_type_id = filters['sort']
+          join_sql = ActiveRecord::Base.sanitize_sql_array([<<~SQL, metadata_type_id])
+            LEFT JOIN content_metadata cm
+              ON cm.content_id = contents.id
+            LEFT JOIN metadata m
+              ON m.id = cm.metadatum_id
+              AND m.metadata_type_id = ?
+          SQL
+
+          sorted = filtered
+            .joins(join_sql)
+            .group('contents.id')
+            .order(Arel.sql("COALESCE(MIN(LOWER(m.name)), '') #{filters['direction']}, contents.id"))
         else
           sorted = filtered.order("#{filters['sort']} #{filters['direction']}") 
         end

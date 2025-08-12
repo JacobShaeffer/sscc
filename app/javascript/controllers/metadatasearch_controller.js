@@ -23,7 +23,7 @@ export default class extends Controller {
 
 	onShowMore(){
 		this.countValue += 5;
-		this.autoComplete(this.nameinputTarget.value);//FIXME: this should get the correct value to pass to autocomplete
+		this.autoComplete(this.nameinputTarget.value);
 	}
 
 	onSearchInput(event) {

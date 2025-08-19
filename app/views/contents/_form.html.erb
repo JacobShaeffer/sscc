@@ -21,7 +21,7 @@
 			data-filepond-extensions-value='["application/pdf","audio/mpeg","video/mp4"]' 
 			class="field col-lg-4 col-md-6 col-sm-12"
 		>
-			<%= form.label :file, "File", class: "form-label" %>
+			<%= form.label :file, "File <sub>(256MB max)</sub>".html_safe, class: "form-label" %>
 			<%= form.file_field :file, 
 				class: 'filepond', 
 				direct_upload: true, 

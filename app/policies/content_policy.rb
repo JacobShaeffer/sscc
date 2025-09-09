@@ -27,7 +27,7 @@ class ContentPolicy < ApplicationPolicy
   end
 
   def update?
-    @user.admin? || @user.editor? || @user.intern? || @user.volunteer? || @record.user_id == @user.id
+    @user.admin? || @user.intern_plus? || @user.intern? || @user.volunteer? || @record.user_id == @user.id
   end
 
   def edit?
@@ -35,7 +35,7 @@ class ContentPolicy < ApplicationPolicy
   end
 
   def destroy?
-    @user.admin? || @user.editor?
+    @user.admin? || @user.intern_plus?
   end
 
   def search?
@@ -43,7 +43,7 @@ class ContentPolicy < ApplicationPolicy
   end
 
   def add_new_metadatum?
-    @user.admin? || @user.editor? || @user.intern?
+    @user.admin? || @user.intern_plus? || @user.intern?
   end
 
   def add_existing_metadatum?

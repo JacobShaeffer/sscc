@@ -13,7 +13,7 @@ class MetadataTypes::MetadataController < ApplicationController
     @metadatum = Metadatum.new(metadatum_params.merge(user: current_user))
     authorize @metadatum
     @metadatum.metadata_type = @metadata_type
-    if( current_user.admin? || current_user.editor? )
+    if( current_user.admin? || current_user.intern_plus? )
       @metadatum.needs_review = false
     end
     @target = "metadataTable_#{params[:metadata_type_id]}"

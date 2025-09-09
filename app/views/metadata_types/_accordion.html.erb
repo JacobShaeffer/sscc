@@ -37,6 +37,9 @@
                       <div class="bold">Metadata Value</div>
                     </div>
                     <div class="thin-column btn-tools">
+                      <div class="bold">Status</div>
+                    </div>
+                    <div class="thin-column btn-tools">
                       <div class="bold">Actions</div>
                     </div>
                   </div>
@@ -45,6 +48,18 @@
                   <div class="row">
                     <div class="col">
                       <%= render "search_input", id: metadata_type.id %>
+                    </div>
+                    <div class="thin-column btn-tools">
+                      <select id="metadataStatus_<%= metadata_type.id %>"
+                              class="form-control" 
+                              name="metadatum[name]" 
+                              data-action="change->metadatasearch#onStatusChange"
+                              data-metadatasearch-target="status"
+                      >
+                        <option value="all">All</option>
+                        <option value="needs_review">Needs Review</option>
+                        <option value="reviewed">Reviewed</option>
+                      </select>
                     </div>
                     <div class="thin-column btn-tools">
                         <%= form_for [metadata_type, Metadatum.new] do |form| %>

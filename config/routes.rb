@@ -12,12 +12,16 @@ Rails.application.routes.draw do
     end
     scope module: 'metadata_types' do
       resources :metadata, except: [:index, :new, :show] do
+        member do
+          get :review
+        end
         collection do
           get :search
         end
       end
     end
   end
+
   resources :contents do
     collection do
       get :search

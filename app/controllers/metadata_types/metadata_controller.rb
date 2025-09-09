@@ -1,5 +1,5 @@
 class MetadataTypes::MetadataController < ApplicationController
-  before_action :set_metadatum, only: %i[ edit update destroy ]
+  before_action :set_metadatum, only: %i[ edit update destroy review ]
   before_action :set_metadata_type
 	before_action :authenticate_user!
 
@@ -14,7 +14,7 @@ class MetadataTypes::MetadataController < ApplicationController
     authorize @metadatum
     @metadatum.metadata_type = @metadata_type
     if( current_user.admin? || current_user.editor? )
-      @metadatum.need_review = false
+      @metadatum.needs_review = false
     end
     @target = "metadataTable_#{params[:metadata_type_id]}"
 
@@ -64,9 +64,33 @@ class MetadataTypes::MetadataController < ApplicationController
     @target = params[:target]
     @metadatum_count = params[:count].to_i
     @metadata = @metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%").order(Arel.sql("length(name), name"))
+
+    needs_review = params[:status] == "all" ? 0 : params[:status] == "needs_review" ? 1 : 2
+    if(needs_review != 0)
+      tf = needs_review == 1 ? "true" : "false"
+      @metadata = @metadata.where("needs_review = #{tf}")
+    end
+
     respond_to do |format|
       format.turbo_stream
     end
+  end
+
+  def review 
+    authorize @metadatum
+    @metadatum.needs_review = false
+
+    respond_to do |format|
+      if @metadatum.save
+        flash.now[:notice] = "#{@metadatum.metadata_type.name} \"#{@metadatum.name}\" was created successfully."
+        @metadata = MetadataType.find(params[:metadata_type_id]).metadata
+        format.turbo_stream
+      else
+        format.turbo_stream { render "create_error" }
+        # format.html { render :new, status: :unprocessable_entity }
+      end
+    end
+
   end
 
   private

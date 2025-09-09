@@ -18,6 +18,10 @@ class MetadatumPolicy < ApplicationPolicy
     @user.admin? || @user.editor? || @user.intern?
   end
 
+  def review?
+    @user.admin? || @user.editor?
+  end
+
   def destroy?
     @user.admin? || @user.editor?
   end

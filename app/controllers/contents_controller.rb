@@ -222,7 +222,16 @@ class ContentsController < ApplicationController
   def download_zip
     authorize Content
     zip_filename = params[:filename]
-    send_file Rails.root.join('tmp', zip_filename)
+    # send_file Rails.root.join('tmp', zip_filename)
+
+    path = Rails.root.join('tmp', zip_filename)
+    send_file path,
+      filename: zip_filename,
+      type: "application/zip",
+      disposition: "attachment",
+      stream: false,       # <= important: don't stream from Rails
+      buffer_size: 4096
+
   end
 
   private

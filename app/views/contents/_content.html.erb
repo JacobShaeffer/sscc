@@ -60,6 +60,16 @@
             data: {action: "input->filters#filter"},
             value: filter_values[:filename]
       %>
+      <%= form.date_field :created_at_from,
+            autocomplete: "off",
+            data: {action: "input->filters#filter"},
+            value: filter_values[:created_at_from]
+      %>
+      <%= form.date_field :created_at_to,
+            autocomplete: "off",
+            data: {action: "input->filters#filter"},
+            value: filter_values[:created_at_to]
+      %>
     <% end %>
     <hr>
     <%= content_filters_form(url: list_contents_path) do |form| %>

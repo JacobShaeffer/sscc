@@ -22,8 +22,16 @@ class MetadatumPolicy < ApplicationPolicy
     @user.admin? || @user.intern_plus?
   end
 
+  def info?
+    @user.admin? || @user.intern_plus?
+  end
+
   def destroy?
     @user.admin? || @user.intern_plus?
+  end
+
+  def replace?
+    destroy?
   end
 
   def search?

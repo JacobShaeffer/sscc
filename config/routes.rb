@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       resources :metadata, except: [:index, :new, :show] do
         member do
           get :review
+          get :info
+          get :replace
         end
         collection do
           get :search

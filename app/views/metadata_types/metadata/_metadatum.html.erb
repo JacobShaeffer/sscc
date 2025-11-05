@@ -27,9 +27,10 @@
         <div class="thin-column">
           <div class="btn-tools">
             <%= link_to "Edit", edit_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-primary me-2", :data => { :'turbo_stream' => '' } %>
-            <% if policy(Metadatum).review? %>
-              <%= link_to "Review", review_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-success me-2", :data => { :'turbo_stream' => '' } %>
-            <% end %>
+            <%= link_to "Info", info_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-success me-2", :data => { :'turbo_stream' => '' } %>
+            <%# if policy(Metadatum).review? %>
+              <%#= link_to "Review", review_metadata_type_metadatum_path(metadatum.metadata_type, metadatum), class: "btn btn-success me-2", :data => { :'turbo_stream' => '' } %>
+            <%# end %>
             <% if policy(Metadatum).destroy? %>
               <%= button_to "Destroy", metadata_type_metadatum_path(metadatum.metadata_type, metadatum), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"%>
             <% end %>

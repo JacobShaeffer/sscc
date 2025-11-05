@@ -1,0 +1,67 @@
+<%#= turbo_stream.replace dom_id(@metadatum) do %>
+<!--    <div class="list-group-item" id="<%#= dom_id @metadatum%>">
+        <p>this is a test</p>
+    </div>
+<%# end %>-->
+
+<%= turbo_stream.replace dom_id(@metadatum) do %>
+  <div class="list-group-item" id="<%= dom_id @metadatum %>">
+    <div class="mb-2 d-flex justify-content-between">
+      <h5 class="mb-0"><%= @metadatum.name %> -- id: <%= @metadatum.id %></h5>
+    </div>
+
+    <div class="row g-2 mb-3">
+
+      <div class="col-12 col-md-4">
+        <div class="card">
+          <div class="card-body p-2">
+            <div class="d-flex justify-content-between">
+              <div class="text-muted small">Usage</div>
+              <div class="fw-bold">
+                <%= @usage_count %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="card">
+          <div class="card-body p-2">
+            <div class="d-flex justify-content-between">
+              <div class="text-muted small">Added by</div>
+              <div class="fw-bold">
+                <%= @added_by %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+				<% reviewed_button_class = "btn me-2 " + (@reviewed == "reviewed" ? "btn-success" : "btn-warning") %>
+        <%= link_to @reviewed, review_metadata_type_metadatum_path(@metadata_type, @metadatum), class: reviewed_button_class, :data => { :'turbo_stream' => '' } %>
+      </div>
+
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-12">
+        <form 
+            class="d-flex" 
+            data-controller="metadatumReplace" 
+            data-metadatumReplace-id-value="<%= @metadatum.id %>" 
+            data-action="submit->metadatumReplace#replace" 
+            data-metadatumReplace-id-value="<%= @metadatum.id %>"
+            data-metadatumReplace-url-value="/metadata_types/<%= @metadata_type.id %>/metadata/<%= @metadatum.id %>/replace"
+        >
+            <label for="replace_with_<%= @metadatum.id %>" class="visually-hidden">Replace with id</label>
+            <input id="replace_with_<%= @metadatum.id %>" data-metadatumReplace-target="replaceWithId" name="replace_with" type="text" class="form-control me-2" placeholder="Replace with id">
+            <button type="submit" class="btn btn-danger" data-toggle="tooltip" title="Replacing destroys the current metadatum, removing it from all content, but adding the selected metedatum in its place.">Replace</button>
+        </form>
+      </div>
+    </div>
+  </div>
+<% end %>

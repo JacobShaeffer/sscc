@@ -1,5 +1,5 @@
 class MetadataTypes::MetadataController < ApplicationController
-  before_action :set_metadatum, only: %i[ edit update destroy review ]
+  before_action :set_metadatum, only: %i[ edit update destroy review info replace ]
   before_action :set_metadata_type
 	before_action :authenticate_user!
 
@@ -59,6 +59,20 @@ class MetadataTypes::MetadataController < ApplicationController
     end
   end
 
+  def replace
+    authorize @metadatum
+    title = @metadatum.name
+    replace_with_id = params[:replace_with]
+    replace_with_metadatum = Metadatum.find(replace_with_id)
+
+    flash.now[:notice] = "\"#{title} was deleted and replaced by \"#{replace_with_metadatum.name}\"."
+
+    @target = "metadatum_#{@metadatum.id}"
+    respond_to do |format|
+      format.turbo_stream { render 'destroy' }
+    end
+  end
+
   def search
     authorize Metadatum
     @target = params[:target]
@@ -78,11 +92,11 @@ class MetadataTypes::MetadataController < ApplicationController
 
   def review 
     authorize @metadatum
-    @metadatum.needs_review = false
+    @metadatum.needs_review = !@metadatum.needs_review
 
     respond_to do |format|
       if @metadatum.save
-        flash.now[:notice] = "#{@metadatum.metadata_type.name} \"#{@metadatum.name}\" was created successfully."
+        # flash.now[:notice] = "#{@metadatum.metadata_type.name} \"#{@metadatum.name}\" was created successfully."
         @metadata = MetadataType.find(params[:metadata_type_id]).metadata
         format.turbo_stream
       else
@@ -91,6 +105,13 @@ class MetadataTypes::MetadataController < ApplicationController
       end
     end
 
+  end
+
+  def info
+    authorize @metadatum
+    @added_by = (@metadatum.respond_to?(:user) ? (@metadatum.user&.name || "Unknown") : "Unknown")
+    @reviewed = (@metadatum.respond_to?(:needs_review) ? (@metadatum.needs_review ? "needs review" : "reviewed") : "N/A")
+    @usage_count = (@metadatum.respond_to?(:contents) ? @metadatum.contents.count : 0)
   end
 
   private

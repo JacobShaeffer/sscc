@@ -65,11 +65,57 @@ class MetadataTypes::MetadataController < ApplicationController
     replace_with_id = params[:replace_with]
     replace_with_metadatum = Metadatum.find(replace_with_id)
 
-    flash.now[:notice] = "\"#{title} was deleted and replaced by \"#{replace_with_metadatum.name}\"."
+    # Validate that both metadata are of the same type
+    if @metadatum.metadata_type_id != replace_with_metadatum.metadata_type_id
+      flash.now[:alert] = "Error: Cannot replace metadatum. Both metadata must be of the same metadata type."
+      @target = "metadatum_#{@metadatum.id}"
+      respond_to do |format|
+        format.turbo_stream { render 'error' }
+      end
+      return
+    end
 
+    # Find all content_metadata associations for the original metadatum
+    content_metadata_to_replace = @metadatum.content_metadata.includes(:content)
+    
+    # Use a transaction to ensure data consistency
+    Metadatum.transaction do
+      content_metadata_to_replace.each do |content_metadatum|
+        content = content_metadatum.content
+        
+        # Check if the content already has the replacement metadatum
+        existing_association = ContentMetadatum.find_by(
+          content_id: content.id,
+          metadatum_id: replace_with_metadatum.id
+        )
+        
+        if existing_association
+          # If it already exists, just remove the old association
+          content_metadatum.destroy
+        else
+          # Otherwise, update the association to point to the replacement metadatum
+          content_metadatum.update(metadatum_id: replace_with_metadatum.id)
+        end
+      end
+      
+      # Now delete the original metadatum (this will also destroy remaining content_metadata via dependent: :destroy)
+      @metadatum.destroy
+    end
+
+    flash.now[:notice] = "\"#{title}\" was deleted and replaced by \"#{replace_with_metadatum.name}\"."
     @target = "metadatum_#{@metadatum.id}"
     respond_to do |format|
       format.turbo_stream { render 'destroy' }
+    end
+  rescue ActiveRecord::RecordNotFound => e
+    flash.now[:alert] = "Error: Could not find replacement metadatum."
+    respond_to do |format|
+      format.turbo_stream { render 'error' }
+    end
+  rescue => e
+    flash.now[:alert] = "Error replacing metadatum: #{e.message}"
+    respond_to do |format|
+      format.turbo_stream { render 'error' }
     end
   end
 

@@ -128,6 +128,7 @@ class ContentsController < ApplicationController
     @target = params[:target]
     @selected = params[:selected_ids].nil? ? [] : params[:selected_ids].split(',')
     @metadata_type = MetadataType.find(params[:metadata_type_id])
+    @should_show_add_new_for_given_metadata_type = current_user.read_attribute_before_type_cast(:role) >= @metadata_type.access_level
     @metadata = @metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%").order(Arel.sql("length(name), name"))
     @metadatum_count = params[:metadatum_count].to_i
     respond_to do |format|

@@ -3,7 +3,7 @@
         <%= render 'list-group-item', is_active: @selected.include?(metadatum.id.to_s), metadatum: metadatum %>
     <% end %>
     <%# if @metadata.count <= 0 %>
-        <% if policy(Metadatum).create? %>
+        <% if policy(Metadatum).create? and @should_show_add_new_for_given_metadata_type %>
             <a class="list-group-item list-group-item-success list-group-item-action" data-action="mousedown->multiSelect#onAddSelected" id="adder_for=<%=@metadata_type.id%>">Add New</a>
         <% end %>
     <%# end %>

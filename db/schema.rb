@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_07_235651) do
+ActiveRecord::Schema[7.0].define(version: 2025_12_05_170801) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -170,6 +170,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_07_235651) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.integer "order"
+    t.integer "access_level", default: 0
     t.index ["user_id"], name: "index_metadata_types_on_user_id"
   end
 

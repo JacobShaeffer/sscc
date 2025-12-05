@@ -24,8 +24,8 @@ module ContentsHelper
             year_of_publication_to: session.dig('content_filters', :year_of_publication_to.to_s) || "",
             description: session.dig('content_filters', :description.to_s) || "",
             filename: session.dig('content_filters', :filename.to_s) || "",
-            created_at_from: session.dig('content_filters', :created_at_from.to_s) || "",
-            created_at_to: session.dig('content_filters', :created_at_to.to_s) || "",
+            created_after: session.dig('content_filters', :created_after.to_s) || "",
+            created_before: session.dig('content_filters', :created_before.to_s) || "",
         }
     end
 

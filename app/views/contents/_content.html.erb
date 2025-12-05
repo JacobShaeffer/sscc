@@ -60,15 +60,15 @@
             data: {action: "input->filters#filter"},
             value: filter_values[:filename]
       %>
-      <%= form.date_field :created_at_from,
+      <%= form.date_field :created_after,
             autocomplete: "off",
             data: {action: "input->filters#filter"},
-            value: filter_values[:created_at_from]
+            value: filter_values[:created_after]
       %>
-      <%= form.date_field :created_at_to,
+      <%= form.date_field :created_before,
             autocomplete: "off",
             data: {action: "input->filters#filter"},
-            value: filter_values[:created_at_to]
+            value: filter_values[:created_before]
       %>
     <% end %>
     <hr>

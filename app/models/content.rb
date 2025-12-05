@@ -11,7 +11,7 @@ class Content < ApplicationRecord
   validates :file, presence: true, blob: { content_type: ['application/pdf', 'audio/mpeg', 'video/mp4'], size_range: 0..(256.megabytes) }
 
   #List of filterable columns
-  FILTERABLE_COLUMNS = %i[ title user display_title description year_of_publication year_of_publication_from year_of_publication_to filename created_at_from created_at_to ].freeze
+  FILTERABLE_COLUMNS = %i[ title user display_title description year_of_publication year_of_publication_from year_of_publication_to filename created_after created_before ].freeze
   FILTER_PARAMS = [FILTERABLE_COLUMNS + %i[sort direction], :items_per_page, :columns => [], :metadata => {}].freeze
 
   scope :by_title,                      ->  (title) { where('lower(title) LIKE lower(?)', "%#{title}%") }
@@ -21,8 +21,8 @@ class Content < ApplicationRecord
   scope :by_year_of_publication_from,   ->  (year_of_publication_from) { where('year_of_publication >= ?', year_of_publication_from) }
   scope :by_year_of_publication_to,     ->  (year_of_publication_to) { where('year_of_publication <= ?', year_of_publication_to) }
   scope :by_filename,                   ->  (filename) { joins(file_attachment: :blob).where('lower(active_storage_blobs.filename) LIKE lower(?)', "%#{filename}%") }
-  scope :by_created_at_from,            ->  (created_at_from) { where('created_at >= ?', created_at_from) }
-  scope :by_created_at_to,              ->  (created_at_to) { where('created_at <= ?', created_at_to) }
+  scope :by_created_after,            ->  (created_after) { where('created_at >= ?', created_after) }
+  scope :by_created_before,              ->  (created_before) { where('created_at <= ?', created_before) }
 
   # scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ?', type_id]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
   #scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ? AND lower(name) LIKE lower(?)', type_id, "%#{metadata}%"]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
@@ -41,8 +41,8 @@ class Content < ApplicationRecord
     filtered = filtered.by_year_of_publication_from(filters['year_of_publication_from']) if filters['year_of_publication_from'].present?
     filtered = filtered.by_year_of_publication_to(filters['year_of_publication_to']) if filters['year_of_publication_to'].present?
     filtered = filtered.by_filename(filters['filename']) if filters['filename'].present?
-    filtered = filtered.by_created_at_from(filters['created_at_from']) if filters['created_at_from'].present?
-    filtered = filtered.by_created_at_to(filters['created_at_to']) if filters['created_at_to'].present?
+    filtered = filtered.by_created_after(filters['created_after']) if filters['created_after'].present?
+    filtered = filtered.by_created_before(filters['created_before']) if filters['created_before'].present?
 
     #dynamc filtering for metadata
     if filters['metadata'].present?

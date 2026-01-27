@@ -7,9 +7,6 @@ import { application } from "controllers/application"
 import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
 eagerLoadControllersFrom("controllers", application)
 
-import metadatumReplaceController, {string_identifier as metadatumReplace_id} from "./metadatum-replace_controller"
-application.register(metadatumReplace_id, metadatumReplaceController)
-
 // import fileSelectController, {string_identifier as fileSelect_id} from "./fileSelect_controller"
 // application.register(fileSelect_id, fileSelectController)
 

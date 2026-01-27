@@ -51,14 +51,14 @@
       <div class="col-12">
         <form 
             class="d-flex" 
-            data-controller="metadatum-replace" 
-            data-metadatum-replace-id-value="<%= @metadatum.id %>" 
-            data-action="submit->metadatum-replace#replace" 
-            data-metadatum-replace-id-value="<%= @metadatum.id %>"
-            data-metadatum-replace-url-value="/metadata_types/<%= @metadata_type.id %>/metadata/<%= @metadatum.id %>/replace"
+            data-controller="metadatareplace" 
+            data-metadatareplace-id-value="<%= @metadatum.id %>" 
+            data-action="submit->metadatareplace#replace" 
+            data-metadatareplace-id-value="<%= @metadatum.id %>"
+            data-metadatareplace-url-value="/metadata_types/<%= @metadata_type.id %>/metadata/<%= @metadatum.id %>/replace"
         >
             <label for="replace_with_<%= @metadatum.id %>" class="visually-hidden">Replace with id</label>
-            <input id="replace_with_<%= @metadatum.id %>" data-metadatum-replace-target="replaceWithId" name="replace_with" type="text" class="form-control me-2" placeholder="Replace with id">
+            <input id="replace_with_<%= @metadatum.id %>" data-metadatareplace-target="replaceWithId" name="replace_with" type="text" class="form-control me-2" placeholder="Replace with id">
             <button type="submit" class="btn btn-danger" data-toggle="tooltip" title="Replacing destroys the current metadatum, removing it from all content, but adding the selected metedatum in its place.">Replace</button>
         </form>
       </div>

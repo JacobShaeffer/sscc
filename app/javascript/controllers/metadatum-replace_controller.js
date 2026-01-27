@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import { get } from "@rails/request.js"
 
+export const string_identifier = 'metadatum-replace';
 
 export default class extends Controller {
     static targets = ["replaceWithId"];

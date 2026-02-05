@@ -1,8 +1,8 @@
 class ContentsController < ApplicationController
   include Filterable
-  before_action :set_content, only: %i[ show edit update destroy ]
-  before_action :set_filterable_columns, only: %i[ index list ]
-	before_action :authenticate_user!
+  before_action :set_content, only: %i[show edit update destroy]
+  before_action :set_filterable_columns, only: %i[index list]
+  before_action :authenticate_user!
 
   # GET /contents or /contents.json
   def index
@@ -14,14 +14,14 @@ class ContentsController < ApplicationController
     # warn("this is a warning")
     # err("this is an error")
 
-    if(session["#{Content.to_s.underscore}_filters"].blank?)
-      session["#{Content.to_s.underscore}_filters"] = {"columns" => ["title", "display_title", "user"]}
+    if session["#{Content.to_s.underscore}_filters"].blank?
+      session["#{Content.to_s.underscore}_filters"] = { 'columns' => %w[title display_title user] }
     end
     items_per_page = session.dig('content_filters', :items_per_page.to_s)
 
     @pagy, @contents = pagy(Content.order(created_at: :desc), items: items_per_page || 10)
   end
-  
+
   # GET /contents/1 or /contents/1.json
   def show
     authorize @content
@@ -53,26 +53,26 @@ class ContentsController < ApplicationController
   # POST /contents or /contents.json
   def create
     # content_params[:metadatum_ids].reject!(&:blank?) if content_params[:metadatum_ids]
-    err("content params")
+    err('content params')
     log(content_params)
     @content = Content.new(content_params.merge(user: current_user))
     authorize @content
 
     respond_to do |format|
       if @content.save
-        format.html { redirect_to content_url(@content), notice: "Content was successfully created." }
+        format.html { redirect_to content_url(@content), notice: 'Content was successfully created.' }
         format.json { render :show, status: :created, location: @content }
       else
         @metadata_types = MetadataType.all.order(:order)
         @metadata = {}
 
-        #put the file back
+        # put the file back
         log(content_params)
         if content_params[:file].present?
-          @content.file.attach(content_params[:file]) 
+          @content.file.attach(content_params[:file])
           warn(content_params[:file])
         else
-          err("content file not present")
+          err('content file not present')
         end
 
         # put the metadata back
@@ -96,7 +96,7 @@ class ContentsController < ApplicationController
     authorize @content
     respond_to do |format|
       if @content.update(content_params)
-        format.html { redirect_to content_url(@content), notice: "Content was successfully updated." }
+        format.html { redirect_to content_url(@content), notice: 'Content was successfully updated.' }
         format.json { render :show, status: :ok, location: @content }
       else
         @metadata_types = MetadataType.all.order(:order)
@@ -116,20 +116,21 @@ class ContentsController < ApplicationController
     @content.destroy
 
     respond_to do |format|
-      format.html { redirect_to contents_url, notice: "Content was successfully destroyed." }
+      format.html { redirect_to contents_url, notice: 'Content was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def search
     authorize Content
-    #Search for metadata that matches the search string
-    #Used in multi_select turbo controller for Content#new
+    # Search for metadata that matches the search string
+    # Used in multi_select turbo controller for Content#new
     @target = params[:target]
     @selected = params[:selected_ids].nil? ? [] : params[:selected_ids].split(',')
     @metadata_type = MetadataType.find(params[:metadata_type_id])
     @should_show_add_new_for_given_metadata_type = current_user.read_attribute_before_type_cast(:role) >= @metadata_type.access_level
-    @metadata = @metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%").order(Arel.sql("length(name), name"))
+    @metadata = @metadata_type.metadata.where('lower(name) LIKE lower(?)',
+                                              "%#{params[:search]}%").order(Arel.sql('length(name), name'))
     @metadatum_count = params[:metadatum_count].to_i
     respond_to do |format|
       format.turbo_stream
@@ -138,31 +139,29 @@ class ContentsController < ApplicationController
 
   def add_new_metadatum
     authorize Content
-    #Add a new metadatum to the database while createing a content record
+    # Add a new metadatum to the database while createing a content record
     @metadata_type = MetadataType.find(params[:metadata_type_id])
     @target = params[:target]
     @metadatum = @metadata_type.metadata.create(name: params[:name], user: current_user)
-    if( current_user.admin? || current_user.intern_plus? )
-      @metadatum.needs_review = false
-    end
+    @metadatum.needs_review = false if current_user.admin? || current_user.intern_plus?
     respond_to do |format|
       if @metadatum.save
-        format.turbo_stream { render "add_metadatum"}
+        format.turbo_stream { render 'add_metadatum' }
       else
-        @target = @target + "_container"
-        format.turbo_stream { render "add_new_metadatum_error"}
+        @target += '_container'
+        format.turbo_stream { render 'add_new_metadatum_error' }
       end
     end
   end
 
   def add_existing_metadatum
     authorize Content
-    #Add a new metadatum to the database while createing a content record
+    # Add a new metadatum to the database while createing a content record
     @target = params[:target]
     @metadata_type = MetadataType.find(params[:metadata_type_id])
     @metadatum = @metadata_type.metadata.find(params[:metadatum_id])
     respond_to do |format|
-      format.turbo_stream { render "add_metadatum"}
+      format.turbo_stream { render 'add_metadatum' }
     end
   end
 
@@ -173,25 +172,23 @@ class ContentsController < ApplicationController
 
     items_per_page = session.dig('content_filters', :items_per_page.to_s)
 
-    @pagy, @contents = pagy(contents_scope.order(created_at: :desc), items: items_per_page || 10) 
-    render(partial: "content", locals: { contents: @contents, pagy: @pagy })
+    @pagy, @contents = pagy(contents_scope.order(created_at: :desc), items: items_per_page || 10)
+    render(partial: 'content', locals: { contents: @contents, pagy: @pagy })
   end
 
   def download
     authorize Content
-    raw_names = Dir[ Rails.root.join("tmp", "bulk_content_download_*.zip") ]
+    raw_names = Dir[Rails.root.join('tmp/bulk_content_download_*.zip')]
     @filenames = raw_names.map { |path| File.basename(path) }
     require 'yaml'
-    #@runnning_jobs = Delayed::Job.all.map(|job| YAML.load_stream(job.handler)[0].job_data["job_id"])
-    if Delayed::Job.all.size > 0
-      @jobs = Delayed::Job.all.map do |job|
-        handler = YAML.load_stream(job.handler)[0]
-        if handler.job_data["job_class"].include?("ContentDownloadJob")
-          [handler.job_data["job_id"], job.locked_at]
-        end
-      end.compact
-      # @jobs = Delayed::Job.all.map{ |job| [YAML.load_stream(job.handler)[0].job_data["job_id"], job.locked_at] }
-    end
+    # @runnning_jobs = Delayed::Job.all.map(|job| YAML.load_stream(job.handler)[0].job_data["job_id"])
+    return unless Delayed::Job.all.size > 0
+
+    @jobs = Delayed::Job.all.map do |job|
+      handler = YAML.load_stream(job.handler)[0]
+      [handler.job_data['job_id'], job.locked_at] if handler.job_data['job_class'].include?('ContentDownloadJob')
+    end.compact
+    # @jobs = Delayed::Job.all.map{ |job| [YAML.load_stream(job.handler)[0].job_data["job_id"], job.locked_at] }
   end
 
   def create_download
@@ -203,15 +200,14 @@ class ContentsController < ApplicationController
     authorize Content
     zip_filename = params[:filename]
     log(zip_filename)
-    raw_names = Dir[ Rails.root.join("tmp", "bulk_content_download_*.zip") ]
+    Dir[Rails.root.join('tmp/bulk_content_download_*.zip')]
     full_path = Rails.root.join('tmp', zip_filename)
 
-    if full_path in raw_names
-      log(full_path)
-      log(File.exist?(full_path))
-      File.delete(full_path) if File.exist?(full_path)
-    end
+    return unless full_path in raw_names
 
+    log(full_path)
+    log(File.exist?(full_path))
+    File.delete(full_path) if File.exist?(full_path)
   end
 
   def download_spreadsheet
@@ -227,27 +223,27 @@ class ContentsController < ApplicationController
 
     path = Rails.root.join('tmp', zip_filename)
     send_file path,
-      filename: zip_filename,
-      type: "application/zip",
-      disposition: "attachment",
-      stream: false,       # <= important: don't stream from Rails
-      buffer_size: 4096
-
+              filename: zip_filename,
+              type: 'application/zip',
+              disposition: 'attachment',
+              stream: false, # <= important: don't stream from Rails
+              buffer_size: 4096
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_content
-      @content = Content.find(params[:id])
-    end
 
-    def set_filterable_columns
-      @filterable_columns = Content::FILTERABLE_COLUMNS
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_content
+    @content = Content.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def content_params
-      params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication, :additional_notes, metadatum_ids: [])
-    end
+  def set_filterable_columns
+    @filterable_columns = Content::FILTERABLE_COLUMNS
+  end
 
+  # Only allow a list of trusted parameters through.
+  def content_params
+    params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication,
+                                    :additional_notes, metadatum_ids: [])
+  end
 end

@@ -1,7 +1,7 @@
 class MetadataTypes::MetadataController < ApplicationController
-  before_action :set_metadatum, only: %i[ edit update destroy review info replace ]
+  before_action :set_metadatum, only: %i[edit update destroy review info replace]
   before_action :set_metadata_type
-	before_action :authenticate_user!
+  before_action :authenticate_user!
 
   # GET /metadata/1/edit
   def edit
@@ -13,9 +13,7 @@ class MetadataTypes::MetadataController < ApplicationController
     @metadatum = Metadatum.new(metadatum_params.merge(user: current_user))
     authorize @metadatum
     @metadatum.metadata_type = @metadata_type
-    if( current_user.admin? || current_user.intern_plus? )
-      @metadatum.needs_review = false
-    end
+    @metadatum.needs_review = false if current_user.admin? || current_user.intern_plus?
     @target = "metadataTable_#{params[:metadata_type_id]}"
 
     respond_to do |format|
@@ -24,7 +22,7 @@ class MetadataTypes::MetadataController < ApplicationController
         @metadata = MetadataType.find(params[:metadata_type_id]).metadata
         format.turbo_stream
       else
-        format.turbo_stream { render "create_error" }
+        format.turbo_stream { render 'create_error' }
         # format.html { render :new, status: :unprocessable_entity }
       end
     end
@@ -54,7 +52,7 @@ class MetadataTypes::MetadataController < ApplicationController
         format.turbo_stream
       end
     else
-      flash.now[:alert] = "There was an error deleting the metadatum."
+      flash.now[:alert] = 'There was an error deleting the metadatum.'
       render :show
     end
   end
@@ -67,7 +65,7 @@ class MetadataTypes::MetadataController < ApplicationController
 
     # Validate that both metadata are of the same type
     if @metadatum.metadata_type_id != replace_with_metadatum.metadata_type_id
-      flash.now[:alert] = "Error: Cannot replace metadatum. Both metadata must be of the same metadata type."
+      flash.now[:alert] = 'Error: Cannot replace metadatum. Both metadata must be of the same metadata type.'
       @target = "metadatum_#{@metadatum.id}"
       respond_to do |format|
         format.turbo_stream { render 'error' }
@@ -77,18 +75,18 @@ class MetadataTypes::MetadataController < ApplicationController
 
     # Find all content_metadata associations for the original metadatum
     content_metadata_to_replace = @metadatum.content_metadata.includes(:content)
-    
+
     # Use a transaction to ensure data consistency
     Metadatum.transaction do
       content_metadata_to_replace.each do |content_metadatum|
         content = content_metadatum.content
-        
+
         # Check if the content already has the replacement metadatum
         existing_association = ContentMetadatum.find_by(
           content_id: content.id,
           metadatum_id: replace_with_metadatum.id
         )
-        
+
         if existing_association
           # If it already exists, just remove the old association
           content_metadatum.destroy
@@ -97,7 +95,7 @@ class MetadataTypes::MetadataController < ApplicationController
           content_metadatum.update(metadatum_id: replace_with_metadatum.id)
         end
       end
-      
+
       # Now delete the original metadatum (this will also destroy remaining content_metadata via dependent: :destroy)
       @metadatum.destroy
     end
@@ -107,12 +105,12 @@ class MetadataTypes::MetadataController < ApplicationController
     respond_to do |format|
       format.turbo_stream { render 'destroy' }
     end
-  rescue ActiveRecord::RecordNotFound => e
-    flash.now[:alert] = "Error: Could not find replacement metadatum."
+  rescue ActiveRecord::RecordNotFound
+    flash.now[:alert] = 'Error: Could not find replacement metadatum.'
     respond_to do |format|
       format.turbo_stream { render 'error' }
     end
-  rescue => e
+  rescue StandardError => e
     flash.now[:alert] = "Error replacing metadatum: #{e.message}"
     respond_to do |format|
       format.turbo_stream { render 'error' }
@@ -123,11 +121,16 @@ class MetadataTypes::MetadataController < ApplicationController
     authorize Metadatum
     @target = params[:target]
     @metadatum_count = params[:count].to_i
-    @metadata = @metadata_type.metadata.where("lower(name) LIKE lower(?)", "%#{params[:search]}%").order(Arel.sql("length(name), name"))
+    @metadata = @metadata_type.metadata.where('lower(name) LIKE lower(?)',
+                                              "%#{params[:search]}%").order(Arel.sql('length(name), name'))
 
-    needs_review = params[:status] == "all" ? 0 : params[:status] == "needs_review" ? 1 : 2
-    if(needs_review != 0)
-      tf = needs_review == 1 ? "true" : "false"
+    needs_review = if params[:status] == 'all'
+                     0
+                   else
+                     params[:status] == 'needs_review' ? 1 : 2
+                   end
+    if needs_review != 0
+      tf = needs_review == 1 ? 'true' : 'false'
       @metadata = @metadata.where("needs_review = #{tf}")
     end
 
@@ -136,7 +139,7 @@ class MetadataTypes::MetadataController < ApplicationController
     end
   end
 
-  def review 
+  def review
     authorize @metadatum
     @metadatum.needs_review = !@metadatum.needs_review
 
@@ -146,32 +149,36 @@ class MetadataTypes::MetadataController < ApplicationController
         @metadata = MetadataType.find(params[:metadata_type_id]).metadata
         format.turbo_stream
       else
-        format.turbo_stream { render "create_error" }
+        format.turbo_stream { render 'create_error' }
         # format.html { render :new, status: :unprocessable_entity }
       end
     end
-
   end
 
   def info
     authorize @metadatum
-    @added_by = (@metadatum.respond_to?(:user) ? (@metadatum.user&.name || "Unknown") : "Unknown")
-    @reviewed = (@metadatum.respond_to?(:needs_review) ? (@metadatum.needs_review ? "needs review" : "reviewed") : "N/A")
+    @added_by = (@metadatum.respond_to?(:user) ? (@metadatum.user&.name || 'Unknown') : 'Unknown')
+    @reviewed = (if @metadatum.respond_to?(:needs_review)
+                   @metadatum.needs_review ? 'needs review' : 'reviewed'
+                 else
+                   'N/A'
+                 end)
     @usage_count = (@metadatum.respond_to?(:contents) ? @metadatum.contents.count : 0)
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_metadatum
-      @metadatum = Metadatum.find(params[:id])
-    end
 
-    def set_metadata_type
-      @metadata_type = MetadataType.find(params[:metadata_type_id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_metadatum
+    @metadatum = Metadatum.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def metadatum_params
-      params.require(:metadatum).permit(:name, :metadata_type_id)
-    end
+  def set_metadata_type
+    @metadata_type = MetadataType.find(params[:metadata_type_id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def metadatum_params
+    params.require(:metadatum).permit(:name, :metadata_type_id)
+  end
 end

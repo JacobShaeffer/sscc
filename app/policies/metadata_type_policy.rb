@@ -11,7 +11,7 @@ class MetadataTypePolicy < ApplicationPolicy
   end
 
   def list?
-		@user.admin?
+    @user.admin?
   end
 
   def edit?
@@ -33,5 +33,4 @@ class MetadataTypePolicy < ApplicationPolicy
   def search?
     @user.admin?
   end
-
 end

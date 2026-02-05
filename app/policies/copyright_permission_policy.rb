@@ -35,7 +35,7 @@ class CopyrightPermissionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    @user.admin? || @user.intern_plus?  
+    @user.admin? || @user.intern_plus?
   end
 
   class Scope < Scope

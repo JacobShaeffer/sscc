@@ -1,14 +1,15 @@
 class CopyrightPermissionsController < ApplicationController
   include Filterable
-  before_action :set_copyright_permission, only: %i[ show edit update destroy ]
-  before_action :set_filterable_columns, only: %i[ index list ]
-	before_action :authenticate_user!
+  before_action :set_copyright_permission, only: %i[show edit update destroy]
+  before_action :set_filterable_columns, only: %i[index list]
+  before_action :authenticate_user!
 
   def index
     authorize CopyrightPermission
 
     clear_filters!(CopyrightPermission)
-    session["#{CopyrightPermission.to_s.underscore}_filters"] = {"columns" => ["organization_name", "organization_website", "date_contacted", "date_of_response", "granted"]}
+    session["#{CopyrightPermission.to_s.underscore}_filters"] =
+      { 'columns' => %w[organization_name organization_website date_contacted date_of_response granted] }
     @pagy, @copyright_permissions = pagy(CopyrightPermission.all, items: 10)
   end
 
@@ -36,7 +37,10 @@ class CopyrightPermissionsController < ApplicationController
 
     respond_to do |format|
       if @copyright_permission.save
-        format.html { redirect_to copyright_permission_url(@copyright_permission), notice: "Copyright permission was successfully created." }
+        format.html do
+          redirect_to copyright_permission_url(@copyright_permission),
+                      notice: 'Copyright permission was successfully created.'
+        end
         format.json { render :show, status: :created, location: @copyright_permission }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -50,7 +54,10 @@ class CopyrightPermissionsController < ApplicationController
     authorize @copyright_permission
     respond_to do |format|
       if @copyright_permission.update(copyright_permission_params)
-        format.html { redirect_to copyright_permission_url(@copyright_permission), notice: "Copyright permission was successfully updated." }
+        format.html do
+          redirect_to copyright_permission_url(@copyright_permission),
+                      notice: 'Copyright permission was successfully updated.'
+        end
         format.json { render :show, status: :ok, location: @copyright_permission }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -65,7 +72,7 @@ class CopyrightPermissionsController < ApplicationController
     @copyright_permission.destroy
 
     respond_to do |format|
-      format.html { redirect_to copyright_permissions_url, notice: "Copyright permission was successfully destroyed." }
+      format.html { redirect_to copyright_permissions_url, notice: 'Copyright permission was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -80,17 +87,19 @@ class CopyrightPermissionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_copyright_permission
-      @copyright_permission = CopyrightPermission.find(params[:id])
-    end
 
-    def set_filterable_columns
-      @filterable_columns = CopyrightPermission::FILTERABLE_COLUMNS
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_copyright_permission
+    @copyright_permission = CopyrightPermission.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def copyright_permission_params
-      params.require(:copyright_permission).permit(:notes, :organization_name, :organization_website, :organization_contact_information, :granted, :date_contacted, :date_of_response, :communication)
-    end
+  def set_filterable_columns
+    @filterable_columns = CopyrightPermission::FILTERABLE_COLUMNS
+  end
+
+  # Only allow a list of trusted parameters through.
+  def copyright_permission_params
+    params.require(:copyright_permission).permit(:notes, :organization_name, :organization_website,
+                                                 :organization_contact_information, :granted, :date_contacted, :date_of_response, :communication)
+  end
 end

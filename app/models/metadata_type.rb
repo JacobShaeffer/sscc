@@ -1,6 +1,6 @@
 class MetadataType < ApplicationRecord
-    belongs_to :user
-    has_many :metadata, dependent: :destroy
+  belongs_to :user
+  has_many :metadata, dependent: :destroy
 
-		validates :name, presence: true, allow_blank: false, uniqueness: true
+  validates :name, presence: true, allow_blank: false, uniqueness: true
 end

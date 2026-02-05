@@ -1,16 +1,15 @@
 class MetadataTypesController < ApplicationController
-  before_action :set_metadata_type, only: %i[ show edit update destroy ]
-	before_action :authenticate_user!
+  before_action :set_metadata_type, only: %i[show edit update destroy]
+  before_action :authenticate_user!
 
   # GET /metadata_types or /metadata_types.json
   def index
     authorize MetadataType
     @metadata_types = MetadataType.all.order(:order)
     @metadata_hash = {}
-    MetadataType.all.order(:order).each do | metadataType |
-      @metadata_hash[metadataType] = metadataType.metadata.order(Arel.sql("length(name), name")).first(10)
+    MetadataType.all.order(:order).each do |metadataType|
+      @metadata_hash[metadataType] = metadataType.metadata.order(Arel.sql('length(name), name')).first(10)
     end
-
   end
 
   def list
@@ -30,7 +29,7 @@ class MetadataTypesController < ApplicationController
 
     respond_to do |format|
       if @metadata_type.save
-        format.html { redirect_to list_metadata_types_path, notice: "Metadata type was successfully created." }
+        format.html { redirect_to list_metadata_types_path, notice: 'Metadata type was successfully created.' }
       else
         format.html { render :list, status: :unprocessable_entity }
       end
@@ -42,7 +41,7 @@ class MetadataTypesController < ApplicationController
     authorize @metadata_type
     respond_to do |format|
       if @metadata_type.update(metadata_type_params)
-				format.turbo_stream
+        format.turbo_stream
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -55,7 +54,7 @@ class MetadataTypesController < ApplicationController
     @metadata_type.destroy
 
     respond_to do |format|
-      format.html { redirect_to list_metadata_types_url, notice: "Metadata type was successfully destroyed." }
+      format.html { redirect_to list_metadata_types_url, notice: 'Metadata type was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -63,20 +62,21 @@ class MetadataTypesController < ApplicationController
   def search
     authorize MetadataType
     @target = params[:target]
-    @metadata_types = MetadataType.where("lower(name) LIKE lower(?)", "%#{params[:search]}%")
+    @metadata_types = MetadataType.where('lower(name) LIKE lower(?)', "%#{params[:search]}%")
     respond_to do |format|
       format.turbo_stream
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_metadata_type
-      @metadata_type = MetadataType.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def metadata_type_params
-      params.require(:metadata_type).permit(:name, :order)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_metadata_type
+    @metadata_type = MetadataType.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def metadata_type_params
+    params.require(:metadata_type).permit(:name, :order)
+  end
 end

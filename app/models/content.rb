@@ -36,8 +36,8 @@ class Content < ApplicationRecord
   scope :by_filename, lambda { |filename|
     joins(file_attachment: :blob).where('lower(active_storage_blobs.filename) LIKE lower(?)', "%#{filename}%")
   }
-  scope :by_created_after, ->(created_after) { where('created_at >= ?', created_after) }
-  scope :by_created_before, ->(created_before) { where('created_at <= ?', created_before) }
+  scope :by_created_after, ->(created_after) { where('contents.created_at >= ?', created_after) }
+  scope :by_created_before, ->(created_before) { where('contents.created_at <= ?', created_before) }
 
   # scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ?', type_id]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
   # scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ? AND lower(name) LIKE lower(?)', type_id, "%#{metadata}%"]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }

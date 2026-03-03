@@ -138,19 +138,19 @@ class Content < ApplicationRecord
   end
 
   def file_checksum_must_be_unique
-    return unless ActiveStorage::Blob.where(checksum: file.blob.checksum).exists?
+    duplicate_content = Content.joins(file_attachment: :blob).find_by(active_storage_blobs: { checksum: file.blob.checksum })
+    return if duplicate_content.blank?
 
-    existing_file_title = Content.joins(file_attachment: :blob).where(active_storage_blobs: { checksum: file.blob.checksum }).first.title
+    existing_file_title = duplicate_content.title
 
     errors.add(:file, "File already exists with title: #{existing_file_title}")
   end
 
   def file_filename_must_be_unique
-    return if errors.include?(:file)
-    filename = file.blob.filename.to_s
-    return unless ActiveStorage::Blob.where(filename: filename).exists?
+    duplicate_content = Content.joins(file_attachment: :blob).find_by('lower(active_storage_blobs.filename) LIKE lower(?)', "%#{file.blob.filename}%")
+    return if duplicate_content.blank?
 
-    existing_file_title = Content.by_filename(filename).first.title
+    existing_file_title = duplicate_content.title
 
     errors.add(:file, "A file with the same filename already exists with title: #{existing_file_title}")
   end

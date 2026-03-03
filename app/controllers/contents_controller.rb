@@ -52,11 +52,11 @@ class ContentsController < ApplicationController
 
   # POST /contents or /contents.json
   def create
+    authorize Content
     # content_params[:metadatum_ids].reject!(&:blank?) if content_params[:metadatum_ids]
     err('content params')
     log(content_params)
     @content = Content.new(content_params.merge(user: current_user))
-    authorize @content
 
     respond_to do |format|
       if @content.save

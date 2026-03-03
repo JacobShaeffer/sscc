@@ -12,6 +12,10 @@ class Content < ApplicationRecord
   validates :file, presence: true,
                    blob: { content_type: ['application/pdf', 'audio/mpeg', 'video/mp4'], size_range: 0..(256.megabytes) }
 
+  validate :file_checksum_must_be_unique
+  validate :file_filename_must_be_unique
+
+
   # List of filterable columns
   FILTERABLE_COLUMNS = %i[title user display_title description year_of_publication year_of_publication_from
                           year_of_publication_to filename created_after created_before].freeze
@@ -131,6 +135,24 @@ class Content < ApplicationRecord
     else
       metadatas(metadataType.id)
     end
+  end
+
+  def file_checksum_must_be_unique
+    return unless ActiveStorage::Blob.where(checksum: file.blob.checksum).exists?
+
+    existing_file_title = Content.joins(file_attachment: :blob).where(active_storage_blobs: { checksum: file.blob.checksum }).first.title
+
+    errors.add(:file, "File already exists with title: #{existing_file_title}")
+  end
+
+  def file_filename_must_be_unique
+    return if errors.include?(:file)
+    filename = file.blob.filename.to_s
+    return unless ActiveStorage::Blob.where(filename: filename).exists?
+
+    existing_file_title = Content.by_filename(filename).first.title
+
+    errors.add(:file, "A file with the same filename already exists with title: #{existing_file_title}")
   end
 
   def self.to_csv

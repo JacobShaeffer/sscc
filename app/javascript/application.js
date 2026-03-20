@@ -5,6 +5,7 @@ import "popper"
 import "bootstrap"
 import "@rails/request.js"
 import Rails from "@rails/ujs"
+import "tom-select"
 
 window.Rails = Rails;
 if(Rails.fire(document, "rails:attachBindings")) {

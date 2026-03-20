@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     collection do
       get :search
       get :list
+      get :auto_complete
       get :add_new_metadatum
       get :add_existing_metadatum
       get :download

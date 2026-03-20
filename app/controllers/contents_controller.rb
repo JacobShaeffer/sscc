@@ -242,6 +242,8 @@ class ContentsController < ApplicationController
   end
 
   # Only allow a list of trusted parameters through.
+  # These params are for creating/updating a Content
+  # If you are looking for search params, look in Content model
   def content_params
     params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication,
                                     :additional_notes, metadatum_ids: [])

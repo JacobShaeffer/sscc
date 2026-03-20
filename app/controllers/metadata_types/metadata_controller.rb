@@ -11,7 +11,8 @@ class MetadataTypes::MetadataController < ApplicationController
   # POST /metadata or /metadata.json
   def create
     @metadatum = Metadatum.new(metadatum_params.merge(user: current_user))
-    authorize @metadatum
+    authorize @metadata
+    @metadatum.errors.add('Wrong permission level') unless current_user.read_attribute_before_type_cast(:role) >= @metadata_type.access_level
     @metadatum.metadata_type = @metadata_type
     @metadatum.needs_review = false if current_user.admin? || current_user.intern_plus?
     @target = "metadataTable_#{params[:metadata_type_id]}"

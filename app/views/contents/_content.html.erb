@@ -25,6 +25,16 @@
   <div class="collapse <%= filters_active ? "show" : "" %>" id="collapseExample">
     <div class="card card-body">
     <%= content_filters_form(url: list_contents_path) do |form| %>
+      <%= form.label "search", for: "general"%>
+      <%= form.text_field "general", 
+            hide_label: true,
+            autocomplete: "off",
+            data: {action: "input->filters#filter"}
+      %>
+      <span style="font-size: small; color: grey;">Searches: Title, Display title, Description, User, Filename, and All Metadata</span>
+    <%end%>
+    <hr>
+    <%= content_filters_form(url: list_contents_path) do |form| %>
       <%= form.text_field :title, 
             autocomplete: "off",
             data: {action: "input->filters#filter"},

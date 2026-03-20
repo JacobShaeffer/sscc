@@ -19,40 +19,40 @@ class Content < ApplicationRecord
   # List of filterable columns
   FILTERABLE_COLUMNS = %i[title user display_title description year_of_publication year_of_publication_from
                           year_of_publication_to filename created_after created_before].freeze
-  FILTER_PARAMS = [FILTERABLE_COLUMNS + %i[sort direction], :items_per_page, { columns: [], metadata: {} }].freeze
+  FILTER_PARAMS = [FILTERABLE_COLUMNS + %i[sort direction], :items_per_page, { columns: [], metadata: {} }, 'general'].freeze
 
   scope :by_title,                      ->(title) { where('lower(title) LIKE lower(?)', "%#{title}%") }
-  scope :by_display_title,              lambda { |display_title|
-    where('lower(display_title) LIKE lower(?)', "%#{display_title}%")
-  }
-  scope :by_user, lambda { |user|
-    joins(:user).where('lower(users.name) LIKE lower(?)', "%#{user}%")
-  }
-  scope :by_description, lambda { |description|
-    where('lower(description) LIKE lower(?)', "%#{description}%")
-  }
-  scope :by_year_of_publication_from, lambda { |year_of_publication_from|
-    where('year_of_publication >= ?', year_of_publication_from)
-  }
-  scope :by_year_of_publication_to, lambda { |year_of_publication_to|
-    where('year_of_publication <= ?', year_of_publication_to)
-  }
-  scope :by_filename, lambda { |filename|
-    joins(file_attachment: :blob).where('lower(active_storage_blobs.filename) LIKE lower(?)', "%#{filename}%")
-  }
-  scope :by_created_after, ->(created_after) { where('contents.created_at >= ?', created_after) }
-  scope :by_created_before, ->(created_before) { where('contents.created_at <= ?', created_before) }
+  scope :by_display_title,              ->(display_title) { where('lower(display_title) LIKE lower(?)', "%#{display_title}%") }
+  scope :by_user,                       ->(user) { joins(:user).where('lower(users.name) LIKE lower(?)', "%#{user}%") }
+  scope :by_description,                ->(description) { where('lower(description) LIKE lower(?)', "%#{description}%") }
+  scope :by_year_of_publication_from,   ->(year_of_publication_from) { where('year_of_publication >= ?', year_of_publication_from) }
+  scope :by_year_of_publication_to,     ->(year_of_publication_to) { where('year_of_publication <= ?', year_of_publication_to) }
+  scope :by_filename,                   ->(filename) { joins(file_attachment: :blob).where('lower(active_storage_blobs.filename) LIKE lower(?)', "%#{filename}%") }
+  scope :by_created_after,              ->(created_after) { where('contents.created_at >= ?', created_after) }
+  scope :by_created_before,             ->(created_before) { where('contents.created_at <= ?', created_before) }
 
   # scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ?', type_id]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
   # scope :by_metadata_type_and_metadata, ->  (type_id, metadata) { where_assoc_exists(:metadata, ['metadata_type_id = ? AND lower(name) LIKE lower(?)', type_id, "%#{metadata}%"]).where_assoc_exists(:metadata, ['lower(name) LIKE lower(?)', "%#{metadata}%"]) }
-  scope :by_metadata_type_and_metadata, lambda { |type_id, metadata|
-    joins(:metadata).where(metadata: { metadata_type_id: type_id }).where('LOWER(metadata.name) LIKE LOWER(?)', "%#{metadata}%").distinct
+  scope :by_metadata_type_and_metadata, ->(type_id, metadata) { joins(:metadata).where(metadata: { metadata_type_id: type_id }).where('LOWER(metadata.name) LIKE LOWER(?)', "%#{metadata}%").distinct }
+
+  scope :by_any, lambda { |search_term|
+    by_title(search_term)
+      .or(by_display_title(search_term))
+      .or(by_description(search_term))
+      .or(where('LOWER(users.name) LIKE LOWER(?)', "%#{search_term}"))
+      .or(where('LOWER(active_storage_blobs.filename) LIKE LOWER(?)', "%#{search_term}"))
+      .or(where('LOWER(metadata.name) LIKE LOWER(?)', "%#{search_term}"))
+      .joins(:user)
+      .joins(file_attachment: :blob)
+      .joins(:metadata)
   }
 
   def self.filter(filters)
     # puts "\e[38;2;0;255;0m#{filters}\e[0m"
     # start by getting all the records
     filtered = Content.all
+
+    filtered = filtered.by_any(filters['general']) if filters['general'].present?
 
     # filter by each column if there is a value
     filtered = filtered.by_title(filters['title']) if filters['title'].present?

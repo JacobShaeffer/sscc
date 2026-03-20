@@ -77,6 +77,6 @@ class MetadataTypesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def metadata_type_params
-    params.require(:metadata_type).permit(:name, :order)
+    params.require(:metadata_type).permit(:name, :order, :access_level)
   end
 end

@@ -61,10 +61,10 @@
                         <option value="reviewed">Reviewed</option>
                       </select>
                     </div>
-                    <div class="thin-column btn-tools">
+                    <div class="thin-column btn-tools"> 
                         <%= form_for [metadata_type, Metadatum.new] do |form| %>
                           <%= form.hidden_field :name, id: metadata_type.id, data: { "metadatasearch-target": "nameinput" } %>
-                          <% if policy(Metadatum).create? %>
+                          <% if policy(Metadatum).create? && current_user.read_attribute_before_type_cast(:role) >= metadata_type.access_level%><!-- TODO: make this not appear if the user cannot add this metadata-type -->
                             <%= form.submit "+", class: "btn btn-success me-2" %>
                           <% end %>
                         <% end %>

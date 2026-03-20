@@ -16,6 +16,7 @@ module ContentsHelper
 
   def get_filter_values
     {
+      # general: session.dig('content_filters', :general.to_s) || '',
       title: session.dig('content_filters', :title.to_s) || '',
       display_title: session.dig('content_filters', :display_title.to_s) || '',
       user: session.dig('content_filters', :user.to_s) || '',

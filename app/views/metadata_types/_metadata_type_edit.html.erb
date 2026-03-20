@@ -11,7 +11,8 @@
 				<%= inline_error_for(:order, metadata_type) %>
 			</div>
 			<div class="col">
-				<%= form.number_field :access_level, class: "form-control", data: { "metadatasearch-target": "accesslevelinput" } %>
+				<%#= form.number_field :access_level, class: "form-control", data: { "metadatasearch-target": "accesslevelinput" } %>
+				<%= form.select :access_level, User.roles.map {|role| role}, {}, {class: "form-control", data: { "metadatasearch-target": "accesslevelinput"}} %>
 				<%= inline_error_for(:access_level, metadata_type) %>
 			</div>
 			<div class="thin-column">

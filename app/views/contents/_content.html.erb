@@ -22,13 +22,13 @@
   <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
     Filters 
   </button>
-  <input 
+<!--  <input 
     id="tom-select" 
     data-controller="tom-select" 
-    data-tom-select-url-value=<%=auto_complete_contents_path%>
+    data-tom-select-url-value=<%#=auto_complete_contents_path%>
     data-tom-select-field-value="title"
     autocomplete="off" 
-  />
+  />-->
   <div class="collapse <%= filters_active ? "show" : "" %>" id="collapseExample">
     <div class="card card-body">
     <%= content_filters_form(url: list_contents_path) do |form| %>
@@ -47,6 +47,14 @@
             data: {action: "input->filters#filter"},
             value: filter_values[:title]
       %>
+<!--      <input 
+        id="title" 
+        name="title"
+        data-controller="tom-select" 
+        data-tom-select-url-value=<%#=auto_complete_contents_path%>
+        data-tom-select-field-value="title"
+        autocomplete="off" 
+      />-->
       <%= form.text_field :display_title, 
             autocomplete: "off",
             data: {action: "input->filters#filter"},

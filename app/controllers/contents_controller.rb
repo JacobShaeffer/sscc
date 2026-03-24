@@ -176,38 +176,38 @@ class ContentsController < ApplicationController
     render(partial: 'content', locals: { contents: @contents, pagy: @pagy })
   end
 
-  def auto_complete
-    #authorize Content
-
-    contents = Content.where('LOWER(title) LIKE LOWER(?)', "%#{params.permit(:q)[:q]}")
-
-    items = contents.map do |content|
-      { id: content.id, name: content.title }
-    end
-
-    render json: { items: items }
-
-  end
-
-  #AI update TODO: review this code
   # def auto_complete
-  #   acceptable_fields = %w[title display_title description]
-  #   field = params[:field].to_s
-  #   return render(json: { items: [] }) unless acceptable_fields.include?(field)
+  #   #authorize Content
 
-  #   query = params[:q].to_s.strip
-  #   return render(json: { items: [] }) if query.empty?
-
-  #   contents = Content
-  #     .where("LOWER(#{field}) LIKE ?", "%#{query.downcase}%")
-  #     .limit(20)
+  #   contents = Content.where('LOWER(title) LIKE LOWER(?)', "%#{params.permit(:q)[:q]}")
 
   #   items = contents.map do |content|
-  #     { id: content.id, name: content.public_send(field) }
+  #     { id: content.id, name: content.title }
   #   end
 
   #   render json: { items: items }
+
   # end
+
+  #AI update TODO: review this code
+  def auto_complete
+    acceptable_fields = %w[title display_title description]
+    field = params[:field].to_s
+    return render(json: { items: [] }) unless acceptable_fields.include?(field)
+
+    query = params[:q].to_s.strip
+    return render(json: { items: [] }) if query.empty?
+
+    contents = Content
+      .where("LOWER(#{field}) LIKE ?", "%#{query.downcase}%")
+      .limit(20)
+
+    items = contents.map do |content|
+      { id: content.id, name: content.public_send(field) }
+    end
+
+    render json: { items: items }
+  end
 
   def download
     authorize Content

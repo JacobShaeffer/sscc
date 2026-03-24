@@ -41,10 +41,11 @@ class Content < ApplicationRecord
       .or(by_description(search_term))
       .or(where('LOWER(users.name) LIKE LOWER(?)', "%#{search_term}"))
       .or(where('LOWER(active_storage_blobs.filename) LIKE LOWER(?)', "%#{search_term}"))
-      .or(where('LOWER(metadata.name) LIKE LOWER(?)', "%#{search_term}"))
+      # .or(where('LOWER(metadata.name) LIKE LOWER(?)', "%#{search_term}")) # FIXME: with this present the number of search results decreases eventhough the search terms do not change
       .joins(:user)
       .joins(file_attachment: :blob)
-      .joins(:metadata)
+      # .joins(:metadata)
+      .distinct
   }
 
   def self.filter(filters)

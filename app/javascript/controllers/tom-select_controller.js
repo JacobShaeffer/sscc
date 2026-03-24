@@ -20,7 +20,7 @@ export default class extends Controller {
         const baseUrl = this.urlValue;
         const field = this.fieldValue;
 
-        new TomSelect("#tom-select",{
+        new TomSelect("#title",{
             plugins: {
                 'remove_button': {
                     title: 'Remove this item',
@@ -30,7 +30,7 @@ export default class extends Controller {
                 },
             },
             create: false,
-            valueField: 'id',
+            valueField: 'name',
             labelField: 'name',
             searchField: 'name',
             load: (query, callback) => {

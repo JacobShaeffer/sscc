@@ -36,15 +36,19 @@ class Content < ApplicationRecord
   scope :by_metadata_type_and_metadata, ->(type_id, metadata) { joins(:metadata).where(metadata: { metadata_type_id: type_id }).where('LOWER(metadata.name) LIKE LOWER(?)', "%#{metadata}%").distinct }
 
   scope :by_any, lambda { |search_term|
-    by_title(search_term)
-      .or(by_display_title(search_term))
-      .or(by_description(search_term))
-      .or(where('LOWER(users.name) LIKE LOWER(?)', "%#{search_term}"))
-      .or(where('LOWER(active_storage_blobs.filename) LIKE LOWER(?)', "%#{search_term}"))
-      .or(where('LOWER(metadata.name) LIKE LOWER(?)', "%#{search_term}"))
-      .joins(:user)
-      .joins(file_attachment: :blob)
-      .joins(:metadata)
+    pattern = "%#{search_term}%"
+
+    left_joins(:user, :metadata, file_attachment: :blob)
+      .where(
+        'LOWER(contents.title) LIKE LOWER(:pattern)
+         OR LOWER(contents.display_title) LIKE LOWER(:pattern)
+         OR LOWER(contents.description) LIKE LOWER(:pattern)
+         OR LOWER(users.name) LIKE LOWER(:pattern)
+         OR LOWER(active_storage_blobs.filename) LIKE LOWER(:pattern)
+         OR LOWER(metadata.name) LIKE LOWER(:pattern)',
+        pattern: pattern
+      )
+      .distinct
   }
 
   def self.filter(filters)

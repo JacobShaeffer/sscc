@@ -61,6 +61,21 @@ class ContentsControllerTest < ActionDispatch::IntegrationTest
     assert_equal ['title', @metadata_type.id.to_s], job_args.dig('filters', 'columns')
   end
 
+  test 'general search matches display title without metadata' do
+    sign_in @admin
+
+    content = create_content(
+      title: 'Display Title Match',
+      display_title: 'duplicate2',
+      filename: 'display-title-match.pdf'
+    )
+
+    get list_contents_path, params: { general: '2' }
+
+    assert_response :success
+    assert_includes response.body, "/contents/#{content.id}"
+  end
+
   test 'admin can download a DLMS report' do
     sign_in @admin
     File.write(Rails.root.join('tmp', @report_filename), '{"success":true}')
@@ -85,10 +100,10 @@ class ContentsControllerTest < ActionDispatch::IntegrationTest
 
   private
 
-  def create_content(title:, filename:, metadata: [])
+  def create_content(title:, filename:, metadata: [], display_title: nil)
     content = Content.new(
       title: title,
-      display_title: "#{title} Display",
+      display_title: display_title || "#{title} Display",
       description: "#{title} Description",
       year_of_publication: 2024,
       additional_notes: "#{title} Notes",

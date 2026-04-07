@@ -32,8 +32,10 @@ Rails.application.routes.draw do
       get :add_existing_metadatum
       get :download
       get :create_download
+      get :create_dlms_transfer
       get :delete_download
       get :download_spreadsheet
+      get :download_dlms_report
       get :download_zip
     end
   end

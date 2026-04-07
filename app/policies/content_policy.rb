@@ -70,6 +70,14 @@ class ContentPolicy < ApplicationPolicy
     @user.admin?
   end
 
+  def create_dlms_transfer?
+    @user.admin?
+  end
+
+  def download_dlms_report?
+    @user.admin?
+  end
+
   class Scope < Scope
     # NOTE: Be explicit about which records you allow access to!
     # def resolve

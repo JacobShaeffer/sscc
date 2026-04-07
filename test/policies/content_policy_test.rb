@@ -1,18 +1,33 @@
 require 'test_helper'
 
 class ContentPolicyTest < ActiveSupport::TestCase
-  def test_scope
+  test 'admin can use DLMS transfer actions' do
+    admin = User.create!(
+      email: 'admin-policy@example.com',
+      name: 'Admin Policy',
+      password: 'password123',
+      password_confirmation: 'password123',
+      role: :admin
+    )
+
+    policy = ContentPolicy.new(admin, Content)
+
+    assert policy.create_dlms_transfer?
+    assert policy.download_dlms_report?
   end
 
-  def test_show
-  end
+  test 'non-admin cannot use DLMS transfer actions' do
+    volunteer = User.create!(
+      email: 'volunteer-policy@example.com',
+      name: 'Volunteer Policy',
+      password: 'password123',
+      password_confirmation: 'password123',
+      role: :volunteer
+    )
 
-  def test_create
-  end
+    policy = ContentPolicy.new(volunteer, Content)
 
-  def test_update
-  end
-
-  def test_destroy
+    assert_not policy.create_dlms_transfer?
+    assert_not policy.download_dlms_report?
   end
 end

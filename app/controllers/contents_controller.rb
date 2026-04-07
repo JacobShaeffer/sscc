@@ -178,35 +178,39 @@ class ContentsController < ApplicationController
 
   def download
     authorize Content
-    raw_names = Dir[Rails.root.join('tmp/bulk_content_download_*.zip')]
-    @filenames = raw_names.map { |path| File.basename(path) }
-    require 'yaml'
-    # @runnning_jobs = Delayed::Job.all.map(|job| YAML.load_stream(job.handler)[0].job_data["job_id"])
-    return unless Delayed::Job.all.size > 0
-
-    @jobs = Delayed::Job.all.map do |job|
-      handler = YAML.load_stream(job.handler)[0]
-      [handler.job_data['job_id'], job.locked_at] if handler.job_data['job_class'].include?('ContentDownloadJob')
-    end.compact
-    # @jobs = Delayed::Job.all.map{ |job| [YAML.load_stream(job.handler)[0].job_data["job_id"], job.locked_at] }
+    @zip_filenames = tmp_filenames('bulk_content_download_*.zip')
+    @dlms_report_filenames = tmp_filenames('dlms_content_transfer_*.json')
+    @zip_jobs = delayed_jobs_for('ContentDownloadJob')
+    @dlms_jobs = delayed_jobs_for('ContentDlmsTransferJob')
   end
 
   def create_download
+    authorize Content
     contents_scope = filter!(Content)
     @job_id = ContentDownloadJob.perform_later(contents_scope.pluck(:id)).job_id
+  end
+
+  def create_dlms_transfer
+    authorize Content
+    contents_scope = filter!(Content)
+    filters_snapshot = session.fetch('content_filters', {}).deep_dup
+
+    @job_id = ContentDlmsTransferJob.perform_later(
+      content_ids: contents_scope.pluck(:id),
+      filters: filters_snapshot,
+      queued_at: Time.current.iso8601,
+      base_url: DlmsClient.default_base_url
+    ).job_id
   end
 
   def delete_download
     authorize Content
     zip_filename = params[:filename]
-    log(zip_filename)
-    Dir[Rails.root.join('tmp/bulk_content_download_*.zip')]
+    raw_names = Dir[Rails.root.join('tmp/bulk_content_download_*.zip')]
     full_path = Rails.root.join('tmp', zip_filename)
 
-    return unless full_path in raw_names
+    return unless raw_names.include?(full_path.to_s)
 
-    log(full_path)
-    log(File.exist?(full_path))
     File.delete(full_path) if File.exist?(full_path)
   end
 
@@ -219,14 +223,27 @@ class ContentsController < ApplicationController
   def download_zip
     authorize Content
     zip_filename = params[:filename]
-    # send_file Rails.root.join('tmp', zip_filename)
-
     path = Rails.root.join('tmp', zip_filename)
     send_file path,
               filename: zip_filename,
               type: 'application/zip',
               disposition: 'attachment',
               stream: false, # <= important: don't stream from Rails
+              buffer_size: 4096
+  end
+
+  def download_dlms_report
+    authorize Content
+    filename = params[:filename].to_s
+    path = Rails.root.join('tmp', filename)
+
+    return head(:not_found) unless filename.match?(/\Adlms_content_transfer_.*\.json\z/) && File.exist?(path)
+
+    send_file path,
+              filename: filename,
+              type: 'application/json',
+              disposition: 'attachment',
+              stream: false,
               buffer_size: 4096
   end
 
@@ -239,6 +256,24 @@ class ContentsController < ApplicationController
 
   def set_filterable_columns
     @filterable_columns = Content::FILTERABLE_COLUMNS
+  end
+
+  def tmp_filenames(pattern)
+    Dir[Rails.root.join("tmp/#{pattern}")]
+      .map { |path| File.basename(path) }
+      .sort
+      .reverse
+  end
+
+  def delayed_jobs_for(job_class_name)
+    require 'yaml'
+
+    Delayed::Job.all.map do |job|
+      handler = YAML.load_stream(job.handler)[0]
+      next unless handler.job_data['job_class'].include?(job_class_name)
+
+      [handler.job_data['job_id'], job.locked_at]
+    end.compact
   end
 
   # Only allow a list of trusted parameters through.

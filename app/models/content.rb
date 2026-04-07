@@ -156,37 +156,12 @@ class Content < ApplicationRecord
   end
 
   def self.to_csv
+    metadata_types = MetadataType.all.order(:order).to_a
+
     CSV.generate(headers: true) do |csv|
-      csv << [
-        'Title',
-        'Display Title',
-        'File Name',
-        'Description',
-        'Modified On',
-        'Copyright Notes',
-        'Additional Notes',
-        'Year Published',
-        'Reviewed On',
-        'Active',
-        'Duplicatable',
-        'Filesize'
-      ].concat(MetadataType.all.map { |type| type.name })
+      csv << ContentExporter.headers(metadata_types: metadata_types)
       all.each do |content|
-        csv << [
-          content.title,
-          content.display_title,
-          content.file.filename.to_s, # does this work?
-          content.description,
-          '', # check this (Modified On)
-          '', # check this (Copywrite Notes)
-          content.additional_notes,
-          content.year_of_publication,
-          '', # check this (Reviewed On)
-          'True',
-          'False',
-          content.file.byte_size
-        ].concat(MetadataType.all.map { |type| content.metadatas_by_name(type.name).join(' | ') })
-        # multiple values should be separated by a pipe (|)
+        csv << ContentExporter.row_values(content, metadata_types: metadata_types)
       end
     end
   end
@@ -196,48 +171,16 @@ class Content < ApplicationRecord
 
     package = Axlsx::Package.new
     workbook = package.workbook
+    metadata_types = MetadataType.all.order(:order).to_a
 
     # Create a new worksheet
     workbook.add_worksheet(name: 'Contents') do |sheet|
-      # Build the header row
-      header_row = [
-        'Title',
-        'Display Title',
-        'File Name',
-        'Description',
-        'Modified On',
-        'Copyright Notes',
-        'Additional Notes',
-        'Year Published',
-        'Reviewed On',
-        'Active',
-        'Duplicatable',
-        'Filesize'
-      ].concat(MetadataType.all.map(&:name))
-
       # Add header row
-      sheet.add_row(header_row)
+      sheet.add_row(ContentExporter.headers(metadata_types: metadata_types))
 
       # Iterate over all content records
       all.find_each do |content|
-        row_data = [
-          content.title,
-          content.display_title,
-          content.file.filename.to_s,
-          content.description,
-          '',                           # "Modified On" placeholder
-          '',                           # "Copyright Notes" placeholder
-          content.additional_notes,
-          content.year_of_publication,
-          '',                           # "Reviewed On" placeholder
-          'True',
-          'False',
-          content.file.byte_size
-        ].concat(
-          MetadataType.all.map { |type| content.metadatas_by_name(type.name).join(' | ') }
-        )
-
-        sheet.add_row(row_data)
+        sheet.add_row(ContentExporter.row_values(content, metadata_types: metadata_types))
       end
     end
 

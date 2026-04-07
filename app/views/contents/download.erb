@@ -1,17 +1,25 @@
 <div class="col">
   <%= link_to "Download Metadata Spreadsheet", download_spreadsheet_contents_path, class: "btn btn-primary" %>
   <%= link_to "Create New Content Zip", create_download_contents_path, class: "btn btn-primary" %>
+  <%= link_to "Transfer Content to DLMS", create_dlms_transfer_contents_path, class: "btn btn-primary" %>
 </div>
 <div style="margin-top: 15px;">
-  <h3>Finished Jobs</h3>
-  <% @filenames.each do |filename| %>
+  <h3>Finished Zip Jobs</h3>
+  <% @zip_filenames.each do |filename| %>
       <p>
       <%= link_to filename, download_zip_contents_path(filename: filename) %>
       <%= link_to 'delete', delete_download_contents_path(filename: filename), style: "color: red;"%>
       </p>
   <% end %>
 
-  <h3>Running Jobs</h3>
+  <h3>Finished DLMS Reports</h3>
+  <% @dlms_report_filenames.each do |filename| %>
+      <p>
+      <%= link_to filename, download_dlms_report_contents_path(filename: filename) %>
+      </p>
+  <% end %>
+
+  <h3>Running Zip Jobs</h3>
   <table style="border: 1px solid black;">
     <thead>
         <tr>
@@ -20,15 +28,33 @@
         </tr>
     </thead>
     <tbody>
-    <% if @jobs %>
-      <% @jobs.each do |job| %>
+    <% @zip_jobs.each do |job| %>
         <tr>
           <td style="border: 1px solid black;"><%= job[0] %></td>
           <% if job[1] %>
           <td style="border: 1px solid black;"><%= job[1].strftime('%m-%d-%y %H:%M') %></td>
           <% end %>
         </tr>
-      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top: 15px;">Running DLMS Jobs</h3>
+  <table style="border: 1px solid black;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid black;">Job ID</th>
+            <th style="border: 1px solid black;">Start Time</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% @dlms_jobs.each do |job| %>
+        <tr>
+          <td style="border: 1px solid black;"><%= job[0] %></td>
+          <% if job[1] %>
+          <td style="border: 1px solid black;"><%= job[1].strftime('%m-%d-%y %H:%M') %></td>
+          <% end %>
+        </tr>
     <% end %>
     </tbody>
   </table>

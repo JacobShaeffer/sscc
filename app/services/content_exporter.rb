@@ -62,8 +62,19 @@ class ContentExporter
       'display_title' => row['Display Title'],
       'description' => row['Description'],
       'additional_notes' => row['Additional Notes'],
-      'published_year' => row['Year Published'],
+      'published_date' => published_date(row['Year Published']),
+      'reviewed_on' => reviewed_on,
       'active' => row['Active']
     }.compact
+  end
+
+  def self.published_date(year)
+    return if year.blank?
+
+    Date.new(year.to_i, 1, 1).iso8601
+  end
+
+  def self.reviewed_on
+    Date.current.iso8601
   end
 end

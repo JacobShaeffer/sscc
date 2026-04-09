@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class ContentDlmsTransferJobTest < ActiveSupport::TestCase
+  include ActiveSupport::Testing::TimeHelpers
+
   setup do
     @admin = User.create!(
       email: 'admin-job@example.com',
@@ -20,17 +22,19 @@ class ContentDlmsTransferJobTest < ActiveSupport::TestCase
     cleanup_reports
   end
 
-  test 'writes report with uploaded content, filters, metadata ids, and active true field' do
+  test 'writes report with uploaded content, filters, metadata ids, active true field, published_date, and reviewed_on' do
     content = create_content(title: 'Transferable', filename: 'transferable.pdf', metadata: [@science, @book])
     fake_client = FakeDlmsClient.new
     job = build_job(fake_client, 'job-upload-1')
 
-    job.perform(
-      content_ids: [content.id],
-      filters: { 'title' => 'Transferable', 'metadata' => { @subject_type.id.to_s => 'Science' } },
-      queued_at: '2026-04-07T12:00:00Z',
-      base_url: 'http://example.test'
-    )
+    travel_to Time.zone.local(2026, 4, 9, 8, 15, 0) do
+      job.perform(
+        content_ids: [content.id],
+        filters: { 'title' => 'Transferable', 'metadata' => { @subject_type.id.to_s => 'Science' } },
+        queued_at: '2026-04-07T12:00:00Z',
+        base_url: 'http://example.test'
+      )
+    end
 
     report = JSON.parse(File.read(report_files.first))
     result = report.fetch('results').first
@@ -40,6 +44,9 @@ class ContentDlmsTransferJobTest < ActiveSupport::TestCase
     assert_equal 'uploaded', result.fetch('status')
     assert_equal [101, 102], result.fetch('resolved_metadata_ids')
     assert_equal 'True', fake_client.uploads.first[:fields].fetch('active')
+    assert_equal '2025-01-01', fake_client.uploads.first[:fields].fetch('published_date')
+    assert_equal '2026-04-09', fake_client.uploads.first[:fields].fetch('reviewed_on')
+    assert_not fake_client.uploads.first[:fields].key?('published_year')
     assert_equal 'transferable.pdf', fake_client.uploads.first[:original_filename]
     assert_equal [101, 102], Array(fake_client.uploads.first[:fields]['metadata']).map(&:to_i)
     assert_equal 1, report.dig('summary', 'uploaded')

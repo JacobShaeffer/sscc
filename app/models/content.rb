@@ -142,7 +142,11 @@ class Content < ApplicationRecord
   end
 
   def file_checksum_must_be_unique
-    duplicate_content = Content.joins(file_attachment: :blob).find_by(active_storage_blobs: { checksum: file.blob.checksum })
+    return unless file.attached?
+
+    duplicate_content = Content.joins(file_attachment: :blob)
+                               .where.not(id: id)
+                               .find_by(active_storage_blobs: { checksum: file.blob.checksum })
     return if duplicate_content.blank?
 
     existing_file_title = duplicate_content.title
@@ -151,7 +155,11 @@ class Content < ApplicationRecord
   end
 
   def file_filename_must_be_unique
-    duplicate_content = Content.joins(file_attachment: :blob).find_by('lower(active_storage_blobs.filename) LIKE lower(?)', "%#{file.blob.filename}%")
+    return unless file.attached?
+
+    duplicate_content = Content.joins(file_attachment: :blob)
+                               .where.not(id: id)
+                               .find_by('LOWER(active_storage_blobs.filename) = ?', file.blob.filename.to_s.downcase)
     return if duplicate_content.blank?
 
     existing_file_title = duplicate_content.title

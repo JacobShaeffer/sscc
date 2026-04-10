@@ -98,9 +98,83 @@ class ContentsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
+  test 'updating content without a file param keeps the existing attachment' do
+    sign_in @admin
+
+    content = create_content(title: 'Editable Update', filename: 'editable-update.pdf')
+    original_blob_id = content.file.blob.id
+
+    patch content_path(content), params: {
+      content: {
+        title: content.title,
+        display_title: 'Updated Display Title',
+        description: 'Updated description',
+        year_of_publication: content.year_of_publication,
+        additional_notes: content.additional_notes
+      }
+    }
+
+    assert_redirected_to content_path(content)
+
+    content.reload
+    assert_equal original_blob_id, content.file.blob.id
+    assert_equal 'Updated Display Title', content.display_title
+    assert_equal 'Updated description', content.description
+  end
+
+  test 'updating content with a duplicate uploaded file fails' do
+    sign_in @admin
+
+    existing = create_content(title: 'Duplicate Source', filename: 'duplicate-source.pdf', file_body: '%PDF-1.4 duplicate')
+    content = create_content(title: 'Duplicate Target', filename: 'duplicate-target.pdf', file_body: '%PDF-1.4 target')
+    duplicate_blob = create_uploaded_blob(filename: 'replacement.pdf', body: '%PDF-1.4 duplicate')
+    original_blob_id = content.file.blob.id
+
+    patch content_path(content), params: {
+      content: {
+        title: content.title,
+        display_title: content.display_title,
+        description: content.description,
+        year_of_publication: content.year_of_publication,
+        additional_notes: content.additional_notes,
+        file: duplicate_blob.signed_id
+      }
+    }
+
+    assert_response :unprocessable_entity
+    assert_includes response.body, "File already exists with title: #{existing.title}"
+
+    content.reload
+    assert_equal original_blob_id, content.file.blob.id
+  end
+
+  test 'updating content ignores preloaded blob urls submitted as file params' do
+    sign_in @admin
+
+    content = create_content(title: 'Preloaded Url Content', filename: 'preloaded-url.pdf')
+    original_blob_id = content.file.blob.id
+
+    patch content_path(content), params: {
+      content: {
+        title: content.title,
+        display_title: 'Updated via URL Payload',
+        description: 'Updated description',
+        file: Rails.application.routes.url_helpers.rails_blob_path(content.file, only_path: true),
+        year_of_publication: content.year_of_publication,
+        additional_notes: content.additional_notes
+      }
+    }
+
+    assert_redirected_to content_path(content)
+
+    content.reload
+    assert_equal original_blob_id, content.file.blob.id
+    assert_equal 'Updated via URL Payload', content.display_title
+  end
+
   private
 
-  def create_content(title:, filename:, metadata: [], display_title: nil)
+  def create_content(title:, filename:, metadata: [], display_title: nil, file_body: nil)
     content = Content.new(
       title: title,
       display_title: display_title || "#{title} Display",
@@ -110,12 +184,20 @@ class ContentsControllerTest < ActionDispatch::IntegrationTest
       user: @admin
     )
     content.file.attach(
-      io: StringIO.new("%PDF-1.4 #{title}"),
+      io: StringIO.new(file_body || "%PDF-1.4 #{title}"),
       filename: filename,
       content_type: 'application/pdf'
     )
     content.save!
     content.metadata = metadata if metadata.any?
     content
+  end
+
+  def create_uploaded_blob(filename:, body:, content_type: 'application/pdf')
+    ActiveStorage::Blob.create_and_upload!(
+      io: StringIO.new(body),
+      filename: filename,
+      content_type: content_type
+    )
   end
 end

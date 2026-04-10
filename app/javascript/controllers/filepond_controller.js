@@ -11,52 +11,42 @@ export default class extends Controller {
 		extensions: Array,
 	}
 
-    initialize() {
-    	// Called once, when the controller is first instantiated
-		// console.log("filepond controller initialized")
+    connect() {
 		FilePond.registerPlugin(FilePondPluginFileValidateType);
 		FilePond.registerPlugin(FilePondPluginFileValidateSize);
 
-		var directUploadUrl;
-		const input = document.querySelector('input[type="file"]');
-		if (input) {
-			directUploadUrl = input.dataset.directUploadUrl;
-		}
+		this.input = this.element.querySelector('input[type="file"]');
+		this.form = this.element.closest('form');
+		this.submit = this.form?.querySelector('input[type="submit"], button[type="submit"]');
 
-		const submit = document.querySelector('input[type="submit"]');
+		if (!this.input || !this.form) return;
 
-		FilePond.setOptions({
+		this.inputName = this.input.name;
+		this.input.name = '';
+
+		this.pond = FilePond.create(this.input, {
 			acceptedFileTypes: this.extensionsValue,
 			maxFileSize: '265MB',
 			credits: ['https://pqina.nl/filepond/', 'Powered by FilePond'],
-			onaddfilestart: (file) => {
-				submit.disabled = true;
+			files: this.existingFiles(),
+			onaddfilestart: () => {
+				this.setSubmitDisabled(true);
 			},
-			onprocessfile: (error, file) => {
+			onprocessfile: (error) => {
 				if (error) {
 					console.log("error");
 					console.log(error);
-				}	
-				else {
-					submit.disabled = false;
-					// console.log("file: ", file);
-					// this file object has a property called serverId which is the id of the blob
-					// this can be used to show the content on the page after it's been uploaded
-					//
-					// The rails way to do this is the following:
-					//url_for(user.avatar)
-					//# => https://www.example.com/rails/active_storage/blobs/redirect/:signed_id/my-avatar.png
-					// but I don't know if we can do this in the controller unless it's through turbo, but even then 
-					// we would have to specify the controller and I don't know if we can do that
-
+				}
+				else{
+					this.setSubmitDisabled(false);
 				}
 			},
-			onrestore: (error, file) => {
-				submit.disabled = false;
+			onrestore: () => {
+				this.setSubmitDisabled(false);
 			},
 			server: {
-				process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-					const uploader = new DirectUpload(file, directUploadUrl, {
+				process: (fieldName, file, metadata, load, error, progress, abort) => {
+					const uploader = new DirectUpload(file, this.input.dataset.directUploadUrl, {
 						directUploadWillStoreFileWithXHR: (request) => {
 							request.upload.addEventListener(
 								'progress',
@@ -68,11 +58,7 @@ export default class extends Controller {
 						if (errorResponse) {
 							error(`Something went wrong: ${errorResponse}`)
 						} else {
-							const hiddenField = document.createElement('input')
-							hiddenField.setAttribute('type', 'hidden')
-							hiddenField.setAttribute('value', blob.signed_id)
-							hiddenField.name = input.name
-							document.querySelector('form').appendChild(hiddenField)
+							this.replaceHiddenField(blob.signed_id);
 							load(blob.signed_id)
 						}
 					})
@@ -81,8 +67,17 @@ export default class extends Controller {
 						abort: () => abort()
 					}
 				},
-				load: (source, load, error, progress, abort, headers) => {
-					fetch(source.url)
+				load: (source, load, error, progress, abort) => {
+					const sourceUrl = typeof source === 'string' ? source : source?.url;
+
+					if (!sourceUrl) {
+						error('Missing source URL');
+						return {
+							abort: () => abort(),
+						};
+					}
+
+					fetch(sourceUrl)
 						.then(response => response.blob())
 						.then(load);
 					
@@ -99,28 +94,49 @@ export default class extends Controller {
 					'X-CSRF-Token': document.head.querySelector("[name='csrf-token']").content
 				}
 			}
-		})
+		});
+    }
 
-		if (input) {
-			const fileId= input.dataset.filepondFileId;
-			const fileName = input.dataset.filepondFileName;
-			const fileSize = input.dataset.filepondFileSize;
+	disconnect() {
+		this.pond?.destroy();
+	}
 
-			FilePond.create( input, {
-				files: fileId && fileName ? [{
-					// This tells FilePond this is an existing file
-					source: fileId,
-					options: {
-						type: 'local',
-						file: {
-							name: fileName,
-							size: fileSize,
-							type: 'application/pdf',
-						}
-					}
-				}] : []
-			});
-
+	setSubmitDisabled(disabled) {
+		if (this.submit) {
+			this.submit.disabled = disabled;
 		}
+	}
+
+	replaceHiddenField(signedId) {
+		const existingHiddenField = this.form.querySelector('[data-filepond-hidden-field="true"]');
+		if (existingHiddenField) existingHiddenField.remove();
+
+		const hiddenField = document.createElement('input');
+		hiddenField.setAttribute('type', 'hidden');
+		hiddenField.setAttribute('value', signedId);
+		hiddenField.setAttribute('data-filepond-hidden-field', 'true');
+		hiddenField.name = this.inputName;
+		this.form.appendChild(hiddenField);
+	}
+
+	existingFiles() {
+		const fileUrl = this.input.dataset.filepondFileUrl;
+		const fileName = this.input.dataset.filepondFileName;
+		const fileSize = this.input.dataset.filepondFileSize;
+		const fileType = this.input.dataset.filepondFileType;
+
+		if (!fileUrl || !fileName) return [];
+
+		return [{
+			source: fileUrl,
+			options: {
+				type: 'local',
+				file: {
+					name: fileName,
+					size: fileSize,
+					type: fileType,
+				}
+			}
+		}];
 	}
 }

@@ -280,7 +280,13 @@ class ContentsController < ApplicationController
   # These params are for creating/updating a Content
   # If you are looking for search params, look in Content model
   def content_params
-    params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication,
-                                    :additional_notes, metadatum_ids: [])
+    permitted_params = params.require(:content).permit(:title, :display_title, :file, :description, :year_of_publication,
+                                                       :additional_notes, metadatum_ids: [])
+
+    if permitted_params[:file].is_a?(String) && permitted_params[:file].start_with?('/rails/active_storage/blobs/')
+      permitted_params.delete(:file)
+    end
+
+    permitted_params
   end
 end

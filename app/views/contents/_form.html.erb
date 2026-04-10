@@ -27,9 +27,10 @@
 				direct_upload: true, 
 				skip_label: true,
 				data: {
-					'filepond-file-id': form.object.file.attached? ? form.object.file.signed_id : nil,
+					'filepond-file-url': form.object.file.attached? ? rails_blob_path(form.object.file, only_path: true) : nil,
 					'filepond-file-name': form.object.file.attached? ? form.object.file.filename : nil,
 					'filepond-file-size': form.object.file.attached? ? form.object.file.blob.byte_size : nil,
+					'filepond-file-type': form.object.file.attached? ? form.object.file.blob.content_type : nil,
 				}
 			%>
 		</div>

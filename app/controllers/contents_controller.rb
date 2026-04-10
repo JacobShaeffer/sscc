@@ -19,6 +19,7 @@ class ContentsController < ApplicationController
     end
     items_per_page = session.dig('content_filters', :items_per_page.to_s)
 
+    @total_content = Content.count
     @pagy, @contents = pagy(Content.order(created_at: :desc), items: items_per_page || 10)
   end
 
@@ -173,7 +174,7 @@ class ContentsController < ApplicationController
     items_per_page = session.dig('content_filters', :items_per_page.to_s)
 
     @pagy, @contents = pagy(contents_scope.order(created_at: :desc), items: items_per_page || 10)
-    render(partial: 'content', locals: { contents: @contents, pagy: @pagy })
+    render(partial: 'content', locals: { contents: @contents, pagy: @pagy, total_content: contents_scope.length })
   end
 
   def download

@@ -2,6 +2,41 @@ require 'test_helper'
 require 'zip'
 
 class ContentExporterTest < ActiveSupport::TestCase
+  include ActiveSupport::Testing::TimeHelpers
+
+  test 'dlms_fields exports year of publication as published_date and reviewed_on' do
+    admin = User.create!(
+      email: 'admin-dlms-export@example.com',
+      name: 'Admin Dlms Export',
+      password: 'password123',
+      password_confirmation: 'password123',
+      role: :admin
+    )
+    metadata_type = MetadataType.create!(name: 'Subject', order: 1, user: admin)
+    content = Content.new(
+      title: 'DLMS Title',
+      display_title: 'DLMS Display',
+      description: 'DLMS Description',
+      year_of_publication: 2026,
+      additional_notes: 'DLMS Notes',
+      user: admin
+    )
+    content.file.attach(
+      io: StringIO.new('%PDF-1.4 dlms'),
+      filename: 'dlms.pdf',
+      content_type: 'application/pdf'
+    )
+    content.save!
+
+    travel_to Time.zone.local(2026, 4, 9, 10, 30, 0) do
+      fields = ContentExporter.dlms_fields(content, metadata_types: [metadata_type])
+
+      assert_equal '2026-01-01', fields['published_date']
+      assert_equal '2026-04-09', fields['reviewed_on']
+      assert_not fields.key?('published_year')
+    end
+  end
+
   test 'to_xlsx includes shared exporter headers and row values' do
     admin = User.create!(
       email: 'admin-export@example.com',

@@ -22,6 +22,13 @@ class ContentsControllerTest < ActionDispatch::IntegrationTest
       password_confirmation: 'password123',
       role: :volunteer
     )
+    @intern = User.create!(
+      email: 'intern-controller@example.com',
+      name: 'Intern Controller',
+      password: 'password123',
+      password_confirmation: 'password123',
+      role: :intern
+    )
     @metadata_type = MetadataType.create!(name: 'Subject', order: 1, user: @admin)
     @metadatum = Metadatum.create!(name: 'Science', metadata_type: @metadata_type, user: @admin)
     @matching_content = create_content(title: 'Matching Content', filename: 'matching.pdf', metadata: [@metadatum])
@@ -170,6 +177,48 @@ class ContentsControllerTest < ActionDispatch::IntegrationTest
     content.reload
     assert_equal original_blob_id, content.file.blob.id
     assert_equal 'Updated via URL Payload', content.display_title
+  end
+
+  test 'user below metadata type access level cannot add a new metadatum from content form' do
+    sign_in @intern
+    restricted_type = MetadataType.create!(
+      name: 'Admin-only metadata',
+      order: 2,
+      access_level: User.roles.fetch(:admin),
+      user: @admin
+    )
+
+    assert_no_difference('Metadatum.count') do
+      get add_new_metadatum_contents_path(format: :turbo_stream), params: {
+        metadata_type_id: restricted_type.id,
+        target: "metadataBadge_#{restricted_type.id}_container",
+        name: 'Restricted value'
+      }
+    end
+
+    assert_response :forbidden
+    assert_includes response.body, 'You do not have permission to add values for this metadata type.'
+  end
+
+  test 'user at metadata type access level can add a new metadatum from content form' do
+    sign_in @intern
+    intern_type = MetadataType.create!(
+      name: 'Intern metadata',
+      order: 2,
+      access_level: User.roles.fetch(:intern),
+      user: @admin
+    )
+
+    assert_difference('Metadatum.count', 1) do
+      get add_new_metadatum_contents_path(format: :turbo_stream), params: {
+        metadata_type_id: intern_type.id,
+        target: "metadataBadge_#{intern_type.id}_container",
+        name: 'Allowed value'
+      }
+    end
+
+    assert_response :success
+    assert_equal @intern, Metadatum.find_by!(metadata_type: intern_type, name: 'Allowed value').user
   end
 
   private

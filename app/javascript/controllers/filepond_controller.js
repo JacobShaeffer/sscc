@@ -26,7 +26,7 @@ export default class extends Controller {
 
 		this.pond = FilePond.create(this.input, {
 			acceptedFileTypes: this.extensionsValue,
-			maxFileSize: '265MB',
+			maxFileSize: '256MB',
 			credits: ['https://pqina.nl/filepond/', 'Powered by FilePond'],
 			files: this.existingFiles(),
 			onaddfilestart: () => {
@@ -43,6 +43,9 @@ export default class extends Controller {
 			},
 			onrestore: () => {
 				this.setSubmitDisabled(false);
+			},
+			onremovefile: () => {
+				this.removeHiddenField();
 			},
 			server: {
 				process: (fieldName, file, metadata, load, error, progress, abort) => {
@@ -108,8 +111,7 @@ export default class extends Controller {
 	}
 
 	replaceHiddenField(signedId) {
-		const existingHiddenField = this.form.querySelector('[data-filepond-hidden-field="true"]');
-		if (existingHiddenField) existingHiddenField.remove();
+		this.removeHiddenField();
 
 		const hiddenField = document.createElement('input');
 		hiddenField.setAttribute('type', 'hidden');
@@ -117,6 +119,10 @@ export default class extends Controller {
 		hiddenField.setAttribute('data-filepond-hidden-field', 'true');
 		hiddenField.name = this.inputName;
 		this.form.appendChild(hiddenField);
+	}
+
+	removeHiddenField() {
+		this.form.querySelectorAll('[data-filepond-hidden-field="true"]').forEach((field) => field.remove());
 	}
 
 	existingFiles() {

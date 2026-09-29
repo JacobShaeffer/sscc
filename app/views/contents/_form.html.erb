@@ -1,4 +1,5 @@
 <%= bootstrap_form_for [@metadata_type, @content], data: {controller: 'form'} do |form| %>
+	<%= form.alert_message "Please correct the following errors:" %>
 
 	<div class="row">
 		<div class="field col-lg-6 col-md-12">
@@ -33,6 +34,12 @@
 					'filepond-file-type': form.object.file.attached? ? form.object.file.blob.content_type : nil,
 				}
 			%>
+			<% if form.object.errors.any? && form.object.file.attached? %>
+				<%= form.hidden_field :file,
+					value: form.object.file.blob.signed_id,
+					id: nil,
+					data: { filepond_hidden_field: true } %>
+			<% end %>
 		</div>
 
 		<div class="field col-lg-4 col-md-6 col-sm-12">

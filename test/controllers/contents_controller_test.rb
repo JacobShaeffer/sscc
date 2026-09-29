@@ -111,6 +111,11 @@ class ContentsControllerTest < ActionDispatch::IntegrationTest
     content = create_content(title: 'Editable Update', filename: 'editable-update.pdf')
     original_blob_id = content.file.blob.id
 
+    get edit_content_path(content)
+
+    assert_response :success
+    assert_select "input[name='content[file]'][type='hidden']", count: 0
+
     patch content_path(content), params: {
       content: {
         title: content.title,
@@ -153,6 +158,71 @@ class ContentsControllerTest < ActionDispatch::IntegrationTest
 
     content.reload
     assert_equal original_blob_id, content.file.blob.id
+  end
+
+  test 'failed content creation preserves the direct upload for a successful retry' do
+    sign_in @admin
+    uploaded_blob = create_uploaded_blob(filename: 'retry-upload.pdf', body: '%PDF-1.4 retry upload')
+    submitted_content = {
+      title: @matching_content.title,
+      display_title: 'Retry Display Title',
+      description: 'Retry Description',
+      year_of_publication: 2024,
+      additional_notes: 'Retry Notes',
+      file: uploaded_blob.signed_id,
+      metadatum_ids: [@metadatum.id]
+    }
+
+    assert_no_difference('Content.count') do
+      post contents_path, params: { content: submitted_content }
+    end
+
+    assert_response :unprocessable_entity
+    assert_includes response.body, 'Title must be unique'
+    assert_select '.rails-bootstrap-forms-error-summary', count: 1
+    assert_select "input[name='content[title]']", value: @matching_content.title
+    assert_select "input[name='content[file]'][type='hidden']", count: 1 do |fields|
+      assert_equal uploaded_blob.signed_id, fields.first['value']
+      assert_equal 'true', fields.first['data-filepond-hidden-field']
+    end
+    assert_select "input[name='content[metadatum_ids][]'][value='#{@metadatum.id}'][checked]", count: 1
+
+    assert_difference('Content.count', 1) do
+      post contents_path, params: {
+        content: submitted_content.merge(title: 'Successful Retry')
+      }
+    end
+
+    created_content = Content.find_by!(title: 'Successful Retry')
+    assert_redirected_to content_path(created_content)
+    assert_equal uploaded_blob.id, created_content.file.blob.id
+    assert_equal [@metadatum.id], created_content.metadatum_ids
+  end
+
+  test 'failed content update preserves the replacement direct upload' do
+    sign_in @admin
+    content = create_content(title: 'Update Retry', filename: 'update-retry.pdf')
+    original_blob_id = content.file.blob.id
+    replacement_blob = create_uploaded_blob(filename: 'update-replacement.pdf', body: '%PDF-1.4 replacement')
+
+    patch content_path(content), params: {
+      content: {
+        title: @matching_content.title,
+        display_title: content.display_title,
+        description: content.description,
+        year_of_publication: content.year_of_publication,
+        additional_notes: content.additional_notes,
+        file: replacement_blob.signed_id
+      }
+    }
+
+    assert_response :unprocessable_entity
+    assert_includes response.body, 'Title must be unique'
+    assert_select "input[name='content[file]'][type='hidden']", count: 1 do |fields|
+      assert_equal replacement_blob.signed_id, fields.first['value']
+      assert_equal 'true', fields.first['data-filepond-hidden-field']
+    end
+    assert_equal original_blob_id, content.reload.file.blob.id
   end
 
   test 'updating content ignores preloaded blob urls submitted as file params' do

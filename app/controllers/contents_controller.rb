@@ -54,9 +54,6 @@ class ContentsController < ApplicationController
   # POST /contents or /contents.json
   def create
     authorize Content
-    # content_params[:metadatum_ids].reject!(&:blank?) if content_params[:metadatum_ids]
-    err('content params')
-    log(content_params)
     @content = Content.new(content_params.merge(user: current_user))
 
     respond_to do |format|
@@ -66,15 +63,7 @@ class ContentsController < ApplicationController
       else
         @metadata_types = MetadataType.all.order(:order)
         @metadata = {}
-
-        # put the file back
-        log(content_params)
-        if content_params[:file].present?
-          @content.file.attach(content_params[:file])
-          warn(content_params[:file])
-        else
-          err('content file not present')
-        end
+        log_content_validation_failure
 
         # put the metadata back
         if content_params[:metadatum_ids].present?
@@ -102,6 +91,7 @@ class ContentsController < ApplicationController
       else
         @metadata_types = MetadataType.all.order(:order)
         @metadata = {}
+        log_content_validation_failure
         @metadata_types.each do |metadata_type|
           @metadata[metadata_type] = @content.metadata.where(metadata_type_id: metadata_type.id)
         end
@@ -270,6 +260,10 @@ class ContentsController < ApplicationController
 
   def can_create_metadatum_for?(metadata_type)
     User.roles.fetch(current_user.role) >= metadata_type.access_level
+  end
+
+  def log_content_validation_failure
+    Rails.logger.warn("Content validation failed: #{@content.errors.full_messages.join(', ')}")
   end
 
   def tmp_filenames(pattern)

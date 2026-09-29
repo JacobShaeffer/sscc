@@ -61,44 +61,29 @@ class MetadataTypes::MetadataController < ApplicationController
   def replace
     authorize @metadatum
     title = @metadatum.name
-    replace_with_id = params[:replace_with]
-    replace_with_metadatum = Metadatum.find(replace_with_id)
+    replace_with_metadatum = Metadatum.find(params[:replace_with])
 
-    # Validate that both metadata are of the same type
+    return render_replace_error('A metadata value cannot replace itself.') if @metadatum == replace_with_metadatum
+
     if @metadatum.metadata_type_id != replace_with_metadatum.metadata_type_id
-      flash.now[:alert] = 'Error: Cannot replace metadatum. Both metadata must be of the same metadata type.'
-      @target = "metadatum_#{@metadatum.id}"
-      respond_to do |format|
-        format.turbo_stream { render 'error' }
-      end
-      return
+      return render_replace_error('Both metadata values must have the same metadata type.')
     end
 
-    # Find all content_metadata associations for the original metadatum
-    content_metadata_to_replace = @metadatum.content_metadata.includes(:content)
-
-    # Use a transaction to ensure data consistency
     Metadatum.transaction do
-      content_metadata_to_replace.each do |content_metadatum|
-        content = content_metadatum.content
-
-        # Check if the content already has the replacement metadatum
+      @metadatum.content_metadata.find_each do |content_metadatum|
         existing_association = ContentMetadatum.find_by(
-          content_id: content.id,
+          content_id: content_metadatum.content_id,
           metadatum_id: replace_with_metadatum.id
         )
 
         if existing_association
-          # If it already exists, just remove the old association
-          content_metadatum.destroy
+          content_metadatum.destroy!
         else
-          # Otherwise, update the association to point to the replacement metadatum
-          content_metadatum.update(metadatum_id: replace_with_metadatum.id)
+          content_metadatum.update!(metadatum_id: replace_with_metadatum.id)
         end
       end
 
-      # Now delete the original metadatum (this will also destroy remaining content_metadata via dependent: :destroy)
-      @metadatum.destroy
+      @metadatum.destroy!
     end
 
     flash.now[:notice] = "\"#{title}\" was deleted and replaced by \"#{replace_with_metadatum.name}\"."
@@ -107,15 +92,9 @@ class MetadataTypes::MetadataController < ApplicationController
       format.turbo_stream { render 'destroy' }
     end
   rescue ActiveRecord::RecordNotFound
-    flash.now[:alert] = 'Error: Could not find replacement metadatum.'
-    respond_to do |format|
-      format.turbo_stream { render 'error' }
-    end
+    render_replace_error('Could not find the replacement metadata value.', status: :not_found)
   rescue StandardError => e
-    flash.now[:alert] = "Error replacing metadatum: #{e.message}"
-    respond_to do |format|
-      format.turbo_stream { render 'error' }
-    end
+    render_replace_error("Could not replace the metadata value: #{e.message}")
   end
 
   def search
@@ -181,5 +160,13 @@ class MetadataTypes::MetadataController < ApplicationController
   # Only allow a list of trusted parameters through.
   def metadatum_params
     params.require(:metadatum).permit(:name, :metadata_type_id)
+  end
+
+  def render_replace_error(message, status: :unprocessable_entity)
+    flash.now[:alert] = "Error: #{message}"
+
+    respond_to do |format|
+      format.turbo_stream { render 'error', status: status }
+    end
   end
 end

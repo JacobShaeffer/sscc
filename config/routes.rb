@@ -15,7 +15,7 @@ Rails.application.routes.draw do
         member do
           get :review
           get :info
-          get :replace
+          patch :replace
         end
         collection do
           get :search

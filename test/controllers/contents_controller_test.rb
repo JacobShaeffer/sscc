@@ -83,6 +83,18 @@ class ContentsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "/contents/#{content.id}"
   end
 
+  test 'new content form marks persisted text fields for whitespace trimming' do
+    sign_in @admin
+
+    get new_content_path
+
+    assert_response :success
+    %w[title display_title description additional_notes].each do |attribute|
+      assert_select "[name='content[#{attribute}]'][data-form-trim='true']", count: 1
+    end
+    assert_select "input[data-multiSelect-target='searchInput'][data-form-trim]", count: 0
+  end
+
   test 'admin can download a DLMS report' do
     sign_in @admin
     File.write(Rails.root.join('tmp', @report_filename), '{"success":true}')

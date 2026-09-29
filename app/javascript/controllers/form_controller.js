@@ -26,11 +26,13 @@ export default class extends Controller {
 	}
 
 	onBlur = (event) => {
+		this.trimField(event.target)
 		this.validateField(event.target)
 	}
 
 	onSubmit = (event) => {
 		console.log("form controller submit")
+		this.trimFields()
 		if (!this.validateForm()) {
 			event.preventDefault()
 			this.firstInvalidField.focus()
@@ -47,6 +49,16 @@ export default class extends Controller {
 			}
 		})
 		return isValid
+	}
+
+	trimFields () {
+		this.formFields.forEach((field) => this.trimField(field))
+	}
+
+	trimField (field) {
+		if (field.dataset.formTrim === 'true' && typeof field.value === 'string') {
+			field.value = field.value.trim()
+		}
 	}
 
 	validateField (field) {

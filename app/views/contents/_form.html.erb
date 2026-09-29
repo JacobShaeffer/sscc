@@ -3,17 +3,17 @@
 
 	<div class="row">
 		<div class="field col-lg-6 col-md-12">
-			<%= form.text_field :title, required: true %>
+			<%= form.text_field :title, required: true, data: { form_trim: true } %>
 		</div>
 
 		<div class="field col-lg-6 col-md-12">
-			<%= form.text_field :display_title, required: true %>
+			<%= form.text_field :display_title, required: true, data: { form_trim: true } %>
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="field">
-			<%= form.text_area :description, required: true %>
+			<%= form.text_area :description, required: true, data: { form_trim: true } %>
 		</div>
 	</div>
 
@@ -49,7 +49,7 @@
 	</div>
 	
 	<div class="field">
-		<%= form.text_area :additional_notes %>
+		<%= form.text_area :additional_notes, data: { form_trim: true } %>
 	</div>
 
 	<div class="mb-3">

@@ -16,9 +16,11 @@ export default class extends Controller {
 	// }
 
 	onAddSelected(event) {
-		let name = this.searchInputTarget.value;
+		let name = this.searchInputTarget.value.trim();
 		this.searchInputTarget.value = "";
 		this.autoComplete("");
+
+		if (!name) return;
 
 		let params = new URLSearchParams();
 

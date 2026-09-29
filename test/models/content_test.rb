@@ -58,6 +58,42 @@ class ContentTest < ActiveSupport::TestCase
     assert_equal 'report.pdf', content.file.filename.to_s
   end
 
+  test 'text fields reject leading and trailing whitespace' do
+    content = create_content(title: 'Boundary Validation', filename: 'boundary-validation.pdf')
+    fields = {
+      title: 'Title',
+      display_title: 'Display Title',
+      description: 'Description',
+      additional_notes: 'Additional Notes'
+    }
+
+    fields.each do |attribute, valid_value|
+      [" ", "\t", "\n", "\u00A0"].each do |whitespace|
+        ["#{whitespace}#{valid_value}", "#{valid_value}#{whitespace}"].each do |invalid_value|
+          content.public_send("#{attribute}=", invalid_value)
+
+          assert_not content.valid?, "expected #{attribute} to reject #{invalid_value.inspect}"
+          assert_includes content.errors[attribute], 'must not have leading or trailing whitespace'
+        end
+      end
+
+      content.public_send("#{attribute}=", valid_value)
+    end
+  end
+
+  test 'text fields allow internal whitespace and blank optional notes' do
+    content = create_content(title: 'Internal Whitespace', filename: 'internal-whitespace.pdf')
+
+    content.assign_attributes(
+      title: 'Internal Title',
+      display_title: 'Internal Display Title',
+      description: "First line\nSecond line",
+      additional_notes: nil
+    )
+
+    assert content.valid?
+  end
+
   private
 
   def create_content(title:, filename:, file_body: nil)
